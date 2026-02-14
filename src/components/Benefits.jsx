@@ -16,8 +16,8 @@ const Benefits = () => {
         },
         {
             icon: TrendingUp,
-            title: "Más Aprobados",
-            desc: "Nuestro banco de preguntas actualizado (A2, B1, C1, C2) prepara mejor a tus estudiantes para el examen teórico."
+            title: "Aprobación Garantizada",
+            desc: "Nuestros simulacros replican la metodología exacta de los nuevos exámenes CALE obligatorios de la ANSV."
         },
         {
             icon: Zap,

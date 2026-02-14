@@ -11,7 +11,7 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}
                 >
-                    <span className={styles.badge}>Nuevo: Integración con Tramitadores 🚀</span>
+                    <span className={styles.badge}>Listo para los nuevos exámenes CALE 2025 🇨🇴</span>
                 </motion.div>
 
                 <motion.h1

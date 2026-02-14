@@ -65,8 +65,8 @@ const BentoGrid = () => {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapper}><ShieldCheck size={32} /></div>
-                            <h3>Exámenes Teóricos</h3>
-                            <p>Banco de preguntas actualizado para categorías A2, B1, C1 y C2.</p>
+                            <h3>Exámenes Tipo CALE</h3>
+                            <p>Banco de preguntas actualizado a la normativa 2025 (A2, B1, C1).</p>
                         </div>
                     </motion.div>
 
