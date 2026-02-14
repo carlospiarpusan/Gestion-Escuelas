@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings } from 'lucide-react';
+import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 
 // Mock user role for now - in real app this comes from Auth Context
@@ -45,14 +45,22 @@ const DashboardLayout = () => {
                         <>
                             <SidebarItem to="/dashboard/schools" icon={BookOpen} label="Escuelas" />
                             <SidebarItem to="/dashboard/users" icon={Users} label="Usuarios Globales" />
+                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
                         </>
+                    )}
+
+                    {role === 'secretary' && (
+                        <SidebarItem to="/dashboard/instructor-logs" icon={Clock} label="Horas Instructor" />
+                    )}
+
+                    {role === 'instructor' && (
+                        <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
                     )}
 
                     {role === 'admin' && (
                         <>
                             <SidebarItem to="/dashboard/instructors" icon={Users} label="Instructores" />
-                            <SidebarItem to="/dashboard/students" icon={GraduationCap} label="Estudiantes" />
-                            <SidebarItem to="/dashboard/vehicles" icon={Car} label="Flota" />
+                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
                         </>
                     )}
 

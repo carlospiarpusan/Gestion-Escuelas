@@ -34,23 +34,28 @@ CREATE TABLE users (
     )
 );
 
--- VEHICLES (Flota)
-CREATE TABLE vehicles (
+-- INSTRUCTOR HOURS LOG
+CREATE TABLE instructor_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     school_id UUID REFERENCES schools(id) ON DELETE CASCADE NOT NULL,
-    plate_number VARCHAR(20) NOT NULL,
-    model VARCHAR(100),
-    status VARCHAR(50) DEFAULT 'active', -- active, maintenance, inactive
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    instructor_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
+    date DATE NOT NULL,
+    hours DECIMAL(4, 2) NOT NULL, -- e.g., 8.5
+    created_by UUID REFERENCES users(id), -- Secretary/Admin who logged it
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(instructor_id, date) -- Prevent duplicate logs for same day
 );
+
+-- EXAM CATEGORIES ENUM
+CREATE TYPE exam_category AS ENUM ('A2', 'B1', 'C1', 'C2', 'SEGURIDAD_VIAL');
 
 -- EXAMS (Question Banks)
 CREATE TABLE exams (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    school_id UUID REFERENCES schools(id) ON DELETE CASCADE, -- If NULL, it's a global template exam
+    school_id UUID REFERENCES schools(id) ON DELETE CASCADE, -- NULL = Global Bank
     title VARCHAR(200) NOT NULL,
-    description TEXT,
-    questions JSONB NOT NULL, -- Array of objects: { question, options[], correct_answer }
+    category exam_category NOT NULL,
+    questions JSONB NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -59,8 +64,10 @@ CREATE TABLE exams (
 CREATE TABLE exam_results (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-    exam_id UUID REFERENCES exams(id) ON DELETE SET NULL NOT NULL,
-    score INT NOT NULL, -- e.g., 18/20
+    school_id UUID REFERENCES schools(id) ON DELETE CASCADE NOT NULL, -- Generic helper for analytics
+    exam_category exam_category NOT NULL,
+    mode INT NOT NULL, -- 15 or 40 questions
+    score INT NOT NULL,
     total_questions INT NOT NULL,
     passed BOOLEAN NOT NULL,
     completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

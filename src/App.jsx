@@ -8,6 +8,9 @@ import DashboardLayout from './layouts/DashboardLayout';
 import SchoolsPage from './pages/SuperAdmin/Schools';
 import StudentExams from './pages/Student/Exams';
 import StudentPayments from './pages/Student/Payments';
+import InstructorHoursLink from './pages/Secretary/InstructorHours';
+import MyHours from './pages/Instructor/MyHours';
+import ExamResults from './pages/Analytics/ExamResults';
 
 // Placeholder Pages (Temporary until implemented)
 const LandingPage = () => (
@@ -38,6 +41,13 @@ function App() {
           {/* Super Admin Routes */}
           <Route path="schools" element={<SchoolsPage />} />
           <Route path="users" element={<UsersPage />} />
+          <Route path="analytics" element={<ExamResults />} />
+
+          {/* Secretary Routes */}
+          <Route path="instructor-logs" element={<InstructorHoursLink />} />
+
+          {/* Instructor Routes */}
+          <Route path="my-hours" element={<MyHours />} />
 
           {/* Student Routes */}
           <Route path="payments" element={<StudentPayments />} />
