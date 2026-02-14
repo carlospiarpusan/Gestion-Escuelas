@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
 
 const Hero = () => {
@@ -39,8 +40,8 @@ const Hero = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                 >
-                    <button className={styles.primaryBtn}>Agendar Demo</button>
-                    <button className={styles.secondaryBtn}>Ver Características</button>
+                    <Link to="/login" className={styles.primaryBtn}>Agendar Demo</Link>
+                    <a href="#features" className={styles.secondaryBtn}>Ver Características</a>
                 </motion.div>
 
                 <motion.div
