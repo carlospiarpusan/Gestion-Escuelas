@@ -1,0 +1,82 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 48px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--panel-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.container {
+    width: 100%;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.logo {
+    font-weight: 600;
+    color: var(--text-main);
+    font-size: 14px;
+}
+
+.links {
+    display: flex;
+    list-style: none;
+    gap: 24px;
+}
+
+.links a {
+    color: #e8e8ed;
+    opacity: 0.8;
+    font-weight: 400;
+    transition: opacity 0.2s;
+}
+
+.links a:hover {
+    opacity: 1;
+    text-decoration: none;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.loginBtn {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 12px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+.ctaBtn {
+    background: white;
+    color: black;
+    border: none;
+    border-radius: 980px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.ctaBtn:hover {
+    transform: scale(1.02);
+}

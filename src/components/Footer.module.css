@@ -1,0 +1,41 @@
+.footer {
+    background: #111;
+    padding: 40px 0;
+    font-size: 12px;
+    color: #86868b;
+    border-top: 1px solid #333;
+}
+
+.container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+.links {
+    display: flex;
+    gap: 20px;
+}
+
+.links a {
+    color: #86868b;
+    text-decoration: none;
+}
+
+.links a:hover {
+    text-decoration: underline;
+    color: #f5f5f7;
+}

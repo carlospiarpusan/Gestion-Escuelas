@@ -1,0 +1,154 @@
+.section {
+    padding: 120px 0;
+    background: #f5f5f7;
+    /* Slightly lighter bg for contrast or dark depending on theme */
+    background: var(--bg-color);
+}
+
+.container {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.title {
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 60px;
+    color: var(--text-main);
+}
+
+.subtitle {
+    color: var(--text-secondary);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 300px);
+    }
+}
+
+.card {
+    background: #1d1d1f;
+    /* Dark card bg */
+    border-radius: 20px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.cardLarge {
+    grid-column: span 1;
+    grid-row: span 2;
+    background: #000;
+    border: 1px solid #333;
+}
+
+@media (min-width: 768px) {
+    .cardLarge {
+        grid-column: span 1;
+        grid-row: span 2;
+    }
+
+    .cardWide {
+        grid-column: span 2;
+    }
+}
+
+.cardContent {
+    z-index: 2;
+    color: var(--text-main);
+}
+
+.cardContent h3 {
+    font-size: 24px;
+    margin: 16px 0 8px;
+}
+
+.cardContent p {
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.iconWrapper {
+    width: 48px;
+    height: 48px;
+    background: var(--primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-bottom: 16px;
+}
+
+/* Visuals */
+.visualList {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.visualItem {
+    height: 40px;
+    background: #333;
+    border-radius: 8px;
+    width: 100%;
+    opacity: 0.5;
+}
+
+.cardVisualGraph {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 100px;
+    opacity: 0.7;
+}
+
+.bar1,
+.bar2,
+.bar3,
+.bar4 {
+    width: 30px;
+    background: var(--primary);
+    border-radius: 4px 4px 0 0;
+}
+
+.bar1 {
+    height: 40%;
+}
+
+.bar2 {
+    height: 70%;
+}
+
+.bar3 {
+    height: 50%;
+}
+
+.bar4 {
+    height: 90%;
+}
