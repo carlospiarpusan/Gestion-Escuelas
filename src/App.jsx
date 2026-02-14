@@ -1,19 +1,53 @@
-import { motion } from 'framer-motion';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import BentoGrid from './components/BentoGrid';
-import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import DashboardLayout from './layouts/DashboardLayout';
+
+import SchoolsPage from './pages/SuperAdmin/Schools';
+import StudentExams from './pages/Student/Exams';
+import StudentPayments from './pages/Student/Payments';
+
+// Placeholder Pages (Temporary until implemented)
+const LandingPage = () => (
+  <div className="app-container">
+    <Navbar />
+    <main>
+      <Hero />
+      <BentoGrid />
+    </main>
+    <Footer />
+  </div>
+);
+
+const DashboardHome = () => <div><h3>Bienvenido al Panel de Control</h3><p>Selecciona una opción del menú.</p></div>;
+const UsersPage = () => <div><h3>Gestión de Usuarios</h3><p>Administración global de usuarios.</p></div>;
 
 function App() {
   return (
-    <div className="app-container">
-      <Navbar />
-      <main>
-        <Hero />
-        <BentoGrid />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Protected Dashboard Routes */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardHome />} />
+
+          {/* Super Admin Routes */}
+          <Route path="schools" element={<SchoolsPage />} />
+          <Route path="users" element={<UsersPage />} />
+
+          {/* Student Routes */}
+          <Route path="payments" element={<StudentPayments />} />
+          <Route path="exams" element={<StudentExams />} />
+        </Route>
+
+        {/* Catch all */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
