@@ -13,6 +13,8 @@ import RegisterStudent from './pages/Secretary/RegisterStudent';
 import Tramitadores from './pages/Secretary/Tramitadores';
 import MyHours from './pages/Instructor/MyHours';
 import ExamResults from './pages/Analytics/ExamResults';
+import Fleet from './pages/SchoolAdmin/Fleet';
+import VehicleDetails from './pages/SchoolAdmin/VehicleDetails';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -67,6 +69,10 @@ function App() {
             {/* Student Routes */}
             <Route path="exams" element={<ProtectedRoute allowedRoles={['student']}><StudentExams /></ProtectedRoute>} />
             <Route path="payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
+
+            {/* Fleet Management (Accessible by SuperAdmin, Admin, Secretary, Instructor) */}
+            <Route path="fleet" element={<ProtectedRoute allowedRoles={['superadmin', 'admin', 'secretary', 'instructor']}><Fleet /></ProtectedRoute>} />
+            <Route path="fleet/:id" element={<ProtectedRoute allowedRoles={['superadmin', 'admin', 'secretary', 'instructor']}><VehicleDetails /></ProtectedRoute>} />
 
             <Route path="settings" element={<SettingsPage />} />
           </Route>

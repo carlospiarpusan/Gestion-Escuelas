@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus } from 'lucide-react';
+import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus, Car } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 import { useAuth } from '../context/AuthContext';
 
@@ -50,6 +50,14 @@ const DashboardLayout = () => {
                             <SidebarItem to="/dashboard/questions" icon={Shield} label="Banco Preguntas" />
                             <SidebarItem to="/dashboard/users" icon={Users} label="Usuarios Globales" />
                             <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
+                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
+                        </>
+                    )}
+
+                    {role === 'admin' && (
+                        <>
+                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
+                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 
@@ -58,11 +66,15 @@ const DashboardLayout = () => {
                             <SidebarItem to="/dashboard/register-student" icon={UserPlus} label="Registrar Alumno" />
                             <SidebarItem to="/dashboard/instructor-logs" icon={Clock} label="Horas Instructor" />
                             <SidebarItem to="/dashboard/tramitadores" icon={Users} label="Tramitadores" />
+                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 
                     {role === 'instructor' && (
-                        <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
+                        <>
+                            <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
+                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
+                        </>
                     )}
 
                     {role === 'student' && (
