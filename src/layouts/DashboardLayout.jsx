@@ -44,6 +44,7 @@ const DashboardLayout = () => {
                     {role === 'superadmin' && (
                         <>
                             <SidebarItem to="/dashboard/schools" icon={BookOpen} label="Escuelas" />
+                            <SidebarItem to="/dashboard/questions" icon={Shield} label="Banco Preguntas" />
                             <SidebarItem to="/dashboard/users" icon={Users} label="Usuarios Globales" />
                             <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
                         </>

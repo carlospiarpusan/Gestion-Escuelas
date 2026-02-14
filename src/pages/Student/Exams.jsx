@@ -14,15 +14,27 @@ const MODES = [
     { id: 40, label: 'Completo (40 preguntas)' },
 ];
 
-// Mock Question Generator
-const generateQuestions = (category, count) => {
-    return Array.from({ length: count }, (_, i) => ({
-        id: i + 1,
-        question: `[${category}] Pregunta ${i + 1}: ¿Cuál es la norma específica para este caso?`,
-        options: ['Opción A - Correcta', 'Opción B - Incorrecta', 'Opción C - Incorrecta', 'Opción D - Incorrecta'],
-        correct: 0
-    }));
-};
+// MOCK DB - In real app this comes from Supabase/Neon "questions" table
+const QUESTION_BANK = [
+    // Seguridad Vial (15 Fixed)
+    { id: 'sv1', category: 'SEGURIDAD_VIAL', question: '¿Cuál es la principal causa de accidentes?', options: { A: 'Fallas', B: 'Vía', C: 'Exceso velocidad', D: 'Clima' }, correct: 'C' },
+    { id: 'sv2', category: 'SEGURIDAD_VIAL', question: '¿Qué hacer ante un herido?', options: { A: 'Moverlo', B: 'Huir', C: 'Proteger y llamar 123', D: 'Dar agua' }, correct: 'C' },
+    { id: 'sv3', category: 'SEGURIDAD_VIAL', question: 'El cinturón es obligatorio para:', options: { A: 'Conductor', B: 'Copiloto', C: 'Atrás', D: 'Todos' }, correct: 'D' },
+    { id: 'sv4', category: 'SEGURIDAD_VIAL', question: 'Señal amarilla rombo significa:', options: { A: 'Reglamentaria', B: 'Preventiva', C: 'Info', D: 'Transitoria' }, correct: 'B' },
+    { id: 'sv5', category: 'SEGURIDAD_VIAL', question: 'Distancia a 60km/h:', options: { A: '10m', B: '20m', C: '30m', D: '5m' }, correct: 'B' },
+    // A2 Samples
+    { id: 'a2_1', category: 'A2', question: '¿Adelantar por derecha?', options: { A: 'Sí', B: 'No', C: 'A veces', D: 'En trancón' }, correct: 'B' },
+    { id: 'a2_2', category: 'A2', question: 'Protección obligatoria:', options: { A: 'Guantes', B: 'Rodilleras', C: 'Casco', D: 'Chaqueta' }, correct: 'C' },
+    { id: 'a2_3', category: 'A2', question: 'Moto en cicloruta:', options: { A: 'Sí', B: 'Poco', C: 'No', D: 'A veces' }, correct: 'C' },
+    // Fillers to simulate logic (In real app, fetch 200)
+    ...Array.from({ length: 50 }, (_, i) => ({
+        id: `gen_${i}`,
+        category: 'A2',
+        question: `Pregunta generada A2 #${i + 4}: ¿Norma simulada de tránsito?`,
+        options: { A: 'Opción A', B: 'Opción B', C: 'Opción C', D: 'Opción D' },
+        correct: ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)]
+    }))
+];
 
 const StudentExams = () => {
     const [step, setStep] = useState('selection'); // selection, exam, result
@@ -36,13 +48,45 @@ const StudentExams = () => {
 
     const handleStart = () => {
         if (!selectedCategory || !selectedMode) return;
-        const q = generateQuestions(selectedCategory, selectedMode);
-        setQuestions(q);
+
+        // FETCH LOGIC
+        let filteredQuestions = QUESTION_BANK.filter(q => q.category === selectedCategory);
+
+        // Logic: If 'SEGURIDAD_VIAL', take fixed 15. Else take random N.
+        let finalQuestions = [];
+
+        if (selectedCategory === 'SEGURIDAD_VIAL') {
+            // Take first 15 (Fixed order as requested)
+            finalQuestions = filteredQuestions.slice(0, 15);
+            // If not enough mock data, fill with generics
+            if (finalQuestions.length < 15) {
+                const needed = 15 - finalQuestions.length;
+                const fillers = Array.from({ length: needed }, (_, i) => ({
+                    id: `fill_${i}`, category: 'SEGURIDAD_VIAL', question: 'Pregunta SV de relleno...', options: { A: '.', B: '.', C: '.', D: '.' }, correct: 'A'
+                }));
+                finalQuestions = [...finalQuestions, ...fillers];
+            }
+        } else {
+            // Randomize for A2, B1, etc.
+            const shuffled = [...filteredQuestions].sort(() => 0.5 - Math.random());
+            finalQuestions = shuffled.slice(0, selectedMode);
+        }
+
+        // Safety check if we requested 40 but have fewer in mock
+        if (finalQuestions.length < selectedMode && selectedCategory !== 'SEGURIDAD_VIAL') {
+            // In real app this won't happen if DB has 200. Here we mock pad.
+            const pad = Array.from({ length: selectedMode - finalQuestions.length }, (_, i) => ({
+                id: `pad_${i}`, category: selectedCategory, question: `Pregunta Simulada ${i}`, options: { A: 'A', B: 'B', C: 'C', D: 'D' }, correct: 'A'
+            }));
+            finalQuestions = [...finalQuestions, ...pad];
+        }
+
+        setQuestions(finalQuestions);
         setStep('exam');
     };
 
-    const handleAnswer = (optionIndex) => {
-        setAnswers({ ...answers, [currentQuestion]: optionIndex });
+    const handleAnswer = (optionKey) => {
+        setAnswers({ ...answers, [currentQuestion]: optionKey });
     };
 
     const handleNext = () => {

@@ -49,13 +49,16 @@ CREATE TABLE instructor_logs (
 -- EXAM CATEGORIES ENUM
 CREATE TYPE exam_category AS ENUM ('A2', 'B1', 'C1', 'C2', 'SEGURIDAD_VIAL');
 
--- EXAMS (Question Banks)
-CREATE TABLE exams (
+-- QUESTION BANK (Granular)
+CREATE TABLE questions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    school_id UUID REFERENCES schools(id) ON DELETE CASCADE, -- NULL = Global Bank
-    title VARCHAR(200) NOT NULL,
     category exam_category NOT NULL,
-    questions JSONB NOT NULL,
+    question_text TEXT NOT NULL,
+    option_a TEXT NOT NULL,
+    option_b TEXT NOT NULL,
+    option_c TEXT NOT NULL,
+    option_d TEXT NOT NULL,
+    correct_option CHAR(1) NOT NULL CHECK (correct_option IN ('A', 'B', 'C', 'D')),
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -64,7 +67,7 @@ CREATE TABLE exams (
 CREATE TABLE exam_results (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     student_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-    school_id UUID REFERENCES schools(id) ON DELETE CASCADE NOT NULL, -- Generic helper for analytics
+    school_id UUID REFERENCES schools(id) ON DELETE CASCADE NOT NULL,
     exam_category exam_category NOT NULL,
     mode INT NOT NULL, -- 15 or 40 questions
     score INT NOT NULL,

@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import DashboardLayout from './layouts/DashboardLayout';
 
 import SchoolsPage from './pages/SuperAdmin/Schools';
+import QuestionsPage from './pages/SuperAdmin/Questions';
 import StudentExams from './pages/Student/Exams';
 import StudentPayments from './pages/Student/Payments';
 import InstructorHoursLink from './pages/Secretary/InstructorHours';
@@ -40,6 +41,7 @@ function App() {
 
           {/* Super Admin Routes */}
           <Route path="schools" element={<SchoolsPage />} />
+          <Route path="questions" element={<QuestionsPage />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="analytics" element={<ExamResults />} />
 
