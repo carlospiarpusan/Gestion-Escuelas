@@ -14,11 +14,11 @@ const BentoGrid = () => {
                     transition={{ duration: 0.6 }}
                 >
                     Todo lo que necesitas. <br />
-                    <span className={styles.subtitle}>En un solo lugar.</span>
+                    <span className={styles.subtitle}>En un solo ecosistema.</span>
                 </motion.h2>
 
                 <div className={styles.grid}>
-                    {/* Feature 1 - Large */}
+                    {/* Feature 1 - Student & Tramitadores (Large) */}
                     <motion.div
                         className={`${styles.card} ${styles.cardLarge}`}
                         initial={{ opacity: 0, y: 20 }}
@@ -28,20 +28,19 @@ const BentoGrid = () => {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapper}><Users size={32} /></div>
-                            <h3>Gestión de Alumnos</h3>
-                            <p>Seguimiento detallado desde la inscripción hasta la licencia.</p>
+                            <h3>Gestión de Alumnos y Tramitadores</h3>
+                            <p>Registro detallado por categoría de licencia. Asigna estudiantes a tramitadores externos y calcula comisiones automáticamente.</p>
                         </div>
                         <div className={styles.cardVisual}>
-                            {/* Abstract visual representation */}
                             <div className={styles.visualList}>
-                                <div className={styles.visualItem}></div>
-                                <div className={styles.visualItem}></div>
-                                <div className={styles.visualItem}></div>
+                                <div className={styles.visualItem} style={{ width: '80%' }}></div>
+                                <div className={styles.visualItem} style={{ width: '60%' }}></div>
+                                <div className={styles.visualItem} style={{ width: '90%' }}></div>
                             </div>
                         </div>
                     </motion.div>
 
-                    {/* Feature 2 - Small */}
+                    {/* Feature 2 - Payments (Small) */}
                     <motion.div
                         className={styles.card}
                         initial={{ opacity: 0, y: 20 }}
@@ -50,13 +49,13 @@ const BentoGrid = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                     >
                         <div className={styles.cardContent}>
-                            <div className={styles.iconWrapper}><Calendar size={32} /></div>
-                            <h3>Calendario Inteligente</h3>
-                            <p>Programación de clases optimizada.</p>
+                            <div className={styles.iconWrapper}><CreditCard size={32} /></div>
+                            <h3>Pagos Multicanal</h3>
+                            <p>Soporte para Efectivo, Nequi y Sistecrédito con control de abonos.</p>
                         </div>
                     </motion.div>
 
-                    {/* Feature 3 - Small */}
+                    {/* Feature 3 - Exams (Small) */}
                     <motion.div
                         className={styles.card}
                         initial={{ opacity: 0, y: 20 }}
@@ -65,13 +64,13 @@ const BentoGrid = () => {
                         transition={{ duration: 0.6, delay: 0.2 }}
                     >
                         <div className={styles.cardContent}>
-                            <div className={styles.iconWrapper}><CreditCard size={32} /></div>
-                            <h3>Pagos Seguros</h3>
-                            <p>Control financiero total.</p>
+                            <div className={styles.iconWrapper}><ShieldCheck size={32} /></div>
+                            <h3>Exámenes Teóricos</h3>
+                            <p>Banco de preguntas actualizado para categorías A2, B1, C1 y C2.</p>
                         </div>
                     </motion.div>
 
-                    {/* Feature 4 - Medium/Wide */}
+                    {/* Feature 4 - Analytics (Wide) */}
                     <motion.div
                         className={`${styles.card} ${styles.cardWide}`}
                         initial={{ opacity: 0, y: 20 }}
@@ -81,8 +80,8 @@ const BentoGrid = () => {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapper}><BarChart3 size={32} /></div>
-                            <h3>Analíticas en Tiempo Real</h3>
-                            <p>Visualiza el crecimiento de tu escuela con gráficas intuitivas.</p>
+                            <h3>Analíticas y Reportes</h3>
+                            <p>Visualiza el rendimiento de tus sedes y tasas de aprobación en tiempo real.</p>
                         </div>
                         <div className={styles.cardVisualGraph}>
                             <div className={styles.bar1}></div>
@@ -92,7 +91,7 @@ const BentoGrid = () => {
                         </div>
                     </motion.div>
 
-                    {/* Feature 5 */}
+                    {/* Feature 5 - Fleet (Small) */}
                     <motion.div
                         className={styles.card}
                         initial={{ opacity: 0, y: 20 }}
@@ -102,12 +101,12 @@ const BentoGrid = () => {
                     >
                         <div className={styles.cardContent}>
                             <div className={styles.iconWrapper}><Car size={32} /></div>
-                            <h3>Flota de Vehículos</h3>
-                            <p>Mantenimiento y disponibilidad.</p>
+                            <h3>Flota Vehicular</h3>
+                            <p>Gestión de mantenimiento y asignación de vehículos (Próximamente).</p>
                         </div>
                     </motion.div>
 
-                    {/* Feature 6 */}
+                    {/* Feature 6 - Calendar (Small) */}
                     <motion.div
                         className={styles.card}
                         initial={{ opacity: 0, y: 20 }}
@@ -116,9 +115,9 @@ const BentoGrid = () => {
                         transition={{ duration: 0.6, delay: 0.5 }}
                     >
                         <div className={styles.cardContent}>
-                            <div className={styles.iconWrapper}><ShieldCheck size={32} /></div>
-                            <h3>Seguridad Total</h3>
-                            <p>Tus datos siempre protegidos.</p>
+                            <div className={styles.iconWrapper}><Calendar size={32} /></div>
+                            <h3>Agenda Inteligente</h3>
+                            <p>Programación de clases prácticas sin conflictos de horario.</p>
                         </div>
                     </motion.div>
 
