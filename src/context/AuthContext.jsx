@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import secureStorage from '../lib/secureStorage';
 
 const AuthContext = createContext(null);
 
@@ -16,10 +16,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check localStorage on mount
-        const storedUser = localStorage.getItem('user_session');
+        // Check secureStorage on mount
+        const storedUser = secureStorage.getItem('user_session');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            setUser(storedUser);
         }
         setLoading(false);
     }, []);
@@ -38,7 +38,7 @@ export const AuthProvider = ({ children }) => {
                         token: 'mock-jwt-token'
                     };
                     setUser(sessionUser);
-                    localStorage.setItem('user_session', JSON.stringify(sessionUser));
+                    secureStorage.setItem('user_session', sessionUser);
                     resolve(sessionUser);
                 } else {
                     reject(new Error('Credenciales inválidas'));
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
-        localStorage.removeItem('user_session');
+        secureStorage.removeItem('user_session');
     };
 
     return (
