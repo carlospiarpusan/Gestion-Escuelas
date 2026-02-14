@@ -82,9 +82,32 @@ CREATE TABLE payments (
     school_id UUID REFERENCES schools(id) ON DELETE CASCADE NOT NULL,
     student_id UUID REFERENCES users(id) ON DELETE CASCADE NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
-    currency VARCHAR(3) DEFAULT 'USD',
+    currency VARCHAR(3) DEFAULT 'COP',
     concept VARCHAR(255), -- e.g., "Matrícula", "Mensualidad Marzo"
+    payment_method VARCHAR(50) NOT NULL, -- Efectivo, Tarjeta, Nequi, Sistecredito, etc.
     payment_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     receipt_url TEXT,
     recorded_by UUID REFERENCES users(id) -- The secretary/admin who registered it
+);
+
+-- TRAMITADORES (Agents)
+CREATE TABLE tramitadores (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    school_id UUID NOT NULL REFERENCES schools(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20),
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- STUDENT DETAILS (Extension of Users)
+CREATE TABLE student_details (
+    user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    cedula VARCHAR(20) UNIQUE NOT NULL,
+    contract_number VARCHAR(50) NOT NULL,
+    license_category VARCHAR(20) NOT NULL, -- A2, B1, C1, RC1, A2-B1, A2-C1, A2-RC1
+    course_value DECIMAL(10, 2) NOT NULL,
+    tramitador_id UUID REFERENCES tramitadores(id) ON DELETE SET NULL,
+    tramitador_fee DECIMAL(10, 2) DEFAULT 0,
+    registration_date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

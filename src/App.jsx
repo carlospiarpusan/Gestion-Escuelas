@@ -10,6 +10,8 @@ import QuestionsPage from './pages/SuperAdmin/Questions';
 import StudentExams from './pages/Student/Exams';
 import StudentPayments from './pages/Student/Payments';
 import InstructorHoursLink from './pages/Secretary/InstructorHours';
+import RegisterStudent from './pages/Secretary/RegisterStudent';
+import Tramitadores from './pages/Secretary/Tramitadores';
 import MyHours from './pages/Instructor/MyHours';
 import ExamResults from './pages/Analytics/ExamResults';
 
@@ -47,6 +49,8 @@ function App() {
 
           {/* Secretary Routes */}
           <Route path="instructor-logs" element={<InstructorHoursLink />} />
+          <Route path="register-student" element={<RegisterStudent />} />
+          <Route path="tramitadores" element={<Tramitadores />} />
 
           {/* Instructor Routes */}
           <Route path="my-hours" element={<MyHours />} />
