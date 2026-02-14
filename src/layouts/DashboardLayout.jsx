@@ -1,20 +1,13 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
-
-// Mock user role for now - in real app this comes from Auth Context
-const MOCK_USER = {
-    name: "Carlos User",
-    role: "superadmin", // Change to 'student', 'instructor', etc. to test
-    school: "Global Driving School"
-};
+import { useAuth } from '../context/AuthContext';
 
 const SidebarItem = ({ to, icon: Icon, label }) => (
     <NavLink
         to={to}
-        className={({ isActive }) =>
-            `${styles.navItem} ${isActive ? styles.active : ''}`
-        }
+        className={({ isActive }) => `${styles.sidebarItem} ${isActive ? styles.active : ''} `}
+        end={to === '/dashboard'} // Only exact match for root dashboard
     >
         <Icon size={20} />
         <span>{label}</span>
@@ -22,23 +15,33 @@ const SidebarItem = ({ to, icon: Icon, label }) => (
 );
 
 const DashboardLayout = () => {
+    const { user, logout } = useAuth();
     const navigate = useNavigate();
-    const role = MOCK_USER.role;
+
+    // Guard clause in case user is null (should be handled by ProtectedRoute, but safe to keep)
+    if (!user) return null;
+
+    const role = user.role;
 
     const handleLogout = () => {
-        // Clear tokens, etc.
-        navigate('/');
+        logout();
+        navigate('/login');
     };
 
     return (
         <div className={styles.layout}>
+            {/* Sidebar */}
             <aside className={styles.sidebar}>
-                <div className={styles.logoContainer}>
-                    <div className={styles.logoText}>Gestion Escuela</div>
-                    <div className={styles.schoolName}>{MOCK_USER.school}</div>
+                <div className={styles.sidebarHeader}>
+                    <div className={styles.logo}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+                        </svg>
+                        <span>SchoolOS</span>
+                    </div>
                 </div>
 
-                <nav className={styles.nav}>
+                <nav className={styles.sidebarNav}>
                     <SidebarItem to="/dashboard" icon={Home} label="Inicio" />
 
                     {role === 'superadmin' && (
@@ -62,40 +65,34 @@ const DashboardLayout = () => {
                         <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
                     )}
 
-                    {role === 'admin' && (
+                    {role === 'student' && (
                         <>
-                            <SidebarItem to="/dashboard/instructors" icon={Users} label="Instructores" />
-                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
+                            <SidebarItem to="/dashboard/exams" icon={GraduationCap} label="Exámenes Teóricos" />
+                            <SidebarItem to="/dashboard/payments" icon={CreditCard} label="Mis Pagos" />
                         </>
                     )}
 
-                    {role === 'student' && (
-                        <>
-                            <SidebarItem to="/dashboard/payments" icon={CreditCard} label="Mis Abonos" />
-                            <SidebarItem to="/dashboard/exams" icon={BookOpen} label="Exámenes Teóricos" />
-                        </>
-                    )}
+                    <div className={styles.divider}></div>
+                    <SidebarItem to="/dashboard/settings" icon={Settings} label="Configuración" />
                 </nav>
 
                 <div className={styles.userProfile}>
-                    <div className={styles.avatar}>{MOCK_USER.name[0]}</div>
-                    <div className={styles.userInfo}>
-                        <div className={styles.userName}>{MOCK_USER.name}</div>
-                        <div className={styles.userRole}>{role}</div>
+                    <div className={styles.avatar}>
+                        {user.name.charAt(0)}
                     </div>
-                    <button onClick={handleLogout} className={styles.logoutBtn}>
-                        <LogOut size={16} />
+                    <div className={styles.userInfo}>
+                        <span className={styles.userName}>{user.name}</span>
+                        <span className={styles.userRole}>{role}</span>
+                    </div>
+                    <button onClick={handleLogout} className={styles.logoutBtn} title="Cerrar Sesión">
+                        <LogOut size={18} />
                     </button>
                 </div>
             </aside>
 
+            {/* Main Content */}
             <main className={styles.mainContent}>
-                <header className={styles.header}>
-                    <h2>Panel de Control</h2>
-                </header>
-                <div className={styles.pageContent}>
-                    <Outlet />
-                </div>
+                <Outlet />
             </main>
         </div>
     );

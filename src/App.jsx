@@ -1,10 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import BentoGrid from './components/BentoGrid';
-import Footer from './components/Footer';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import DashboardLayout from './layouts/DashboardLayout';
 
+import LandingPage from './pages/LandingPage';
+import Login from './pages/Auth/Login';
 import SchoolsPage from './pages/SuperAdmin/Schools';
 import QuestionsPage from './pages/SuperAdmin/Questions';
 import StudentExams from './pages/Student/Exams';
@@ -15,55 +14,67 @@ import Tramitadores from './pages/Secretary/Tramitadores';
 import MyHours from './pages/Instructor/MyHours';
 import ExamResults from './pages/Analytics/ExamResults';
 
-// Placeholder Pages (Temporary until implemented)
-const LandingPage = () => (
-  <div className="app-container">
-    <Navbar />
-    <main>
-      <Hero />
-      <BentoGrid />
-    </main>
-    <Footer />
-  </div>
-);
+// Protected Route Wrapper
+const ProtectedRoute = ({ children, allowedRoles = [] }) => {
+  const { user, loading } = useAuth();
 
-const DashboardHome = () => <div><h3>Bienvenido al Panel de Control</h3><p>Selecciona una opción del menú.</p></div>;
-const UsersPage = () => <div><h3>Gestión de Usuarios</h3><p>Administración global de usuarios.</p></div>;
+  if (loading) return <div>Cargando...</div>; // Or a spinner
+  if (!user) return <Navigate to="/login" replace />;
+
+  // Authorization check
+  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
+
+// Placeholder Pages
+const DashboardHome = () => <h1>Bienvenido al Panel de Control</h1>;
+const UsersPage = () => <h1>Gestión de Usuarios</h1>;
+const SettingsPage = () => <h1>Configuración</h1>;
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Protected Dashboard Routes */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<DashboardHome />} />
+          {/* Protected Dashboard Routes */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<DashboardHome />} />
 
-          {/* Super Admin Routes */}
-          <Route path="schools" element={<SchoolsPage />} />
-          <Route path="questions" element={<QuestionsPage />} />
-          <Route path="users" element={<UsersPage />} />
-          <Route path="analytics" element={<ExamResults />} />
+            {/* Super Admin Routes */}
+            <Route path="schools" element={<ProtectedRoute allowedRoles={['superadmin']}><SchoolsPage /></ProtectedRoute>} />
+            <Route path="questions" element={<ProtectedRoute allowedRoles={['superadmin']}><QuestionsPage /></ProtectedRoute>} />
+            <Route path="users" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><UsersPage /></ProtectedRoute>} />
+            <Route path="analytics" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><ExamResults /></ProtectedRoute>} />
 
-          {/* Secretary Routes */}
-          <Route path="instructor-logs" element={<InstructorHoursLink />} />
-          <Route path="register-student" element={<RegisterStudent />} />
-          <Route path="tramitadores" element={<Tramitadores />} />
+            {/* Secretary Routes */}
+            <Route path="instructor-logs" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><InstructorHoursLink /></ProtectedRoute>} />
+            <Route path="register-student" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><RegisterStudent /></ProtectedRoute>} />
+            <Route path="tramitadores" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><Tramitadores /></ProtectedRoute>} />
 
-          {/* Instructor Routes */}
-          <Route path="my-hours" element={<MyHours />} />
+            {/* Instructor Routes */}
+            <Route path="my-hours" element={<ProtectedRoute allowedRoles={['instructor']}><MyHours /></ProtectedRoute>} />
 
-          {/* Student Routes */}
-          <Route path="payments" element={<StudentPayments />} />
-          <Route path="exams" element={<StudentExams />} />
-        </Route>
+            {/* Student Routes */}
+            <Route path="exams" element={<ProtectedRoute allowedRoles={['student']}><StudentExams /></ProtectedRoute>} />
+            <Route path="payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
 
-        {/* Catch all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
+
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
