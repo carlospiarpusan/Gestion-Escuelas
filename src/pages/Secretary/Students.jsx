@@ -193,7 +193,7 @@ const Students = () => {
 
             {/* Filters Bar */}
             <div style={{
-                background: 'white', padding: '20px', borderRadius: '24px', marginBottom: '24px',
+                background: 'var(--card-bg)', padding: '20px', borderRadius: '24px', marginBottom: '24px',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap'
             }}>
                 <div style={{ flex: 1, position: 'relative', minWidth: '180px' }}>
@@ -206,13 +206,13 @@ const Students = () => {
                         onClick={e => e.stopPropagation()}
                         style={{
                             width: '100%', padding: '12px 16px 12px 48px', borderRadius: '14px',
-                            border: '1px solid #e5e5e5', background: '#f5f5f7', fontSize: '15px'
+                            border: '1px solid var(--border-color)', background: 'var(--bg-color)', fontSize: '15px', color: 'var(--text-main)'
                         }}
                     />
                 </div>
 
                 {/* Month/Year Filter */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f5f5f7', padding: '6px 12px', borderRadius: '14px', border: '1px solid #e5e5e5' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-color)', padding: '6px 12px', borderRadius: '14px', border: '1px solid var(--border-color)' }}>
                     <Calendar size={16} style={{ color: '#86868b' }} />
                     <select
                         value={filterMonth}
@@ -220,7 +220,7 @@ const Students = () => {
                         onClick={e => e.stopPropagation()}
                         style={{
                             background: 'transparent', border: 'none', fontSize: '13px',
-                            color: '#1d1d1f', outline: 'none', cursor: 'pointer',
+                            color: 'var(--text-main)', outline: 'none', cursor: 'pointer',
                             padding: '6px 4px', minWidth: '110px'
                         }}
                     >
@@ -235,7 +235,7 @@ const Students = () => {
                         onClick={e => e.stopPropagation()}
                         style={{
                             background: 'transparent', border: 'none', fontSize: '13px',
-                            color: '#1d1d1f', outline: 'none', cursor: 'pointer',
+                            color: 'var(--text-main)', outline: 'none', cursor: 'pointer',
                             padding: '6px 4px', minWidth: '70px'
                         }}
                     >
@@ -264,9 +264,9 @@ const Students = () => {
                     onClick={(e) => { e.stopPropagation(); setFilterPending(!filterPending); }}
                     style={{
                         padding: '10px 16px', borderRadius: '12px',
-                        border: filterPending ? '2px solid #EF6C00' : '1px solid #e5e5e5',
-                        background: filterPending ? '#FFF3E0' : 'white',
-                        color: filterPending ? '#EF6C00' : '#86868b',
+                        border: filterPending ? '2px solid #EF6C00' : '1px solid var(--border-color)',
+                        background: filterPending ? '#FFF3E0' : 'var(--card-bg)',
+                        color: filterPending ? '#EF6C00' : 'var(--text-secondary)',
                         fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
                         display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap'
                     }}
@@ -281,9 +281,9 @@ const Students = () => {
                             key={cat}
                             onClick={(e) => { e.stopPropagation(); setFilterCategory(cat); }}
                             style={{
-                                padding: '8px 14px', borderRadius: '10px', border: '1px solid #e5e5e5',
-                                background: filterCategory === cat ? '#1d1d1f' : 'white',
-                                color: filterCategory === cat ? 'white' : '#1d1d1f',
+                                padding: '8px 14px', borderRadius: '10px', border: '1px solid var(--border-color)',
+                                background: filterCategory === cat ? 'var(--text-main)' : 'var(--card-bg)',
+                                color: filterCategory === cat ? 'var(--bg-color)' : 'var(--text-main)',
                                 fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s'
                             }}
                         >
