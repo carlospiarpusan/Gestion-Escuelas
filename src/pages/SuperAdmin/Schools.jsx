@@ -36,12 +36,19 @@ const SchoolsPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [isCreateAdminModalOpen, setIsCreateAdminModalOpen] = useState(false); // New Modal
     const [activeMenuId, setActiveMenuId] = useState(null);
     const [selectedSchool, setSelectedSchool] = useState(null);
+    const [newlyCreatedSchool, setNewlyCreatedSchool] = useState(null); // Store for admin creation
 
     // Form State
     const [formData, setFormData] = useState({
-        name: '', plan: 'Standard', active: true, address: '', phone: ''
+        name: '', plan: 'Standard', active: true, address: '', phone: '', nit: '', email: ''
+    });
+
+    // Admin Form State
+    const [adminFormData, setAdminFormData] = useState({
+        full_name: '', email: '', password: ''
     });
 
     const filteredSchools = schools.filter(s =>
@@ -49,7 +56,7 @@ const SchoolsPage = () => {
     );
 
     const handleOpenNewModal = () => {
-        setFormData({ name: '', plan: 'Standard', active: true, address: '', phone: '' });
+        setFormData({ name: '', plan: 'Standard', active: true, address: '', phone: '', nit: '', email: '' });
         setIsNewModalOpen(true);
     };
 
@@ -69,11 +76,46 @@ const SchoolsPage = () => {
                 body: JSON.stringify(formData)
             });
             if (res.ok) {
+                const createdSchool = await res.json();
                 fetchSchools();
                 setIsNewModalOpen(false);
+
+                // Open Admin Creation Modal
+                setNewlyCreatedSchool(createdSchool);
+                setAdminFormData({ full_name: 'Admin ' + createdSchool.name, email: createdSchool.contact_email || '', password: '' });
+                setIsCreateAdminModalOpen(true);
             }
         } catch (err) {
             console.error(err);
+        }
+    };
+
+    const handleCreateAdmin = async (e) => {
+        e.preventDefault();
+        if (!newlyCreatedSchool) return;
+
+        try {
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    school_id: newlyCreatedSchool.id,
+                    role: 'admin',
+                    ...adminFormData
+                })
+            });
+
+            if (res.ok) {
+                alert('Escuela y Administrador creados exitosamente.');
+                setIsCreateAdminModalOpen(false);
+                setNewlyCreatedSchool(null);
+            } else {
+                const err = await res.json();
+                alert('Error creando admin: ' + err.error);
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error creating admin');
         }
     };
 
@@ -316,6 +358,19 @@ const SchoolsPage = () => {
                                     </div>
                                 </div>
                                 <Input
+                                    label="NIT / Identificación Tributaria"
+                                    value={formData.nit}
+                                    onChange={e => setFormData({ ...formData, nit: e.target.value })}
+                                    required
+                                />
+                                <Input
+                                    label="Correo Electrónico (Contacto)"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    required
+                                />
+                                <Input
                                     label="Dirección"
                                     value={formData.address}
                                     onChange={e => setFormData({ ...formData, address: e.target.value })}
@@ -365,6 +420,62 @@ const SchoolsPage = () => {
                                 <Button variant="secondary" style={{ flex: 1 }} onClick={() => setIsDeleteModalOpen(false)}>Cancelar</Button>
                                 <Button style={{ flex: 1, background: '#ff3b30' }} onClick={handleDelete}>Confirmar</Button>
                             </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Create Admin Modal */}
+            <AnimatePresence>
+                {isCreateAdminModalOpen && (
+                    <div
+                        style={{
+                            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1100
+                        }}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            style={{ background: 'white', width: '500px', padding: '32px', borderRadius: '24px' }}
+                        >
+                            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#E3F2FD', color: '#0071e3', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                                    <Shield size={28} />
+                                </div>
+                                <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>Asignar Administrador</h3>
+                                <p style={{ color: '#86868b', fontSize: '15px' }}>
+                                    Crea el usuario administrador para <strong>{newlyCreatedSchool?.name}</strong>.
+                                </p>
+                            </div>
+
+                            <form onSubmit={handleCreateAdmin} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <Input
+                                    label="Nombre Completo"
+                                    value={adminFormData.full_name}
+                                    onChange={e => setAdminFormData({ ...adminFormData, full_name: e.target.value })}
+                                    required
+                                />
+                                <Input
+                                    label="Correo Electrónico (Login)"
+                                    type="email"
+                                    value={adminFormData.email}
+                                    onChange={e => setAdminFormData({ ...adminFormData, email: e.target.value })}
+                                    required
+                                />
+                                <Input
+                                    label="Contraseña"
+                                    type="password"
+                                    value={adminFormData.password}
+                                    onChange={e => setAdminFormData({ ...adminFormData, password: e.target.value })}
+                                    required
+                                />
+                                <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                                    <Button variant="secondary" type="button" style={{ flex: 1 }} onClick={() => setIsCreateAdminModalOpen(false)}>Omitir</Button>
+                                    <Button type="submit" style={{ flex: 1 }}>Crear Usuario</Button>
+                                </div>
+                            </form>
                         </motion.div>
                     </div>
                 )}

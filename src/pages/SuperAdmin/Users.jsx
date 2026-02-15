@@ -1,21 +1,75 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, UserPlus, Search, Shield, Globe, School, MoreVertical, Edit2, Trash2, Mail, Phone, Calendar } from 'lucide-react';
-import Button from '../../components/UI/Button';
-import Input from '../../components/UI/Input';
-
-const MOCK_GLOBAL_USERS = [
-    { id: 1, name: 'Carlos Admin', email: 'admin@school.com', role: 'admin', schoolId: 'school-1', schoolName: 'Autoescuela Central', status: 'Active', registered: '2024-12-10' },
-    { id: 2, name: 'Secretaria General', email: 'sec@school.com', role: 'secretary', schoolId: 'school-1', schoolName: 'Autoescuela Central', status: 'Active', registered: '2025-01-15' },
-    { id: 3, name: 'Juan Instructor', email: 'inst@school.com', role: 'instructor', schoolId: 'school-1', schoolName: 'Autoescuela Central', status: 'Active', registered: '2025-01-20' },
-    { id: 4, name: 'Mario Rossi', email: 'mario@global.com', role: 'superadmin', schoolId: null, schoolName: 'Global', status: 'Active', registered: '2024-01-01' },
-];
 
 const UsersPage = () => {
-    const [users, setUsers] = useState(MOCK_GLOBAL_USERS);
+    const [users, setUsers] = useState([]);
+    const [schools, setSchools] = useState([]); // For dropdown
+    const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
+
+    // Form State
+    const [formData, setFormData] = useState({
+        full_name: '', email: '', password: '', role: 'student', school_id: ''
+    });
+
+    const fetchData = async () => {
+        setIsLoading(true);
+        try {
+            const [usersRes, schoolsRes] = await Promise.all([
+                fetch('/api/users'),
+                fetch('/api/schools')
+            ]);
+
+            const usersData = await usersRes.json();
+            const schoolsData = await schoolsRes.json();
+
+            if (Array.isArray(usersData)) {
+                // Map API data to UI format
+                const mappedUsers = usersData.map(u => ({
+                    ...u,
+                    name: u.full_name,
+                    status: u.active ? 'Active' : 'Inactive',
+                    schoolName: u.schoolName || 'Global'
+                }));
+                setUsers(mappedUsers);
+            }
+            if (Array.isArray(schoolsData)) setSchools(schoolsData);
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useState(() => {
+        fetchData();
+    }, []);
+
+    const handleCreate = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await fetch('/api/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            if (res.ok) {
+                fetchData();
+                setIsNewModalOpen(false);
+                setFormData({ full_name: '', email: '', password: '', role: 'student', school_id: '' });
+                alert('Usuario creado exitosamente');
+            } else {
+                const err = await res.json();
+                alert('Error: ' + err.error);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     const filteredUsers = users.filter(u =>
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,6 +178,86 @@ const UsersPage = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* New User Modal */}
+            <AnimatePresence>
+                {isNewModalOpen && (
+                    <div
+                        style={{
+                            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                        }}
+                        onClick={() => setIsNewModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            style={{ background: 'white', width: '500px', padding: '32px', borderRadius: '24px' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '24px' }}>Nuevo Usuario</h3>
+                            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <Input
+                                    label="Nombre Completo"
+                                    value={formData.full_name}
+                                    onChange={e => setFormData({ ...formData, full_name: e.target.value })}
+                                    required
+                                />
+                                <Input
+                                    label="Correo Electrónico"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    required
+                                />
+                                <Input
+                                    label="Contraseña"
+                                    type="password"
+                                    value={formData.password}
+                                    onChange={e => setFormData({ ...formData, password: e.target.value })}
+                                    required
+                                />
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <label style={{ fontSize: '13px', fontWeight: 500, color: '#86868b' }}>Rol</label>
+                                    <select
+                                        value={formData.role}
+                                        onChange={e => setFormData({ ...formData, role: e.target.value })}
+                                        style={{ padding: '12px', borderRadius: '12px', border: '1px solid #e5e5e5', background: '#f5f5f7' }}
+                                    >
+                                        <option value="student">Estudiante</option>
+                                        <option value="instructor">Instructor</option>
+                                        <option value="secretary">Secretaria</option>
+                                        <option value="admin">Administrador de Sede</option>
+                                        <option value="superadmin">Superadmin</option>
+                                    </select>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                    <label style={{ fontSize: '13px', fontWeight: 500, color: '#86868b' }}>Sede asignada</label>
+                                    <select
+                                        value={formData.school_id}
+                                        onChange={e => setFormData({ ...formData, school_id: e.target.value })}
+                                        disabled={formData.role === 'superadmin'}
+                                        style={{ padding: '12px', borderRadius: '12px', border: '1px solid #e5e5e5', background: '#f5f5f7' }}
+                                    >
+                                        <option value="">Seleccionar Sede...</option>
+                                        {schools.map(s => (
+                                            <option key={s.id} value={s.id}>{s.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                                    <Button variant="secondary" type="button" style={{ flex: 1 }} onClick={() => setIsNewModalOpen(false)}>Cancelar</Button>
+                                    <Button type="submit" style={{ flex: 1 }}>Crear Usuario</Button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
