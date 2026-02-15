@@ -1,34 +1,43 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Filter, MoreHorizontal, User, CreditCard, CheckCircle, Clock, AlertCircle, ExternalLink, Edit2, Trash2, DollarSign, PlusCircle, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
-import { MOCK_STUDENTS } from '../../data/mockStudents';
 
 const Students = () => {
     const [students, setStudents] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterCategory, setFilterCategory] = useState('All');
-    const [dateFilter, setDateFilter] = useState({ start: '', end: '' });
+
+    // Month/Year filter
+    const currentDate = new Date();
+    const [filterMonth, setFilterMonth] = useState('');
+    const [filterYear, setFilterYear] = useState('');
 
     // Fetch students from API
     const fetchStudents = async () => {
         setIsLoading(true);
+        setError(null);
         try {
             const res = await fetch('/api/students');
+            if (!res.ok) throw new Error(`API Error: ${res.status}`);
             const data = await res.json();
-            if (Array.isArray(data)) setStudents(data);
+            if (Array.isArray(data)) {
+                setStudents(data);
+            } else {
+                throw new Error('Invalid data format');
+            }
         } catch (err) {
             console.error('Error fetching students:', err);
-            // Fallback to mock for dev resilience
-            setStudents(MOCK_STUDENTS);
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
     };
 
-    useState(() => {
+    useEffect(() => {
         fetchStudents();
     }, []);
 
@@ -42,15 +51,19 @@ const Students = () => {
     const [paymentMethod, setPaymentMethod] = useState('Efectivo');
 
     const filteredStudents = students.filter(s => {
-        const matchesSearch = s.name.toLowerCase().includes(searchTerm.toLowerCase()) || s.document.includes(searchTerm);
+        const name = (s.name || '').toLowerCase();
+        const doc = (s.document || '');
+        const matchesSearch = name.includes(searchTerm.toLowerCase()) || doc.includes(searchTerm);
+        const cat = (s.category || '');
         const matchesCategory = filterCategory === 'All' ||
-            (filterCategory === 'Combo' ? s.category.includes('Combo') : s.category === filterCategory);
+            (filterCategory === 'Combo' ? cat.includes('Combo') : cat === filterCategory);
 
+        // Month/Year filter
         let matchesDate = true;
-        if (dateFilter.start || dateFilter.end) {
+        if (filterMonth || filterYear) {
             const regDate = new Date(s.registered);
-            if (dateFilter.start && regDate < new Date(dateFilter.start)) matchesDate = false;
-            if (dateFilter.end && regDate > new Date(dateFilter.end)) matchesDate = false;
+            if (filterMonth && (regDate.getMonth() + 1) !== parseInt(filterMonth)) matchesDate = false;
+            if (filterYear && regDate.getFullYear() !== parseInt(filterYear)) matchesDate = false;
         }
 
         return matchesSearch && matchesCategory && matchesDate;
@@ -67,7 +80,6 @@ const Students = () => {
         e.preventDefault();
         setStudents(students.map(s => {
             if (s.id === selectedStudent.id) {
-                // Auto calculate payment status
                 const isPaid = (s.balance || 0) >= selectedStudent.courseValue;
                 return { ...selectedStudent, payment: isPaid ? 'Paid' : 'Pending' };
             }
@@ -101,6 +113,17 @@ const Students = () => {
         setSelectedStudent(null);
     };
 
+    // Generate year options (current year to 3 years back)
+    const yearOptions = [];
+    for (let y = currentDate.getFullYear(); y >= currentDate.getFullYear() - 3; y--) {
+        yearOptions.push(y);
+    }
+
+    const monthNames = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
     return (
         <div
             style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }}
@@ -120,9 +143,9 @@ const Students = () => {
             {/* Filters Bar */}
             <div style={{
                 background: 'white', padding: '20px', borderRadius: '24px', marginBottom: '24px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', gap: '16px', alignItems: 'center'
+                boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap'
             }}>
-                <div style={{ flex: 1, position: 'relative' }}>
+                <div style={{ flex: 1, position: 'relative', minWidth: '200px' }}>
                     <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#86868b' }} />
                     <input
                         type="text"
@@ -137,26 +160,43 @@ const Students = () => {
                     />
                 </div>
 
-                {/* Date Filter */}
+                {/* Month/Year Filter */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#f5f5f7', padding: '6px 12px', borderRadius: '14px', border: '1px solid #e5e5e5' }}>
                     <Calendar size={16} style={{ color: '#86868b' }} />
-                    <input
-                        type="date"
-                        value={dateFilter.start}
-                        onChange={e => setDateFilter({ ...dateFilter, start: e.target.value })}
-                        style={{ background: 'transparent', border: 'none', fontSize: '13px', color: '#1d1d1f', outline: 'none' }}
-                    />
-                    <span style={{ color: '#86868b', fontSize: '12px' }}>–</span>
-                    <input
-                        type="date"
-                        value={dateFilter.end}
-                        onChange={e => setDateFilter({ ...dateFilter, end: e.target.value })}
-                        style={{ background: 'transparent', border: 'none', fontSize: '13px', color: '#1d1d1f', outline: 'none' }}
-                    />
-                    {(dateFilter.start || dateFilter.end) && (
+                    <select
+                        value={filterMonth}
+                        onChange={e => setFilterMonth(e.target.value)}
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                            background: 'transparent', border: 'none', fontSize: '13px',
+                            color: '#1d1d1f', outline: 'none', cursor: 'pointer',
+                            padding: '6px 4px', minWidth: '110px'
+                        }}
+                    >
+                        <option value="">Todos los meses</option>
+                        {monthNames.map((name, i) => (
+                            <option key={i} value={i + 1}>{name}</option>
+                        ))}
+                    </select>
+                    <select
+                        value={filterYear}
+                        onChange={e => setFilterYear(e.target.value)}
+                        onClick={e => e.stopPropagation()}
+                        style={{
+                            background: 'transparent', border: 'none', fontSize: '13px',
+                            color: '#1d1d1f', outline: 'none', cursor: 'pointer',
+                            padding: '6px 4px', minWidth: '70px'
+                        }}
+                    >
+                        <option value="">Año</option>
+                        {yearOptions.map(y => (
+                            <option key={y} value={y}>{y}</option>
+                        ))}
+                    </select>
+                    {(filterMonth || filterYear) && (
                         <button
                             type="button"
-                            onClick={(e) => { e.stopPropagation(); setDateFilter({ start: '', end: '' }); }}
+                            onClick={(e) => { e.stopPropagation(); setFilterMonth(''); setFilterYear(''); }}
                             style={{
                                 background: '#FFE5E5', color: '#ff3b30', border: 'none',
                                 padding: '4px 8px', borderRadius: '8px', fontSize: '12px',
@@ -165,7 +205,7 @@ const Students = () => {
                             onMouseOver={e => e.currentTarget.style.background = '#ffdada'}
                             onMouseOut={e => e.currentTarget.style.background = '#FFE5E5'}
                         >
-                            Limpiar
+                            ✕
                         </button>
                     )}
                 </div>
@@ -188,6 +228,20 @@ const Students = () => {
                 </div>
             </div>
 
+            {/* Error Message */}
+            {error && (
+                <div style={{ background: '#FFF5F5', color: '#ff3b30', padding: '16px', borderRadius: '12px', marginBottom: '24px' }}>
+                    <strong>Error:</strong> {error}
+                </div>
+            )}
+
+            {/* Loading State */}
+            {isLoading && (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#86868b' }}>
+                    Cargando alumnos...
+                </div>
+            )}
+
             {/* Table Area */}
             <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -204,7 +258,9 @@ const Students = () => {
                     <tbody>
                         <AnimatePresence mode='popLayout'>
                             {filteredStudents.map((student) => {
-                                const debt = Math.max(0, (student.courseValue || 0) - (student.balance || 0));
+                                const courseValue = parseFloat(student.courseValue) || 0;
+                                const balance = parseFloat(student.balance) || 0;
+                                const debt = Math.max(0, courseValue - balance);
                                 return (
                                     <motion.tr
                                         layout
@@ -220,17 +276,17 @@ const Students = () => {
                                                     <User size={18} />
                                                 </div>
                                                 <div>
-                                                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#1d1d1f' }}>{student.name}</div>
-                                                    <div style={{ fontSize: '12px', color: '#86868b' }}>{student.document}</div>
+                                                    <div style={{ fontSize: '14px', fontWeight: 600, color: '#1d1d1f' }}>{student.name || 'Sin nombre'}</div>
+                                                    <div style={{ fontSize: '12px', color: '#86868b' }}>{student.document || student.email || ''}</div>
                                                 </div>
                                             </div>
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
-                                            <span style={{ fontSize: '14px', color: '#1d1d1f', fontWeight: 500 }}>{student.category}</span>
+                                            <span style={{ fontSize: '14px', color: '#1d1d1f', fontWeight: 500 }}>{student.category || '—'}</span>
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
                                             <span style={{ fontSize: '15px', fontWeight: 600, color: '#2E7D32' }}>
-                                                ${student.balance?.toLocaleString()}
+                                                ${balance.toLocaleString()}
                                             </span>
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
@@ -246,7 +302,7 @@ const Students = () => {
                                             </div>
                                         </td>
                                         <td style={{ padding: '16px 24px', fontSize: '13px', color: '#86868b' }}>
-                                            {student.registered}
+                                            {student.registered || '—'}
                                         </td>
                                         <td style={{ padding: '16px 24px', textAlign: 'right', position: 'relative' }}>
                                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
@@ -336,7 +392,7 @@ const Students = () => {
                         </AnimatePresence>
                     </tbody>
                 </table>
-                {filteredStudents.length === 0 && (
+                {filteredStudents.length === 0 && !isLoading && (
                     <div style={{ padding: '60px', textAlign: 'center', color: '#86868b' }}>
                         <AlertCircle size={40} style={{ margin: '0 auto 16px', opacity: 0.2 }} />
                         <p>No se encontraron alumnos con los criterios de búsqueda.</p>
@@ -368,7 +424,7 @@ const Students = () => {
                             <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>Registrar Abono</h3>
                             <p style={{ color: '#86868b', fontSize: '14px', marginBottom: '24px' }}>
                                 Registra un abono para <strong>{selectedStudent?.name}</strong>.
-                                Saldo pendiente: ${((selectedStudent?.courseValue || 0) - (selectedStudent?.balance || 0)).toLocaleString()}
+                                Saldo pendiente: ${((parseFloat(selectedStudent?.courseValue) || 0) - (parseFloat(selectedStudent?.balance) || 0)).toLocaleString()}
                             </p>
 
                             <form onSubmit={handleAddPayment} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -468,19 +524,19 @@ const Students = () => {
                             <form onSubmit={handleUpdate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                 <Input
                                     label="Nombre Completo"
-                                    value={selectedStudent?.name}
+                                    value={selectedStudent?.name || ''}
                                     onChange={e => setSelectedStudent({ ...selectedStudent, name: e.target.value })}
                                 />
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <Input
                                         label="Cédula"
-                                        value={selectedStudent?.document}
+                                        value={selectedStudent?.document || ''}
                                         onChange={e => setSelectedStudent({ ...selectedStudent, document: e.target.value })}
                                     />
                                     <Input
                                         label="Valor del Curso ($)"
                                         type="number"
-                                        value={selectedStudent?.courseValue}
+                                        value={selectedStudent?.courseValue || ''}
                                         onChange={e => setSelectedStudent({ ...selectedStudent, courseValue: parseFloat(e.target.value) })}
                                     />
                                 </div>
