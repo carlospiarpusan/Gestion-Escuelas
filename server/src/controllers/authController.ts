@@ -49,9 +49,9 @@ export const login = async (req: AuthRequest, res: Response) => {
         fechaRegistro: user.fecha_registro,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error en login:', error);
-    res.status(500).json({ error: 'Error en el servidor', details: error.message });
+    res.status(500).json({ error: 'Error en el servidor' });
   }
 };
 
