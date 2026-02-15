@@ -1,178 +1,267 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { ArrowLeft, Tool, Fuel, Save, AlertCircle, Calendar, Wrench, DollarSign } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Fuel, Save, AlertCircle, Calendar, Wrench, DollarSign, CheckCircle, FileText } from 'lucide-react';
 import { MOCK_VEHICLES, MOCK_MAINTENANCE_LOGS, MOCK_FUEL_LOGS } from '../../data/mockFleet';
+import MaintenanceForm from '../../components/Fleet/MaintenanceForm';
+import FuelForm from '../../components/Fleet/FuelForm';
 
 const VehicleDetails = () => {
     const { id } = useParams();
-    const vehicle = MOCK_VEHICLES.find(v => v.id === id);
     const [activeTab, setActiveTab] = useState('maintenance');
+    const [showMaintenanceForm, setShowMaintenanceForm] = useState(false);
+    const [showFuelForm, setShowFuelForm] = useState(false);
 
-    // Filter logs for this vehicle
-    const maintenanceLogs = MOCK_MAINTENANCE_LOGS.filter(l => l.vehicle_id === id);
-    const fuelLogs = MOCK_FUEL_LOGS.filter(l => l.vehicle_id === id);
+    // In a real app, these would come from an API/Context
+    const [vehicle, setVehicle] = useState(MOCK_VEHICLES.find(v => v.id === id));
+    const [maintenanceLogs, setMaintenanceLogs] = useState(MOCK_MAINTENANCE_LOGS.filter(l => l.vehicle_id === id));
+    const [fuelLogs, setFuelLogs] = useState(MOCK_FUEL_LOGS.filter(l => l.vehicle_id === id));
 
     if (!vehicle) return <div>Vehículo no encontrado</div>;
 
+    const handleMaintenanceSave = (newLog) => {
+        setMaintenanceLogs([newLog, ...maintenanceLogs]);
+        // Update vehicle KM if the log has higher KM
+        if (newLog.km_at_service > vehicle.km_current) {
+            setVehicle({ ...vehicle, km_current: newLog.km_at_service });
+        }
+    };
+
+    const handleFuelSave = (newLog) => {
+        setFuelLogs([newLog, ...fuelLogs]);
+        if (newLog.km_at_fueling > vehicle.km_current) {
+            setVehicle({ ...vehicle, km_current: newLog.km_at_fueling });
+        }
+    };
+
+    const handleEditInfo = () => {
+        alert("Edición de vehículo próximamente.");
+    };
+
     return (
-        <div className="p-8">
-            <Link to="/dashboard/fleet" className="flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-6 transition-colors">
+        <div style={{ padding: '40px', maxWidth: '1200px', margin: '0 auto' }} className="fade-in">
+            <Link to="/dashboard/fleet" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#86868b', marginBottom: '24px', textDecoration: 'none', fontWeight: 500 }}>
                 <ArrowLeft size={20} /> Volver a la Flota
             </Link>
 
-            <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">{vehicle.brand} {vehicle.model} - {vehicle.plate}</h1>
-                    <p className="text-gray-500">Kilometraje Actual: <span className="font-mono font-bold text-gray-800">{vehicle.km_current.toLocaleString()} km</span></p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '8px' }}>
+                        <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#1d1d1f', margin: 0 }}>{vehicle.brand} {vehicle.model}</h1>
+                        <span style={{ padding: '4px 12px', background: '#e5e5ea', borderRadius: '6px', fontFamily: 'monospace', fontWeight: 600, fontSize: '16px' }}>{vehicle.plate}</span>
+                    </div>
+                    <p style={{ color: '#86868b', fontSize: '17px' }}>
+                        Kilometraje Actual: <span style={{ fontWeight: 600, color: '#1d1d1f' }}>{vehicle.km_current.toLocaleString()} km</span>
+                    </p>
                 </div>
-                <div className="flex gap-3">
-                    <button className="bg-orange-50 text-orange-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-orange-100 font-medium border border-orange-200">
-                        <Wrench size={20} />
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <button
+                        onClick={() => setShowMaintenanceForm(true)}
+                        style={{
+                            background: '#FFF8E1', color: '#F57F17', border: 'none', padding: '10px 20px',
+                            borderRadius: '980px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: '8px'
+                        }}
+                    >
+                        <Wrench size={18} />
                         Registrar Mantenimiento
                     </button>
-                    <button className="bg-blue-50 text-blue-600 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-100 font-medium border border-blue-200">
-                        <Fuel size={20} />
+                    <button
+                        onClick={() => setShowFuelForm(true)}
+                        style={{
+                            background: '#E3F2FD', color: '#0071e3', border: 'none', padding: '10px 20px',
+                            borderRadius: '980px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: '8px'
+                        }}
+                    >
+                        <Fuel size={18} />
                         Registrar Tanqueo
                     </button>
-                    <button className="bg-gray-900 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800">
-                        <Save size={20} />
+                    <button
+                        onClick={handleEditInfo}
+                        style={{
+                            background: '#e5e5ea', color: '#1d1d1f', border: 'none', padding: '10px 20px',
+                            borderRadius: '980px', fontSize: '14px', fontWeight: 600, cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', gap: '8px'
+                        }}
+                    >
+                        <Save size={18} />
                         Editar Info
                     </button>
                 </div>
             </header>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-gray-500 font-medium">Próxima Tecnomecánica</h3>
-                        <Calendar className="text-gray-400" size={20} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', marginBottom: '40px' }}>
+                <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                        <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#86868b' }}>Próxima Tecnomecánica</h3>
+                        <Calendar size={20} color="#86868b" />
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">{vehicle.techno_expires}</p>
-                    <p className="text-sm text-yellow-600 mt-2 flex items-center gap-1">
+                    <p style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>{vehicle.techno_expires}</p>
+                    <p style={{ fontSize: '13px', color: '#FF9500', display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <AlertCircle size={14} /> Atento a vencimiento
                     </p>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-gray-500 font-medium">Gasto Combustible (Mes)</h3>
-                        <Fuel className="text-blue-400" size={20} />
+                <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                        <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#86868b' }}>Gasto Combustible (Mes)</h3>
+                        <Fuel size={20} color="#0071e3" />
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">$273,000</p>
-                    <p className="text-sm text-gray-400 mt-2">Promedio: 45 km/gal</p>
+                    <p style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>$273,000</p>
+                    <p style={{ fontSize: '13px', color: '#86868b' }}>Promedio: 45 km/gal</p>
                 </div>
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-gray-500 font-medium">Gasto Mantenimiento (Año)</h3>
-                        <Wrench className="text-orange-400" size={20} />
+                <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                        <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#86868b' }}>Gasto Mantenimiento (Año)</h3>
+                        <Wrench size={20} color="#FF9500" />
                     </div>
-                    <p className="text-2xl font-bold text-gray-900">$1,450,000</p>
-                    <p className="text-sm text-gray-400 mt-2">2 Reparaciones, 3 Aceites</p>
+                    <p style={{ fontSize: '24px', fontWeight: 700, margin: '0 0 8px 0' }}>$1,450,000</p>
+                    <p style={{ fontSize: '13px', color: '#86868b' }}>2 Reparaciones, 3 Aceites</p>
                 </div>
             </div>
 
             {/* Tabs */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden min-h-[500px]">
-                <div className="border-b border-gray-100 flex">
-                    <button
-                        onClick={() => setActiveTab('maintenance')}
-                        className={`px-8 py-4 font-medium text-sm transition-colors relative ${activeTab === 'maintenance' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Historial Mantenimiento
-                        {activeTab === 'maintenance' && <motion.div layoutId="tabLine" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />}
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('fuel')}
-                        className={`px-8 py-4 font-medium text-sm transition-colors relative ${activeTab === 'fuel' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Historial de Combustible
-                        {activeTab === 'fuel' && <motion.div layoutId="tabLine" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />}
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('docs')}
-                        className={`px-8 py-4 font-medium text-sm transition-colors relative ${activeTab === 'docs' ? 'text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}
-                    >
-                        Documentación
-                        {activeTab === 'docs' && <motion.div layoutId="tabLine" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />}
-                    </button>
+            <div style={{ background: 'white', borderRadius: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.04)', overflow: 'hidden', minHeight: '500px' }}>
+                <div style={{ borderBottom: '1px solid #f0f0f0', display: 'flex', padding: '0 24px' }}>
+                    {[
+                        { id: 'maintenance', label: 'Historial Mantenimiento' },
+                        { id: 'fuel', label: 'Historial de Combustible' },
+                        { id: 'docs', label: 'Documentación' }
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveTab(tab.id)}
+                            style={{
+                                padding: '20px 0', marginRight: '32px', fontSize: '15px', fontWeight: activeTab === tab.id ? 600 : 500,
+                                color: activeTab === tab.id ? '#0071e3' : '#86868b',
+                                borderBottom: activeTab === tab.id ? '2px solid #0071e3' : '2px solid transparent',
+                                background: 'none', border: 'none', cursor: 'pointer', borderBottomWidth: '2px', outline: 'none',
+                                transition: 'color 0.2s'
+                            }}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
-                <div className="p-6">
+                <div style={{ padding: '32px' }}>
+                    {/* Maintenance Table */}
                     {activeTab === 'maintenance' && (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                                        <th className="pb-4">Fecha</th>
-                                        <th className="pb-4">Tipo</th>
-                                        <th className="pb-4">Descripción</th>
-                                        <th className="pb-4">Taller</th>
-                                        <th className="pb-4 text-right">Repuestos</th>
-                                        <th className="pb-4 text-right">M. Obra</th>
-                                        <th className="pb-4 text-right">Total</th>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr style={{ textAlign: 'left', fontSize: '13px', color: '#86868b', borderBottom: '1px solid #f0f0f0' }}>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>FECHA</th>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>TIPO</th>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>DESCRIPCIÓN</th>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>TALLER</th>
+                                    <th style={{ padding: '12px 0 20px', textAlign: 'right', fontWeight: 500 }}>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {maintenanceLogs.map(log => (
+                                    <tr key={log.id} style={{ borderBottom: '1px solid #f9f9f9' }}>
+                                        <td style={{ padding: '20px 0', fontSize: '15px' }}>{log.date}</td>
+                                        <td style={{ padding: '20px 0' }}>
+                                            <span style={{
+                                                padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: 600,
+                                                background: log.type === 'oil_change' ? '#E3F2FD' : '#FFF3E0',
+                                                color: log.type === 'oil_change' ? '#0071e3' : '#E65100'
+                                            }}>
+                                                {log.type === 'oil_change' ? 'Cambio Aceite' : 'Reparación'}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '20px 0', fontSize: '15px', color: '#424245' }}>{log.description}</td>
+                                        <td style={{ padding: '20px 0', fontSize: '15px', color: '#86868b' }}>{log.provider}</td>
+                                        <td style={{ padding: '20px 0', textAlign: 'right', fontWeight: 600 }}>${(log.cost_parts + log.cost_labor).toLocaleString()}</td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-50">
-                                    {maintenanceLogs.map(log => (
-                                        <tr key={log.id} className="text-sm">
-                                            <td className="py-4 text-gray-900">{log.date}</td>
-                                            <td className="py-4">
-                                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${log.type === 'oil_change' ? 'bg-blue-100 text-blue-700' :
-                                                        log.type === 'repair' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-700'
-                                                    }`}>
-                                                    {log.type === 'oil_change' ? 'Cambio Aceite' : 'Reparación'}
-                                                </span>
-                                            </td>
-                                            <td className="py-4 text-gray-600 max-w-[300px]">{log.description}</td>
-                                            <td className="py-4 text-gray-500">{log.provider}</td>
-                                            <td className="py-4 text-right text-gray-900">${log.cost_parts.toLocaleString()}</td>
-                                            <td className="py-4 text-right text-gray-900">${log.cost_labor.toLocaleString()}</td>
-                                            <td className="py-4 text-right font-medium text-gray-900">${(log.cost_parts + log.cost_labor).toLocaleString()}</td>
-                                        </tr>
-                                    ))}
-                                    {maintenanceLogs.length === 0 && (
-                                        <tr>
-                                            <td colSpan="7" className="py-8 text-center text-gray-400">No hay registros de mantenimiento.</td>
-                                        </tr>
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+                                ))}
+                            </tbody>
+                        </table>
                     )}
 
+                    {/* Fuel Table */}
                     {activeTab === 'fuel' && (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider border-b border-gray-100">
-                                        <th className="pb-4">Fecha</th>
-                                        <th className="pb-4">Kilometraje</th>
-                                        <th className="pb-4 text-right">Galones</th>
-                                        <th className="pb-4 text-center">Tanque Lleno</th>
-                                        <th className="pb-4 text-right">Costo Total</th>
-                                        <th className="pb-4 text-right">Costo/Galón</th>
+                        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                            <thead>
+                                <tr style={{ textAlign: 'left', fontSize: '13px', color: '#86868b', borderBottom: '1px solid #f0f0f0' }}>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>FECHA</th>
+                                    <th style={{ padding: '12px 0 20px', fontWeight: 500 }}>KILOMETRAJE</th>
+                                    <th style={{ padding: '12px 0 20px', textAlign: 'right', fontWeight: 500 }}>GALONES</th>
+                                    <th style={{ padding: '12px 0 20px', textAlign: 'center', fontWeight: 500 }}>FULL</th>
+                                    <th style={{ padding: '12px 0 20px', textAlign: 'right', fontWeight: 500 }}>COSTO</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {fuelLogs.map(log => (
+                                    <tr key={log.id} style={{ borderBottom: '1px solid #f9f9f9' }}>
+                                        <td style={{ padding: '20px 0', fontSize: '15px' }}>{log.date}</td>
+                                        <td style={{ padding: '20px 0', fontSize: '15px', fontFamily: 'monospace' }}>{log.km_at_fueling.toLocaleString()}</td>
+                                        <td style={{ padding: '20px 0', textAlign: 'right', fontSize: '15px' }}>{log.gallons}</td>
+                                        <td style={{ padding: '20px 0', textAlign: 'center' }}>
+                                            {log.is_full_tank ? <CheckCircle size={16} color="#34C759" /> : '-'}
+                                        </td>
+                                        <td style={{ padding: '20px 0', textAlign: 'right', fontWeight: 600 }}>${log.cost_total.toLocaleString()}</td>
                                     </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-50">
-                                    {fuelLogs.map(log => (
-                                        <tr key={log.id} className="text-sm">
-                                            <td className="py-4 text-gray-900">{log.date}</td>
-                                            <td className="py-4 font-mono text-gray-600">{log.km_at_fueling.toLocaleString()}</td>
-                                            <td className="py-4 text-right text-gray-900">{log.gallons}</td>
-                                            <td className="py-4 text-center">
-                                                {log.is_full_tank ? <CheckCircle size={16} className="text-green-500 inline" /> : '-'}
-                                            </td>
-                                            <td className="py-4 text-right font-medium text-gray-900">${log.cost_total.toLocaleString()}</td>
-                                            <td className="py-4 text-right text-gray-500">${Math.round(log.cost_total / log.gallons).toLocaleString()}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
+
+                    {/* Docs Tab */}
+                    {activeTab === 'docs' && (
+                        <div>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '20px' }}>
+                                <div style={{ border: '1px solid #e5e5e5', borderRadius: '16px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <div style={{ width: '40px', height: '40px', background: '#FF3B30', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                                        <FileText size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 600 }}>SOAT Digital</div>
+                                        <div style={{ fontSize: '12px', color: '#86868b' }}>Vence: {vehicle.soat_expires}</div>
+                                    </div>
+                                </div>
+                                <div style={{ border: '1px solid #e5e5e5', borderRadius: '16px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <div style={{ width: '40px', height: '40px', background: '#34C759', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                                        <FileText size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 600 }}>Tecnomecánica</div>
+                                        <div style={{ fontSize: '12px', color: '#86868b' }}>Vence: {vehicle.techno_expires}</div>
+                                    </div>
+                                </div>
+                                <div style={{ border: '1px solid #e5e5e5', borderRadius: '16px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <div style={{ width: '40px', height: '40px', background: '#0071e3', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                                        <FileText size={20} />
+                                    </div>
+                                    <div>
+                                        <div style={{ fontWeight: 600 }}>Tarjeta Propiedad</div>
+                                        <div style={{ fontSize: '12px', color: '#86868b' }}>Permanente</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
             </div>
+
+            {/* Modals */}
+            <AnimatePresence>
+                {showMaintenanceForm && (
+                    <MaintenanceForm
+                        vehicleId={id}
+                        onClose={() => setShowMaintenanceForm(false)}
+                        onSave={handleMaintenanceSave}
+                    />
+                )}
+                {showFuelForm && (
+                    <FuelForm
+                        vehicleId={id}
+                        onClose={() => setShowFuelForm(false)}
+                        onSave={handleFuelSave}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

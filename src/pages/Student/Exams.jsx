@@ -1,39 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Clock } from 'lucide-react';
 
-const CATEGORIES = [
-    { id: 'A2', label: 'Moto (A2)', icon: '🏍️' },
-    { id: 'B1', label: 'Auto (B1)', icon: '🚗' },
-    { id: 'C1', label: 'Camión (C1)', icon: '🚛' },
-    { id: 'C2', label: 'Bus (C2)', icon: '🚌' },
-    { id: 'SV', label: 'Seguridad Vial', icon: '🛑' },
-];
+import { MOCK_QUESTIONS as QUESTION_BANK, CATEGORIES } from '../../data/mockQuestions';
 
 const MODES = [
-    { id: 15, label: 'Rápido (15 preguntas)' },
-    { id: 40, label: 'Completo (40 preguntas)' },
-];
-
-// MOCK DB - In real app this comes from Supabase/Neon "questions" table
-const QUESTION_BANK = [
-    // Seguridad Vial (15 Fixed)
-    { id: 'sv1', category: 'SEGURIDAD_VIAL', question: '¿Cuál es la principal causa de accidentes?', options: { A: 'Fallas', B: 'Vía', C: 'Exceso velocidad', D: 'Clima' }, correct: 'C' },
-    { id: 'sv2', category: 'SEGURIDAD_VIAL', question: '¿Qué hacer ante un herido?', options: { A: 'Moverlo', B: 'Huir', C: 'Proteger y llamar 123', D: 'Dar agua' }, correct: 'C' },
-    { id: 'sv3', category: 'SEGURIDAD_VIAL', question: 'El cinturón es obligatorio para:', options: { A: 'Conductor', B: 'Copiloto', C: 'Atrás', D: 'Todos' }, correct: 'D' },
-    { id: 'sv4', category: 'SEGURIDAD_VIAL', question: 'Señal amarilla rombo significa:', options: { A: 'Reglamentaria', B: 'Preventiva', C: 'Info', D: 'Transitoria' }, correct: 'B' },
-    { id: 'sv5', category: 'SEGURIDAD_VIAL', question: 'Distancia a 60km/h:', options: { A: '10m', B: '20m', C: '30m', D: '5m' }, correct: 'B' },
-    // A2 Samples
-    { id: 'a2_1', category: 'A2', question: '¿Adelantar por derecha?', options: { A: 'Sí', B: 'No', C: 'A veces', D: 'En trancón' }, correct: 'B' },
-    { id: 'a2_2', category: 'A2', question: 'Protección obligatoria:', options: { A: 'Guantes', B: 'Rodilleras', C: 'Casco', D: 'Chaqueta' }, correct: 'C' },
-    { id: 'a2_3', category: 'A2', question: 'Moto en cicloruta:', options: { A: 'Sí', B: 'Poco', C: 'No', D: 'A veces' }, correct: 'C' },
-    // Fillers to simulate logic (In real app, fetch 200)
-    ...Array.from({ length: 50 }, (_, i) => ({
-        id: `gen_${i}`,
-        category: 'A2',
-        question: `Pregunta generada A2 #${i + 4}: ¿Norma simulada de tránsito?`,
-        options: { A: 'Opción A', B: 'Opción B', C: 'Opción C', D: 'Opción D' },
-        correct: ['A', 'B', 'C', 'D'][Math.floor(Math.random() * 4)]
-    }))
+    { id: 15, label: 'Rápido (15 preguntas)', time: 20 },
+    { id: 40, label: 'Completo (40 preguntas)', time: 50 },
 ];
 
 const StudentExams = () => {
@@ -45,14 +18,40 @@ const StudentExams = () => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState({});
     const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(0);
+
+    useEffect(() => {
+        if (step !== 'exam') return;
+
+        if (timeLeft <= 0) {
+            calculateScore();
+            setStep('result');
+            return;
+        }
+
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [step, timeLeft]);
+
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
 
     const handleStart = () => {
         if (!selectedCategory || !selectedMode) return;
 
+        // Set time based on mode
+        const modeConfig = MODES.find(m => m.id === selectedMode);
+        setTimeLeft(modeConfig.time * 60);
+
         // FETCH LOGIC
         let filteredQuestions = QUESTION_BANK.filter(q => q.category === selectedCategory);
-
-        // Logic: If 'SEGURIDAD_VIAL', take fixed 15. Else take random N.
+        // ... existing fetch logic ...
         let finalQuestions = [];
 
         if (selectedCategory === 'SEGURIDAD_VIAL') {
@@ -85,6 +84,8 @@ const StudentExams = () => {
         setStep('exam');
     };
 
+    // ... existing handlers ...
+
     const handleAnswer = (optionKey) => {
         setAnswers({ ...answers, [currentQuestion]: optionKey });
     };
@@ -114,9 +115,11 @@ const StudentExams = () => {
         setCurrentQuestion(0);
         setAnswers({});
         setScore(0);
+        setTimeLeft(0);
     };
 
     if (step === 'result') {
+        // ... result render ...
         const passed = (score / questions.length) >= 0.8; // 80% to pass
         return (
             <div style={{ maxWidth: '600px', margin: '40px auto', textAlign: 'center' }}>
@@ -160,6 +163,7 @@ const StudentExams = () => {
 
                 <div style={{ marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '18px', marginBottom: '16px' }}>1. Selecciona Categoría</h3>
+// ... category selection ...
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
                         {CATEGORIES.map(cat => (
                             <div
@@ -192,15 +196,17 @@ const StudentExams = () => {
                                     borderColor: selectedMode === mode.id ? '#0071e3' : '#e5e5e5',
                                     background: selectedMode === mode.id ? '#E3F2FD' : 'white',
                                     color: selectedMode === mode.id ? '#0071e3' : '#1d1d1f',
-                                    fontWeight: 500
+                                    fontWeight: 500,
+                                    display: 'flex', flexDirection: 'column', gap: '4px'
                                 }}
                             >
-                                {mode.label}
+                                <span>{mode.label}</span>
+                                <span style={{ fontSize: '12px', opacity: 0.8 }}>⏱️ {mode.time} min</span>
                             </div>
                         ))}
                     </div>
                 </div>
-
+// ... start button ...
                 <button
                     disabled={!selectedCategory || !selectedMode}
                     onClick={handleStart}
@@ -222,10 +228,23 @@ const StudentExams = () => {
     return (
         <div style={{ maxWidth: '750px', margin: '0 auto' }}>
             <div style={{ marginBottom: '30px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '14px', color: '#888', fontWeight: 500 }}>Pregunta {currentQuestion + 1} de {questions.length}</span>
-                <span style={{ fontSize: '14px', fontWeight: 500, padding: '4px 12px', background: '#f5f5f7', borderRadius: '12px' }}>
-                    {CATEGORIES.find(c => c.id === selectedCategory)?.label}
+                <span style={{ fontSize: '14px', color: '#888', fontWeight: 500 }}>
+                    Pregunta {currentQuestion + 1} de {questions.length}
                 </span>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <span style={{
+                        fontSize: '14px', fontWeight: 600, padding: '6px 16px',
+                        background: timeLeft < 60 ? '#FFE0E0' : '#E3F2FD',
+                        color: timeLeft < 60 ? '#D32F2F' : '#0071e3', // Red alert last minute
+                        borderRadius: '99px', display: 'flex', alignItems: 'center', gap: '6px'
+                    }}>
+                        <Clock size={16} />
+                        {formatTime(timeLeft)}
+                    </span>
+                    <span style={{ fontSize: '14px', fontWeight: 500, padding: '6px 16px', background: '#f5f5f7', borderRadius: '99px' }}>
+                        {CATEGORIES.find(c => c.id === selectedCategory)?.label}
+                    </span>
+                </div>
             </div>
 
             <div style={{ width: '100%', height: '6px', background: '#eee', borderRadius: '3px', marginBottom: '40px' }}>
@@ -242,15 +261,15 @@ const StudentExams = () => {
                 <h2 style={{ fontSize: '22px', fontWeight: 600, marginBottom: '32px', lineHeight: 1.4 }}>{question.question}</h2>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {question.options.map((opt, idx) => (
+                    {Object.entries(question.options).map(([key, value], idx) => (
                         <button
-                            key={idx}
-                            onClick={() => handleAnswer(idx)}
+                            key={key}
+                            onClick={() => handleAnswer(key)}
                             style={{
                                 textAlign: 'left', padding: '20px', borderRadius: '12px', border: '1px solid',
-                                borderColor: answers[currentQuestion] === idx ? '#0071e3' : '#e5e5e5',
-                                background: answers[currentQuestion] === idx ? '#F5FAFF' : 'white',
-                                color: answers[currentQuestion] === idx ? '#0071e3' : '#1d1d1f',
+                                borderColor: answers[currentQuestion] === key ? '#0071e3' : '#e5e5e5',
+                                background: answers[currentQuestion] === key ? '#F5FAFF' : 'white',
+                                color: answers[currentQuestion] === key ? '#0071e3' : '#1d1d1f',
                                 fontSize: '16px', cursor: 'pointer', transition: 'all 0.2s',
                                 position: 'relative', overflow: 'hidden'
                             }}
@@ -258,12 +277,13 @@ const StudentExams = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <div style={{
                                     width: '24px', height: '24px', borderRadius: '50%', border: '2px solid', flexShrink: 0,
-                                    borderColor: answers[currentQuestion] === idx ? '#0071e3' : '#ccc',
+                                    borderColor: answers[currentQuestion] === key ? '#0071e3' : '#ccc',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}>
-                                    {answers[currentQuestion] === idx && <div style={{ width: '12px', height: '12px', background: '#0071e3', borderRadius: '50%' }}></div>}
+                                    {answers[currentQuestion] === key && <div style={{ width: '12px', height: '12px', background: '#0071e3', borderRadius: '50%' }}></div>}
                                 </div>
-                                <span>{opt}</span>
+                                <span style={{ fontWeight: 600 }}>{key}.</span>
+                                <span>{value}</span>
                             </div>
                         </button>
                     ))}

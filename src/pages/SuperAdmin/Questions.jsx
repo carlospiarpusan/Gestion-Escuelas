@@ -1,13 +1,6 @@
 import { useState } from 'react';
 import { Plus, Search, Edit, Trash2, Save, X } from 'lucide-react';
-
-const CATEGORIES = [
-    { id: 'A2', label: 'Moto (A2)' },
-    { id: 'B1', label: 'Auto (B1)' },
-    { id: 'C1', label: 'Camión (C1)' },
-    { id: 'C2', label: 'Bus (C2)' },
-    { id: 'SEGURIDAD_VIAL', label: 'Seguridad Vial' },
-];
+import { MOCK_QUESTIONS, CATEGORIES } from '../../data/mockQuestions';
 
 const QuestionsPage = () => {
     const [filterCategory, setFilterCategory] = useState('A2');
@@ -16,36 +9,33 @@ const QuestionsPage = () => {
     const [editingId, setEditingId] = useState(null);
 
     // Mock Data (In real app, fetch from DB)
-    const [questions, setQuestions] = useState([
-        { id: 1, category: 'A2', text: '¿Cuál es la velocidad máxima en zona escolar?', options: { A: '10 km/h', B: '30 km/h', C: '50 km/h', D: '60 km/h' }, correct: 'B' },
-        { id: 2, category: 'SEGURIDAD_VIAL', text: 'El cinturón de seguridad es obligatorio:', options: { A: 'Solo conductor', B: 'Solo adelante', C: 'Todos los pasajeros', D: 'Nadie' }, correct: 'C' },
-    ]);
+    const [questions, setQuestions] = useState(MOCK_QUESTIONS);
 
     // Form State
     const [formData, setFormData] = useState({
-        category: 'A2', text: '', optionA: '', optionB: '', optionC: '', optionD: '', correct: 'A'
+        category: 'A2', question: '', optionA: '', optionB: '', optionC: '', optionD: '', correct: 'A'
     });
 
     const filteredQuestions = questions.filter(q =>
         q.category === filterCategory &&
-        q.text.toLowerCase().includes(searchTerm.toLowerCase())
+        q.question.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleOpenModal = (question = null) => {
-        if (question) {
-            setEditingId(question.id);
+    const handleOpenModal = (q = null) => {
+        if (q) {
+            setEditingId(q.id);
             setFormData({
-                category: question.category,
-                text: question.text,
-                optionA: question.options.A,
-                optionB: question.options.B,
-                optionC: question.options.C,
-                optionD: question.options.D,
-                correct: question.correct
+                category: q.category,
+                question: q.question,
+                optionA: q.options.A,
+                optionB: q.options.B,
+                optionC: q.options.C,
+                optionD: q.options.D,
+                correct: q.correct
             });
         } else {
             setEditingId(null);
-            setFormData({ category: filterCategory, text: '', optionA: '', optionB: '', optionC: '', optionD: '', correct: 'A' });
+            setFormData({ category: filterCategory, question: '', optionA: '', optionB: '', optionC: '', optionD: '', correct: 'A' });
         }
         setIsModalOpen(true);
     };
@@ -53,9 +43,9 @@ const QuestionsPage = () => {
     const handleSave = (e) => {
         e.preventDefault();
         const newQuestion = {
-            id: editingId || Date.now(),
+            id: editingId || Date.now().toString(),
             category: formData.category,
-            text: formData.text,
+            question: formData.question,
             options: {
                 A: formData.optionA,
                 B: formData.optionB,
@@ -133,7 +123,7 @@ const QuestionsPage = () => {
                         {filteredQuestions.map(q => (
                             <tr key={q.id} style={{ borderTop: '1px solid #eee' }}>
                                 <td style={{ padding: '16px' }}>
-                                    <div style={{ fontSize: '14px', fontWeight: 500, marginBottom: '4px' }}>{q.text}</div>
+                                    <div style={{ fontSize: '14px', fontWeight: 500, marginBottom: '4px' }}>{q.question}</div>
                                     <div style={{ fontSize: '12px', color: '#666' }}>
                                         A: {q.options.A} | B: {q.options.B} | ...
                                     </div>
@@ -178,8 +168,8 @@ const QuestionsPage = () => {
 
                             <textarea
                                 placeholder="Texto de la pregunta..."
-                                value={formData.text}
-                                onChange={e => setFormData({ ...formData, text: e.target.value })}
+                                value={formData.question}
+                                onChange={e => setFormData({ ...formData, question: e.target.value })}
                                 style={{ padding: '12px', borderRadius: '8px', border: '1px solid #ddd', minHeight: '80px' }}
                                 required
                             />

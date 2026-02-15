@@ -1,3 +1,4 @@
+import { createContext, useState, useEffect, useContext } from 'react';
 import secureStorage from '../lib/secureStorage';
 
 const AuthContext = createContext(null);
@@ -5,6 +6,7 @@ const AuthContext = createContext(null);
 // MOCK USERS FOR DEV - In production this comes from API/DB
 const MOCK_DB_USERS = [
     { email: 'super@admin.com', password: '123', role: 'superadmin', name: 'Super Admin', schoolId: null },
+    { email: 'carlospt@live.com', password: 'Carlospt@live.com', role: 'superadmin', name: 'Carlos SuperAdmin', schoolId: null },
     { email: 'admin@school.com', password: '123', role: 'admin', name: 'Admin Escuela', schoolId: 'school-1' },
     { email: 'sec@school.com', password: '123', role: 'secretary', name: 'Secretaria General', schoolId: 'school-1' },
     { email: 'inst@school.com', password: '123', role: 'instructor', name: 'Juan Instructor', schoolId: 'school-1' },
