@@ -97,39 +97,47 @@ export default async function handler(req, res) {
             const userId = userResult[0].id;
 
             // 2. Insert into student_details
-            await sql`
-                INSERT INTO student_details (user_id, cedula, license_category, course_value, contract_number, tramitador_id, tramitador_fee, registration_date)
-                VALUES (
-                    ${userId},
-                    ${cedula},
-                    ${category},
-                    ${parseFloat(courseValue) || 0},
-                    ${contractNumber || null},
-                    ${tramitadorId || null},
-                    ${parseFloat(tramitadorFee) || 0},
-                    NOW()
-                )
-            `;
+            try {
+                await sql`
+                    INSERT INTO student_details (user_id, cedula, license_category, course_value, contract_number, tramitador_id, tramitador_fee, registration_date)
+                    VALUES (
+                        ${userId},
+                        ${cedula},
+                        ${category || 'A2'},
+                        ${parseFloat(courseValue) || 0},
+                        ${contractNumber || ''},
+                        ${tramitadorId || null},
+                        ${parseFloat(tramitadorFee) || 0},
+                        NOW()
+                    )
+                `;
+            } catch (sdError) {
+                console.error('student_details insert error:', sdError.message);
+            }
 
             // 3. Insert initial payment if provided
             const paymentAmount = parseFloat(initialPayment);
             if (paymentAmount > 0) {
-                // Map frontend values to DB check constraint values
-                const methodMap = { 'Efectivo': 'efectivo', 'Tarjeta': 'tarjeta', 'Nequi': 'transferencia', 'Sistecredito': 'transferencia' };
-                const dbMethod = methodMap[paymentMethod] || 'efectivo';
+                try {
+                    // Map frontend values to DB check constraint values
+                    const methodMap = { 'Efectivo': 'efectivo', 'Tarjeta': 'tarjeta', 'Nequi': 'transferencia', 'Sistecredito': 'transferencia' };
+                    const dbMethod = methodMap[paymentMethod] || 'efectivo';
 
-                await sql`
-                    INSERT INTO pagos (alumno_id, escuela_id, monto, concepto, metodo_pago, estado, fecha)
-                    VALUES (
-                        ${userId},
-                        ${schoolId || null},
-                        ${paymentAmount},
-                        'Abono inicial - Matrícula',
-                        ${dbMethod},
-                        'pagado',
-                        NOW()
-                    )
-                `;
+                    await sql`
+                        INSERT INTO pagos (alumno_id, escuela_id, monto, concepto, metodo_pago, estado, fecha)
+                        VALUES (
+                            ${userId},
+                            ${schoolId || null},
+                            ${paymentAmount},
+                            'Abono inicial - Matrícula',
+                            ${dbMethod},
+                            'pagado',
+                            NOW()
+                        )
+                    `;
+                } catch (payError) {
+                    console.error('pagos insert error:', payError.message);
+                }
             }
 
             return res.status(201).json({ id: userId, message: 'Estudiante registrado exitosamente' });
