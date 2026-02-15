@@ -57,6 +57,7 @@ const DashboardLayout = () => {
 
                     {role === 'admin' && (
                         <>
+                            <SidebarItem to="/dashboard/users" icon={Users} label="Usuarios Globales" />
                             <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Resultados Exámenes" />
                             <SidebarItem to="/dashboard/school-performance" icon={TrendingUp} label="Rendimiento Escuelas" />
                             <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />

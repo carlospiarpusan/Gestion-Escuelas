@@ -3,14 +3,6 @@ import { BarChart3, TrendingUp, Users, Award, Calendar, ChevronRight } from 'luc
 import { motion } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 
-const MOCK_RESULTS = [
-    { id: 1, student: 'Ana Garcia', school: 'Autoescuela Central', category: 'B1', mode: 40, score: 38, passed: true, date: '2025-02-14' },
-    { id: 2, student: 'Pedro Lopez', school: 'Ruta Segura', category: 'A2', mode: 15, score: 10, passed: false, date: '2025-02-14' },
-    { id: 3, student: 'Maria Diaz', school: 'Autoescuela Central', category: 'B1', mode: 15, score: 15, passed: true, date: '2025-02-13' },
-    { id: 4, student: 'Luis Torres', school: 'Conducción Pro', category: 'C1', mode: 40, score: 35, passed: true, date: '2025-02-12' },
-    { id: 5, student: 'Julia Sanz', school: 'Autoescuela Central', category: 'B1', mode: 40, score: 40, passed: true, date: '2025-02-11' },
-    { id: 6, student: 'Marcos Ruis', school: 'Ruta Segura', category: 'B1', mode: 15, score: 14, passed: true, date: '2025-02-10' },
-];
 
 const PieChart = ({ percentage, color = '#0071e3', size = 120 }) => {
     const radius = 45;
@@ -58,13 +50,45 @@ const ExamResults = () => {
     const isSuper = user?.role === 'superadmin';
     const isAdmin = user?.role === 'admin';
 
+    const [results, setResults] = useState([]);
+    const [schools, setSchools] = useState([]);
+    const [loading, setLoading] = useState(true);
+
     // If admin, lock the filter to their schoolName
     const [filterSchool, setFilterSchool] = useState(isAdmin ? user.schoolName : 'All');
     const [dateRange, setDateRange] = useState('Week');
 
+    const fetchData = async () => {
+        try {
+            let url = '/api/exam-results';
+            if (isAdmin && user.school_id) {
+                url += `?school_id=${user.school_id}`;
+            }
+
+            const [resultsRes, schoolsRes] = await Promise.all([
+                fetch(url),
+                isSuper ? fetch('/api/schools') : Promise.resolve({ json: () => [] }) // Only fetch schools if superadmin
+            ]);
+
+            const resultsData = await resultsRes.json();
+            const schoolsData = await schoolsRes.json();
+
+            if (Array.isArray(resultsData)) setResults(resultsData);
+            if (Array.isArray(schoolsData)) setSchools(schoolsData);
+        } catch (error) {
+            console.error("Error fetching results:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useState(() => {
+        fetchData();
+    }, []);
+
     const filteredResults = filterSchool === 'All'
-        ? MOCK_RESULTS
-        : MOCK_RESULTS.filter(r => r.school === filterSchool);
+        ? results
+        : results.filter(r => r.school === filterSchool);
 
     const totalExams = filteredResults.length;
     const passedExams = filteredResults.filter(r => r.passed).length;
@@ -74,6 +98,8 @@ const ExamResults = () => {
         .filter(r => r.passed)
         .sort((a, b) => (b.score / b.mode) - (a.score / a.mode))
         .slice(0, 3);
+
+    if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Cargando resultados...</div>;
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }}>
@@ -98,9 +124,9 @@ const ExamResults = () => {
                                 }}
                             >
                                 <option value="All">Todas las Escuelas</option>
-                                <option value="Autoescuela Central">Autoescuela Central</option>
-                                <option value="Ruta Segura">Ruta Segura</option>
-                                <option value="Conducción Pro">Conducción Pro</option>
+                                {schools.map(s => (
+                                    <option key={s.id} value={s.name}>{s.name}</option>
+                                ))}
                             </select>
                             <ChevronRight size={16} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%) rotate(90deg)', color: '#86868b', pointerEvents: 'none' }} />
                         </div>

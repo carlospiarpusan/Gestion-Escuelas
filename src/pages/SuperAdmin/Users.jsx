@@ -2,7 +2,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, UserPlus, Search, Shield, Globe, School, MoreVertical, Edit2, Trash2, Mail, Phone, Calendar } from 'lucide-react';
 
+import { useAuth } from '../../context/AuthContext';
+
 const UsersPage = () => {
+    const { user } = useAuth();
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
     const [schools, setSchools] = useState([]); // For dropdown
@@ -20,8 +23,14 @@ const UsersPage = () => {
         setIsLoading(true);
         setError(null);
         try {
+            // Construct URL with query params
+            let url = '/api/users';
+            if (user.role === 'admin' && user.school_id) {
+                url += `?school_id=${user.school_id}`;
+            }
+
             const [usersRes, schoolsRes] = await Promise.all([
-                fetch('/api/users'),
+                fetch(url),
                 fetch('/api/schools')
             ]);
 
@@ -68,7 +77,7 @@ const UsersPage = () => {
             if (res.ok) {
                 fetchData();
                 setIsNewModalOpen(false);
-                setFormData({ full_name: '', email: '', password: '', role: 'student', school_id: '' });
+                setFormData({ full_name: '', email: '', password: '', role: 'student', school_id: user.role === 'admin' ? user.school_id : '' });
                 alert('Usuario creado exitosamente');
             } else {
                 const err = await res.json();
@@ -253,9 +262,9 @@ const UsersPage = () => {
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     <label style={{ fontSize: '13px', fontWeight: 500, color: '#86868b' }}>Sede asignada</label>
                                     <select
-                                        value={formData.school_id}
+                                        value={user.role === 'admin' ? user.school_id : formData.school_id}
                                         onChange={e => setFormData({ ...formData, school_id: e.target.value })}
-                                        disabled={formData.role === 'superadmin'}
+                                        disabled={formData.role === 'superadmin' || user.role === 'admin'}
                                         style={{ padding: '12px', borderRadius: '12px', border: '1px solid #e5e5e5', background: '#f5f5f7' }}
                                     >
                                         <option value="">Seleccionar Sede...</option>
