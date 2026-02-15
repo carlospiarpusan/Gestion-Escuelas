@@ -183,13 +183,18 @@ button {
   color: #98989d !important;
 }
 
-/* Inputs and selects */
+/* Inputs */
 [data-theme='dark'] input,
-[data-theme='dark'] select,
 [data-theme='dark'] textarea {
   background: #3a3a3c !important;
   color: #f5f5f7 !important;
   border-color: #48484a !important;
+}
+
+/* Selects — no !important so inline styles with var() take precedence */
+[data-theme='dark'] select {
+  color: #f5f5f7;
+  border-color: #48484a;
 }
 
 [data-theme='dark'] input::placeholder,
@@ -254,13 +259,10 @@ button {
   background: #2c2c2e !important;
 }
 
-/* Filter buttons */
-[data-theme='dark'] button[style*="background: #f0f0f2"],
-[data-theme='dark'] button[style*="background-color: #f0f0f2"],
-[data-theme='dark'] button[style*="background: #F5F5F7"],
-[data-theme='dark'] button[style*="background-color: #F5F5F7"] {
-  background: #3a3a3c !important;
-  color: #e5e5ea !important;
+/* Select option elements */
+[data-theme='dark'] option {
+  background: #3a3a3c;
+  color: #f5f5f7;
 }
 
 /* Smooth transition for all elements */
