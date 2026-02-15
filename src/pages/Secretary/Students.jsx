@@ -50,6 +50,9 @@ const Students = () => {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [paymentAmount, setPaymentAmount] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('Efectivo');
+    const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
+    const [paymentHistory, setPaymentHistory] = useState([]);
+    const [isHistoryLoading, setIsHistoryLoading] = useState(false);
 
     const filteredStudents = students.filter(s => {
         const name = (s.name || '').toLowerCase();
@@ -133,6 +136,29 @@ const Students = () => {
         setPaymentAmount('');
         setPaymentMethod('Efectivo');
         setSelectedStudent(null);
+    };
+
+    const fetchPaymentHistory = async (alumnoId) => {
+        setIsHistoryLoading(true);
+        try {
+            const res = await fetch(`/api/payments?alumnoId=${alumnoId}`);
+            if (!res.ok) throw new Error('Error fetching payment history');
+            const data = await res.json();
+            setPaymentHistory(data);
+        } catch (err) {
+            console.error('History fetch error:', err);
+            alert('Error al obtener historial: ' + err.message);
+        } finally {
+            setIsHistoryLoading(false);
+        }
+    };
+
+    const handleOpenHistory = (student) => {
+        setSelectedStudent(student);
+        setPaymentHistory([]);
+        setIsHistoryModalOpen(true);
+        fetchPaymentHistory(student.id);
+        setActiveMenuId(null);
     };
 
     // Generate year options
@@ -452,12 +478,25 @@ const Students = () => {
                                                             <hr style={{ border: 'none', borderTop: '1px solid rgba(0,0,0,0.05)', margin: '4px 0' }} />
                                                             {[
                                                                 { label: 'Ver Perfil', icon: User, color: '#1d1d1f' },
+                                                                {
+                                                                    label: 'Historial de Pagos',
+                                                                    icon: CreditCard,
+                                                                    color: '#0071e3',
+                                                                    onClick: () => handleOpenHistory(student)
+                                                                },
                                                                 { label: 'Historial Exámenes', icon: ExternalLink, color: '#0071e3' },
                                                                 { label: 'Enviar Correo', icon: AlertCircle, color: '#86868b' }
                                                             ].map((item, idx) => (
                                                                 <button
                                                                     key={idx}
-                                                                    onClick={() => { alert(`${item.label} para ${student.name}`); setActiveMenuId(null); }}
+                                                                    onClick={() => {
+                                                                        if (item.onClick) {
+                                                                            item.onClick();
+                                                                        } else {
+                                                                            alert(`${item.label} para ${student.name}`);
+                                                                        }
+                                                                        setActiveMenuId(null);
+                                                                    }}
                                                                     style={{
                                                                         width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
                                                                         padding: '10px 12px', borderRadius: '10px', border: 'none',
@@ -587,6 +626,94 @@ const Students = () => {
                                 <Button variant="secondary" style={{ flex: 1 }} onClick={() => setIsDeleteModalOpen(false)}>Cancelar</Button>
                                 <Button style={{ flex: 1, background: '#ff3b30' }} onClick={handleDelete}>Eliminar</Button>
                             </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Payment History Modal */}
+            <AnimatePresence>
+                {isHistoryModalOpen && (
+                    <div
+                        style={{
+                            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                        }}
+                        onClick={() => setIsHistoryModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            style={{ background: 'var(--card-bg)', width: '500px', maxWidth: '90%', maxHeight: '80vh', padding: '32px', borderRadius: '24px', display: 'flex', flexDirection: 'column' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                                <div>
+                                    <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--text-main)' }}>Historial de Pagos</h3>
+                                    <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>{selectedStudent?.name}</p>
+                                </div>
+                                <button
+                                    onClick={() => setIsHistoryModalOpen(false)}
+                                    style={{ background: 'var(--bg-color)', border: 'none', padding: '8px', borderRadius: '50%', cursor: 'pointer', color: 'var(--text-main)' }}
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div style={{ flex: 1, overflowY: 'auto' }}>
+                                {isHistoryLoading ? (
+                                    <div style={{ textAlign: 'center', padding: '40px' }}>
+                                        <div className="spinner" style={{ border: '3px solid var(--border-color)', borderTop: '3px solid var(--primary)', borderRadius: '50%', width: '24px', height: '24px', animation: 'spin 1s linear infinite', margin: '0 auto' }}></div>
+                                        <style>{`@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`}</style>
+                                        <p style={{ marginTop: '12px', color: 'var(--text-secondary)' }}>Cargando historial...</p>
+                                    </div>
+                                ) : paymentHistory.length === 0 ? (
+                                    <div style={{ textAlign: 'center', padding: '40px', color: 'var(--text-secondary)' }}>
+                                        <Clock size={32} style={{ opacity: 0.2, margin: '0 auto 12px' }} />
+                                        <p>No se encontraron pagos registrados.</p>
+                                    </div>
+                                ) : (
+                                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                                        <thead>
+                                            <tr style={{ borderBottom: '1px solid var(--border-color)', textAlign: 'left' }}>
+                                                <th style={{ padding: '12px 0px', color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600 }}>FECHA</th>
+                                                <th style={{ padding: '12px 0px', color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600 }}>CONCEPTO</th>
+                                                <th style={{ padding: '12px 0px', color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600, textAlign: 'right' }}>MONTO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {paymentHistory.map((payment) => (
+                                                <tr key={payment.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                                                    <td style={{ padding: '12px 0px' }}>
+                                                        <div style={{ fontSize: '13px', color: 'var(--text-main)' }}>
+                                                            {new Date(payment.fecha).toLocaleDateString('es-CO', { day: '2-digit', month: 'short', year: 'numeric' })}
+                                                        </div>
+                                                        <div style={{ fontSize: '11px', color: 'var(--text-secondary)', textTransform: 'capitalize' }}>
+                                                            {payment.metodo_pago}
+                                                        </div>
+                                                    </td>
+                                                    <td style={{ padding: '12px 0px', fontSize: '13px', color: 'var(--text-main)' }}>
+                                                        {payment.concepto}
+                                                    </td>
+                                                    <td style={{ padding: '12px 0px', textAlign: 'right', fontWeight: 600, fontSize: '13px', color: 'var(--success)' }}>
+                                                        ${parseFloat(payment.monto).toLocaleString()}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+                            </div>
+
+                            <Button
+                                variant="secondary"
+                                onClick={() => setIsHistoryModalOpen(false)}
+                                style={{ marginTop: '24px' }}
+                            >
+                                Cerrar
+                            </Button>
                         </motion.div>
                     </div>
                 )}
