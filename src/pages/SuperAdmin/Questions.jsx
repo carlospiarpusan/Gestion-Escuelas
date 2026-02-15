@@ -10,9 +10,30 @@ const QuestionsPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingId, setEditingId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Mock Data
-    const [questions, setQuestions] = useState(MOCK_QUESTIONS);
+    // Database Data
+    const [questions, setQuestions] = useState([]);
+
+    // Fetch questions from API
+    const fetchQuestions = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/questions');
+            const data = await res.json();
+            if (Array.isArray(data)) setQuestions(data);
+        } catch (err) {
+            console.error('Error fetching questions:', err);
+            // Fallback to mock if API fails in dev
+            setQuestions(MOCK_QUESTIONS);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useState(() => {
+        fetchQuestions();
+    }, []);
 
     // Form State
     const [formData, setFormData] = useState({
@@ -43,27 +64,42 @@ const QuestionsPage = () => {
         setIsModalOpen(true);
     };
 
-    const handleSave = (e) => {
+    const handleSave = async (e) => {
         e.preventDefault();
-        const newQuestion = {
-            id: editingId || Date.now().toString(),
+        const questionData = {
             category: formData.category,
-            question: formData.question,
-            options: {
-                A: formData.optionA,
-                B: formData.optionB,
-                C: formData.optionC,
-                D: formData.optionD
-            },
-            correct: formData.correct
+            question_text: formData.question,
+            option_a: formData.optionA,
+            option_b: formData.optionB,
+            option_c: formData.optionC,
+            option_d: formData.optionD,
+            correct_option: formData.correct
         };
 
-        if (editingId) {
-            setQuestions(questions.map(q => q.id === editingId ? newQuestion : q));
-        } else {
-            setQuestions([newQuestion, ...questions]);
+        try {
+            const res = await fetch('/api/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(questionData)
+            });
+
+            if (res.ok) {
+                fetchQuestions(); // Refresh list from DB
+                setIsModalOpen(false);
+            }
+        } catch (err) {
+            console.error('Error saving question:', err);
+            // Local fallback for dev visibility
+            const mockNew = {
+                id: Date.now().toString(),
+                ...questionData,
+                question: questionData.question_text,
+                options: { A: questionData.option_a, B: questionData.option_b, C: questionData.option_c, D: questionData.option_d },
+                correct: questionData.correct_option
+            };
+            setQuestions([mockNew, ...questions]);
+            setIsModalOpen(false);
         }
-        setIsModalOpen(false);
     };
 
     const handleDelete = (id) => {

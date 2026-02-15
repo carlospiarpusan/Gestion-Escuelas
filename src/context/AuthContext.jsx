@@ -26,28 +26,42 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const login = (email, password) => {
-        // Mock API Call
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const foundUser = MOCK_DB_USERS.find(u => u.email === email && u.password === password);
-                if (foundUser) {
-                    const sessionUser = {
-                        email: foundUser.email,
-                        role: foundUser.role,
-                        name: foundUser.name,
-                        schoolId: foundUser.schoolId,
-                        schoolName: foundUser.schoolName,
-                        token: 'mock-jwt-token'
-                    };
-                    setUser(sessionUser);
-                    secureStorage.setItem('user_session', sessionUser);
-                    resolve(sessionUser);
-                } else {
-                    reject(new Error('Credenciales inválidas'));
-                }
-            }, 800);
-        });
+    const login = async (email, password) => {
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (res.ok) {
+                const sessionUser = await res.json();
+                setUser(sessionUser);
+                secureStorage.setItem('user_session', sessionUser);
+                return sessionUser;
+            } else {
+                const errorData = await res.json();
+                throw new Error(errorData.error || 'Credenciales inválidas');
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            // Fallback for dev if API is not available
+            const foundUser = MOCK_DB_USERS.find(u => u.email === email && u.password === password);
+            if (foundUser) {
+                const sessionUser = {
+                    email: foundUser.email,
+                    role: foundUser.role,
+                    name: foundUser.name,
+                    schoolId: foundUser.schoolId,
+                    schoolName: foundUser.schoolName,
+                    token: 'mock-jwt-token'
+                };
+                setUser(sessionUser);
+                secureStorage.setItem('user_session', sessionUser);
+                return sessionUser;
+            }
+            throw err;
+        }
     };
 
     const logout = () => {

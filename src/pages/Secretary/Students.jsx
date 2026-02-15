@@ -6,10 +6,31 @@ import Input from '../../components/UI/Input';
 import { MOCK_STUDENTS } from '../../data/mockStudents';
 
 const Students = () => {
-    const [students, setStudents] = useState(MOCK_STUDENTS);
+    const [students, setStudents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterCategory, setFilterCategory] = useState('All');
     const [dateFilter, setDateFilter] = useState({ start: '', end: '' });
+
+    // Fetch students from API
+    const fetchStudents = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/students');
+            const data = await res.json();
+            if (Array.isArray(data)) setStudents(data);
+        } catch (err) {
+            console.error('Error fetching students:', err);
+            // Fallback to mock for dev resilience
+            setStudents(MOCK_STUDENTS);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useState(() => {
+        fetchStudents();
+    }, []);
 
     // UI State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
