@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, UserPlus, Search, Shield, Globe, School, MoreVertical, Edit2, Trash2, Mail, Phone, Calendar } from 'lucide-react';
-
+import Button from '../../components/UI/Button';
+import Input from '../../components/UI/Input';
 import { useAuth } from '../../context/AuthContext';
 
 const UsersPage = () => {
     const { user } = useAuth();
     const [users, setUsers] = useState([]);
     const [error, setError] = useState(null);
-    const [schools, setSchools] = useState([]); // For dropdown
+    const [schools, setSchools] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [isNewModalOpen, setIsNewModalOpen] = useState(false);
@@ -16,17 +17,16 @@ const UsersPage = () => {
 
     // Form State
     const [formData, setFormData] = useState({
-        full_name: '', email: '', password: '', role: 'student', school_id: ''
+        full_name: '', email: '', password: '', role: 'alumno', school_id: ''
     });
 
     const fetchData = async () => {
         setIsLoading(true);
         setError(null);
         try {
-            // Construct URL with query params
             let url = '/api/users';
-            if (user.role === 'admin' && user.school_id) {
-                url += `?school_id=${user.school_id}`;
+            if (user.role === 'admin' && user.schoolId) {
+                url += `?school_id=${user.schoolId}`;
             }
 
             const [usersRes, schoolsRes] = await Promise.all([
@@ -43,8 +43,8 @@ const UsersPage = () => {
             if (Array.isArray(usersData)) {
                 const mappedUsers = usersData.map(u => ({
                     ...u,
-                    name: u.full_name,
-                    status: u.active ? 'Active' : 'Inactive',
+                    name: u.full_name || u.email || 'Sin nombre',
+                    status: u.active ? 'Activo' : 'Inactivo',
                     schoolName: u.schoolName || 'Global'
                 }));
                 setUsers(mappedUsers);
@@ -61,7 +61,7 @@ const UsersPage = () => {
         }
     };
 
-    useState(() => {
+    useEffect(() => {
         fetchData();
     }, []);
 
@@ -77,7 +77,7 @@ const UsersPage = () => {
             if (res.ok) {
                 fetchData();
                 setIsNewModalOpen(false);
-                setFormData({ full_name: '', email: '', password: '', role: 'student', school_id: user.role === 'admin' ? user.school_id : '' });
+                setFormData({ full_name: '', email: '', password: '', role: 'alumno', school_id: user.role === 'admin' ? user.schoolId : '' });
                 alert('Usuario creado exitosamente');
             } else {
                 const err = await res.json();
@@ -89,10 +89,35 @@ const UsersPage = () => {
     };
 
     const filteredUsers = users.filter(u =>
-        u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        u.schoolName.toLowerCase().includes(searchTerm.toLowerCase())
+        (u.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (u.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (u.schoolName || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    // Map DB roles to display labels
+    const roleLabels = {
+        'super_admin': 'Superadmin',
+        'superadmin': 'Superadmin',
+        'admin': 'Administrador',
+        'instructor': 'Instructor',
+        'secretaria': 'Secretaria',
+        'alumno': 'Estudiante',
+        'student': 'Estudiante',
+        'secretary': 'Secretaria',
+        'supervisor': 'Supervisor'
+    };
+
+    const roleColors = {
+        'super_admin': { bg: '#E3F2FD', color: '#1E88E5' },
+        'superadmin': { bg: '#E3F2FD', color: '#1E88E5' },
+        'admin': { bg: '#EDE7F6', color: '#673AB7' },
+        'instructor': { bg: '#E8F5E9', color: '#2E7D32' },
+        'secretaria': { bg: '#FFF3E0', color: '#E65100' },
+        'secretary': { bg: '#FFF3E0', color: '#E65100' },
+        'alumno': { bg: '#F5F5F7', color: '#616161' },
+        'student': { bg: '#F5F5F7', color: '#616161' },
+        'supervisor': { bg: '#FCE4EC', color: '#C62828' }
+    };
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }}>
@@ -110,8 +135,8 @@ const UsersPage = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '32px' }}>
                 {[
                     { label: 'Total Usuarios', value: users.length, icon: Users, color: '#0071e3' },
-                    { label: 'Administradores', value: users.filter(u => u.role === 'admin').length, icon: Shield, color: '#AF52DE' },
-                    { label: 'Sedes Activas', value: '12', icon: School, color: '#34C759' }
+                    { label: 'Administradores', value: users.filter(u => u.role === 'admin' || u.role === 'super_admin' || u.role === 'superadmin').length, icon: Shield, color: '#AF52DE' },
+                    { label: 'Escuelas Activas', value: schools.length, icon: School, color: '#34C759' }
                 ].map((stat, i) => (
                     <div key={i} style={{ background: 'white', padding: '24px', borderRadius: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: stat.color, marginBottom: '8px' }}>
@@ -122,6 +147,7 @@ const UsersPage = () => {
                     </div>
                 ))}
             </div>
+
             {/* Error Message */}
             {error && (
                 <div style={{ background: '#FFF5F5', color: '#ff3b30', padding: '16px', borderRadius: '12px', marginBottom: '24px' }}>
@@ -148,6 +174,13 @@ const UsersPage = () => {
                 </div>
             </div>
 
+            {/* Loading State */}
+            {isLoading && (
+                <div style={{ textAlign: 'center', padding: '40px', color: '#86868b' }}>
+                    Cargando usuarios...
+                </div>
+            )}
+
             {/* Users Table */}
             <div style={{ background: 'white', borderRadius: '32px', overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.04)' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -161,36 +194,38 @@ const UsersPage = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map((user) => (
-                            <tr key={user.id} style={{ borderBottom: '1px solid #f5f5f7' }}>
+                        {filteredUsers.map((u) => (
+                            <tr key={u.id} style={{ borderBottom: '1px solid #f5f5f7' }}>
                                 <td style={{ padding: '16px 24px' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                         <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#86868b', fontWeight: 600 }}>
-                                            {user.name.charAt(0)}
+                                            {(u.name || '?').charAt(0).toUpperCase()}
                                         </div>
                                         <div>
-                                            <div style={{ fontSize: '14px', fontWeight: 600, color: '#1d1d1f' }}>{user.name}</div>
-                                            <div style={{ fontSize: '12px', color: '#86868b' }}>{user.email}</div>
+                                            <div style={{ fontSize: '14px', fontWeight: 600, color: '#1d1d1f' }}>{u.name}</div>
+                                            <div style={{ fontSize: '12px', color: '#86868b' }}>{u.email}</div>
                                         </div>
                                     </div>
                                 </td>
                                 <td style={{ padding: '16px 24px' }}>
                                     <span style={{
                                         padding: '4px 8px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase',
-                                        background: user.role === 'superadmin' ? '#E3F2FD' : user.role === 'admin' ? '#EDE7F6' : '#F5F5F7',
-                                        color: user.role === 'superadmin' ? '#1E88E5' : user.role === 'admin' ? '#673AB7' : '#616161'
+                                        background: (roleColors[u.role] || { bg: '#F5F5F7' }).bg,
+                                        color: (roleColors[u.role] || { color: '#616161' }).color
                                     }}>
-                                        {user.role}
+                                        {roleLabels[u.role] || u.role}
                                     </span>
                                 </td>
                                 <td style={{ padding: '16px 24px' }}>
-                                    <div style={{ fontSize: '14px', color: '#1d1d1f' }}>{user.schoolName}</div>
-                                    {user.schoolId && <div style={{ fontSize: '11px', color: '#86868b' }}>ID: {user.schoolId}</div>}
+                                    <div style={{ fontSize: '14px', color: '#1d1d1f' }}>{u.schoolName}</div>
                                 </td>
                                 <td style={{ padding: '16px 24px' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#34C759', fontWeight: 500 }}>
-                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#34C759' }}></div>
-                                        {user.status}
+                                    <div style={{
+                                        display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px',
+                                        color: u.active ? '#34C759' : '#ff3b30', fontWeight: 500
+                                    }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: u.active ? '#34C759' : '#ff3b30' }}></div>
+                                        {u.status}
                                     </div>
                                 </td>
                                 <td style={{ padding: '16px 24px', textAlign: 'right' }}>
@@ -202,6 +237,11 @@ const UsersPage = () => {
                         ))}
                     </tbody>
                 </table>
+                {filteredUsers.length === 0 && !isLoading && (
+                    <div style={{ padding: '60px', textAlign: 'center', color: '#86868b' }}>
+                        No se encontraron usuarios.
+                    </div>
+                )}
             </div>
 
             {/* New User Modal */}
@@ -251,20 +291,20 @@ const UsersPage = () => {
                                         onChange={e => setFormData({ ...formData, role: e.target.value })}
                                         style={{ padding: '12px', borderRadius: '12px', border: '1px solid #e5e5e5', background: '#f5f5f7' }}
                                     >
-                                        <option value="student">Estudiante</option>
+                                        <option value="alumno">Estudiante</option>
                                         <option value="instructor">Instructor</option>
-                                        <option value="secretary">Secretaria</option>
+                                        <option value="secretaria">Secretaria</option>
                                         <option value="admin">Administrador de Sede</option>
-                                        <option value="superadmin">Superadmin</option>
+                                        <option value="super_admin">Superadmin</option>
                                     </select>
                                 </div>
 
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                     <label style={{ fontSize: '13px', fontWeight: 500, color: '#86868b' }}>Sede asignada</label>
                                     <select
-                                        value={user.role === 'admin' ? user.school_id : formData.school_id}
+                                        value={user.role === 'admin' ? user.schoolId : formData.school_id}
                                         onChange={e => setFormData({ ...formData, school_id: e.target.value })}
-                                        disabled={formData.role === 'superadmin' || user.role === 'admin'}
+                                        disabled={formData.role === 'super_admin' || user.role === 'admin'}
                                         style={{ padding: '12px', borderRadius: '12px', border: '1px solid #e5e5e5', background: '#f5f5f7' }}
                                     >
                                         <option value="">Seleccionar Sede...</option>
