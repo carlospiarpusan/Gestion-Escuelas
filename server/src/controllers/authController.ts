@@ -35,8 +35,8 @@ export const login = async (req: AuthRequest, res: Response) => {
         role: user.role,
         escuelaId: user.escuela_id,
       },
-      process.env.JWT_SECRET || 'secret',
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      (process.env.JWT_SECRET as string) || 'secret',
+      { expiresIn: (process.env.JWT_EXPIRES_IN as any) || '7d' }
     );
 
     const { password: _, ...userWithoutPassword } = user;

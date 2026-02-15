@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User, Escuela, RegistroHoras, Pago, ResultadoExamen, Clase } from '../types';
+import { USE_API } from '../config/api';
+import { escuelasAPI, usersAPI, registrosAPI, pagosAPI, examenesAPI } from '../services/api';
 
 interface AppState {
   currentUser: User | null;
@@ -10,29 +12,32 @@ interface AppState {
   pagos: Pago[];
   resultadosExamen: ResultadoExamen[];
   clases: Clase[];
-  
+
   login: (email: string, password: string) => User | null;
   logout: () => void;
-  
-  addEscuela: (escuela: Omit<Escuela, 'id' | 'fechaCreacion'>) => void;
-  updateEscuela: (id: string, escuela: Partial<Escuela>) => void;
-  deleteEscuela: (id: string) => void;
-  
-  addUser: (user: Omit<User, 'id' | 'fechaRegistro'>) => void;
-  updateUser: (id: string, user: Partial<User>) => void;
-  deleteUser: (id: string) => void;
-  
-  addRegistroHoras: (registro: Omit<RegistroHoras, 'id'>) => void;
-  updateRegistroHoras: (id: string, registro: Partial<RegistroHoras>) => void;
-  aprobarRegistroHoras: (id: string) => void;
-  
-  addPago: (pago: Omit<Pago, 'id' | 'fecha'>) => void;
-  updatePago: (id: string, pago: Partial<Pago>) => void;
-  
-  addResultadoExamen: (resultado: Omit<ResultadoExamen, 'id' | 'fecha'>) => void;
-  
-  addClase: (clase: Omit<Clase, 'id'>) => void;
-  updateClase: (id: string, clase: Partial<Clase>) => void;
+  setCurrentUser: (user: User | null) => void;
+
+  addEscuela: (escuela: Omit<Escuela, 'id' | 'fechaCreacion'>) => Promise<void>;
+  updateEscuela: (id: string, escuela: Partial<Escuela>) => Promise<void>;
+  deleteEscuela: (id: string) => Promise<void>;
+
+  addUser: (user: Omit<User, 'id' | 'fechaRegistro'>) => Promise<void>;
+  updateUser: (id: string, user: Partial<User>) => Promise<void>;
+  deleteUser: (id: string) => Promise<void>;
+
+  addRegistroHoras: (registro: Omit<RegistroHoras, 'id'>) => Promise<void>;
+  updateRegistroHoras: (id: string, registro: Partial<RegistroHoras>) => Promise<void>;
+  aprobarRegistroHoras: (id: string) => Promise<void>;
+
+  addPago: (pago: Omit<Pago, 'id' | 'fecha'>) => Promise<void>;
+  updatePago: (id: string, pago: Partial<Pago>) => Promise<void>;
+
+  addResultadoExamen: (resultado: Omit<ResultadoExamen, 'id' | 'fecha'>) => Promise<void>;
+
+  addClase: (clase: Omit<Clase, 'id'>) => Promise<void>;
+  updateClase: (id: string, clase: Partial<Clase>) => Promise<void>;
+
+  fetchInitialData: () => Promise<void>;
 }
 
 const generateId = () => Math.random().toString(36).substring(2) + Date.now().toString(36);
@@ -148,61 +153,111 @@ export const useStore = create<AppState>()(
 
       logout: () => set({ currentUser: null }),
 
-      addEscuela: (escuela) => {
-        const newEscuela: Escuela = {
-          ...escuela,
-          id: generateId(),
-          fechaCreacion: new Date(),
-        };
-        set((state) => ({ escuelas: [...state.escuelas, newEscuela] }));
+      setCurrentUser: (user) => set({ currentUser: user }),
+
+      addEscuela: async (escuela) => {
+        if (USE_API) {
+          const res = await escuelasAPI.create(escuela);
+          set((state) => ({ escuelas: [...state.escuelas, res.data] }));
+        } else {
+          const newEscuela: Escuela = {
+            ...escuela,
+            id: generateId(),
+            fechaCreacion: new Date(),
+          };
+          set((state) => ({ escuelas: [...state.escuelas, newEscuela] }));
+        }
       },
 
-      updateEscuela: (id, escuela) => {
-        set((state) => ({
-          escuelas: state.escuelas.map((e) =>
-            e.id === id ? { ...e, ...escuela } : e
-          ),
-        }));
+      updateEscuela: async (id, escuela) => {
+        if (USE_API) {
+          const res = await escuelasAPI.update(id, escuela);
+          set((state) => ({
+            escuelas: state.escuelas.map((e) =>
+              e.id === id ? res.data : e
+            ),
+          }));
+        } else {
+          set((state) => ({
+            escuelas: state.escuelas.map((e) =>
+              e.id === id ? { ...e, ...escuela } : e
+            ),
+          }));
+        }
       },
 
-      deleteEscuela: (id) => {
-        set((state) => ({
-          escuelas: state.escuelas.filter((e) => e.id !== id),
-        }));
+      deleteEscuela: async (id) => {
+        if (USE_API) {
+          await escuelasAPI.delete(id);
+          set((state) => ({
+            escuelas: state.escuelas.filter((e) => e.id !== id),
+          }));
+        } else {
+          set((state) => ({
+            escuelas: state.escuelas.filter((e) => e.id !== id),
+          }));
+        }
       },
 
-      addUser: (user) => {
-        const newUser: User = {
-          ...user,
-          id: generateId(),
-          fechaRegistro: new Date(),
-        };
-        set((state) => ({ users: [...state.users, newUser] }));
+      addUser: async (user) => {
+        if (USE_API) {
+          const res = await usersAPI.create(user);
+          set((state) => ({ users: [...state.users, res.data] }));
+        } else {
+          const newUser: User = {
+            ...user,
+            id: generateId(),
+            fechaRegistro: new Date(),
+          };
+          set((state) => ({ users: [...state.users, newUser] }));
+        }
       },
 
-      updateUser: (id, user) => {
-        set((state) => ({
-          users: state.users.map((u) => (u.id === id ? { ...u, ...user } : u)),
-        }));
+      updateUser: async (id, user) => {
+        if (USE_API) {
+          const res = await usersAPI.update(id, user);
+          set((state) => ({
+            users: state.users.map((u) => (u.id === id ? res.data : u)),
+          }));
+        } else {
+          set((state) => ({
+            users: state.users.map((u) => (u.id === id ? { ...u, ...user } : u)),
+          }));
+        }
       },
 
-      deleteUser: (id) => {
-        set((state) => ({
-          users: state.users.filter((u) => u.id !== id),
-        }));
+      deleteUser: async (id) => {
+        if (USE_API) {
+          await usersAPI.delete(id);
+          set((state) => ({
+            users: state.users.filter((u) => u.id !== id),
+          }));
+        } else {
+          set((state) => ({
+            users: state.users.filter((u) => u.id !== id),
+          }));
+        }
       },
 
-      addRegistroHoras: (registro) => {
-        const newRegistro: RegistroHoras = {
-          ...registro,
-          id: generateId(),
-        };
-        set((state) => ({
-          registrosHoras: [...state.registrosHoras, newRegistro],
-        }));
+      addRegistroHoras: async (registro) => {
+        if (USE_API) {
+          const res = await registrosAPI.create(registro);
+          set((state) => ({
+            registrosHoras: [...state.registrosHoras, res.data],
+          }));
+        } else {
+          const newRegistro: RegistroHoras = {
+            ...registro,
+            id: generateId(),
+          };
+          set((state) => ({
+            registrosHoras: [...state.registrosHoras, newRegistro],
+          }));
+        }
       },
 
-      updateRegistroHoras: (id, registro) => {
+      updateRegistroHoras: async (id, registro) => {
+        // API equivalent missing in current guide, falling back to local for now
         set((state) => ({
           registrosHoras: state.registrosHoras.map((r) =>
             r.id === id ? { ...r, ...registro } : r
@@ -210,41 +265,69 @@ export const useStore = create<AppState>()(
         }));
       },
 
-      aprobarRegistroHoras: (id) => {
-        set((state) => ({
-          registrosHoras: state.registrosHoras.map((r) =>
-            r.id === id ? { ...r, aprobado: true } : r
-          ),
-        }));
+      aprobarRegistroHoras: async (id) => {
+        if (USE_API) {
+          const res = await registrosAPI.aprobar(id);
+          set((state) => ({
+            registrosHoras: state.registrosHoras.map((r) =>
+              r.id === id ? res.data : r
+            ),
+          }));
+        } else {
+          set((state) => ({
+            registrosHoras: state.registrosHoras.map((r) =>
+              r.id === id ? { ...r, aprobado: true } : r
+            ),
+          }));
+        }
       },
 
-      addPago: (pago) => {
-        const newPago: Pago = {
-          ...pago,
-          id: generateId(),
-          fecha: new Date(),
-        };
-        set((state) => ({ pagos: [...state.pagos, newPago] }));
+      addPago: async (pago) => {
+        if (USE_API) {
+          const res = await pagosAPI.create(pago);
+          set((state) => ({ pagos: [...state.pagos, res.data] }));
+        } else {
+          const newPago: Pago = {
+            ...pago,
+            id: generateId(),
+            fecha: new Date(),
+          };
+          set((state) => ({ pagos: [...state.pagos, newPago] }));
+        }
       },
 
-      updatePago: (id, pago) => {
-        set((state) => ({
-          pagos: state.pagos.map((p) => (p.id === id ? { ...p, ...pago } : p)),
-        }));
+      updatePago: async (id, pago) => {
+        if (USE_API) {
+          const res = await pagosAPI.update(id, pago);
+          set((state) => ({
+            pagos: state.pagos.map((p) => (p.id === id ? res.data : p)),
+          }));
+        } else {
+          set((state) => ({
+            pagos: state.pagos.map((p) => (p.id === id ? { ...p, ...pago } : p)),
+          }));
+        }
       },
 
-      addResultadoExamen: (resultado) => {
-        const newResultado: ResultadoExamen = {
-          ...resultado,
-          id: generateId(),
-          fecha: new Date(),
-        };
-        set((state) => ({
-          resultadosExamen: [...state.resultadosExamen, newResultado],
-        }));
+      addResultadoExamen: async (resultado) => {
+        if (USE_API) {
+          const res = await examenesAPI.create(resultado);
+          set((state) => ({
+            resultadosExamen: [...state.resultadosExamen, res.data],
+          }));
+        } else {
+          const newResultado: ResultadoExamen = {
+            ...resultado,
+            id: generateId(),
+            fecha: new Date(),
+          };
+          set((state) => ({
+            resultadosExamen: [...state.resultadosExamen, newResultado],
+          }));
+        }
       },
 
-      addClase: (clase) => {
+      addClase: async (clase) => {
         const newClase: Clase = {
           ...clase,
           id: generateId(),
@@ -252,10 +335,29 @@ export const useStore = create<AppState>()(
         set((state) => ({ clases: [...state.clases, newClase] }));
       },
 
-      updateClase: (id, clase) => {
+      updateClase: async (id, clase) => {
         set((state) => ({
           clases: state.clases.map((c) => (c.id === id ? { ...c, ...clase } : c)),
         }));
+      },
+
+      fetchInitialData: async () => {
+        if (USE_API) {
+          const [escuelas, users, pagos, registros, examenes] = await Promise.all([
+            escuelasAPI.getAll(),
+            usersAPI.getAll(),
+            pagosAPI.getAll(),
+            registrosAPI.getAll(),
+            examenesAPI.getAll(),
+          ]);
+          set({
+            escuelas: escuelas.data,
+            users: users.data,
+            pagos: pagos.data,
+            registrosHoras: registros.data,
+            resultadosExamen: examenes.data,
+          });
+        }
       },
     }),
     {

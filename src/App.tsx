@@ -12,7 +12,14 @@ import ExamenSimulacro from './components/ExamenSimulacro';
 
 function App() {
   const currentUser = useStore((state) => state.currentUser);
+  const fetchInitialData = useStore((state) => state.fetchInitialData);
   const currentHash = window.location.hash;
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchInitialData();
+    }
+  }, [currentUser, fetchInitialData]);
 
   useEffect(() => {
     const handleHashChange = () => {

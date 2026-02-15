@@ -1,20 +1,34 @@
 import { useState } from 'react';
 import { useStore } from '../store';
 import { LogIn } from 'lucide-react';
+import { authAPI } from '../services/api';
+import { USE_API } from '../config/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const login = useStore((state) => state.login);
+  const loginLocal = useStore((state) => state.login);
+  const setCurrentUser = useStore((state) => state.setCurrentUser);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
-    const user = login(email, password);
-    if (!user) {
-      setError('Credenciales incorrectas o usuario inactivo');
+
+    if (USE_API) {
+      try {
+        const response = await authAPI.login(email, password);
+        const { token, user } = response.data;
+        localStorage.setItem('auth_token', token);
+        setCurrentUser(user);
+      } catch (error: any) {
+        setError(error.response?.data?.error || 'Error al iniciar sesión');
+      }
+    } else {
+      const user = loginLocal(email, password);
+      if (!user) {
+        setError('Credenciales incorrectas o usuario inactivo');
+      }
     }
   };
 
