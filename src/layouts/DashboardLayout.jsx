@@ -66,14 +66,12 @@ const DashboardLayout = () => {
                             <SidebarItem to="/dashboard/register-student" icon={UserPlus} label="Registrar Alumno" />
                             <SidebarItem to="/dashboard/instructor-logs" icon={Clock} label="Horas Instructor" />
                             <SidebarItem to="/dashboard/tramitadores" icon={Users} label="Tramitadores" />
-                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 
                     {role === 'instructor' && (
                         <>
                             <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
-                            <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 

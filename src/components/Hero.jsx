@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import styles from './Hero.module.css';
+import StatsStrip from './StatsStrip';
 
 const Hero = () => {
     return (
@@ -44,31 +45,7 @@ const Hero = () => {
                     <a href="#features" className={styles.secondaryBtn}>Ver Características</a>
                 </motion.div>
 
-                <motion.div
-                    className={styles.mockupContainer}
-                    initial={{ opacity: 0, scale: 0.95, y: 40 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
-                >
-                    <div className={styles.mockup}>
-                        <div className={styles.mockupHeader}>
-                            <div className={styles.dot} style={{ background: '#FF5F56' }}></div>
-                            <div className={styles.dot} style={{ background: '#FFBD2E' }}></div>
-                            <div className={styles.dot} style={{ background: '#27C93F' }}></div>
-                        </div>
-                        <div className={styles.mockupScreen}>
-                            <div className={styles.mockupSidebar}></div>
-                            <div className={styles.mockupContentPreview}>
-                                <div className={styles.skeletonHeader}></div>
-                                <div className={styles.skeletonGrid}>
-                                    <div className={styles.skeletonCard}></div>
-                                    <div className={styles.skeletonCard}></div>
-                                    <div className={styles.skeletonCard}></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
+                <StatsStrip />
             </div>
         </section>
     );

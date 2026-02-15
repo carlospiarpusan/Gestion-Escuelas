@@ -70,9 +70,9 @@ function App() {
             <Route path="exams" element={<ProtectedRoute allowedRoles={['student']}><StudentExams /></ProtectedRoute>} />
             <Route path="payments" element={<ProtectedRoute allowedRoles={['student']}><StudentPayments /></ProtectedRoute>} />
 
-            {/* Fleet Management (Accessible by SuperAdmin, Admin, Secretary, Instructor) */}
-            <Route path="fleet" element={<ProtectedRoute allowedRoles={['superadmin', 'admin', 'secretary', 'instructor']}><Fleet /></ProtectedRoute>} />
-            <Route path="fleet/:id" element={<ProtectedRoute allowedRoles={['superadmin', 'admin', 'secretary', 'instructor']}><VehicleDetails /></ProtectedRoute>} />
+            {/* Fleet Management (Accessible by SuperAdmin, Admin) */}
+            <Route path="fleet" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><Fleet /></ProtectedRoute>} />
+            <Route path="fleet/:id" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><VehicleDetails /></ProtectedRoute>} />
 
             <Route path="settings" element={<SettingsPage />} />
           </Route>

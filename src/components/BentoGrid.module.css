@@ -1,8 +1,6 @@
 .section {
-    padding: 120px 0;
-    background: #f5f5f7;
-    /* Slightly lighter bg for contrast or dark depending on theme */
-    background: var(--bg-color);
+    padding: 0 0 120px;
+    background: #FFFFFF;
 }
 
 .container {
@@ -15,11 +13,11 @@
     font-size: 48px;
     font-weight: 600;
     margin-bottom: 60px;
-    color: var(--text-main);
+    color: #1d1d1f;
 }
 
 .subtitle {
-    color: var(--text-secondary);
+    color: #86868b;
 }
 
 .grid {
@@ -42,8 +40,8 @@
 }
 
 .card {
-    background: #1d1d1f;
-    /* Dark card bg */
+    background: #F5F5F7;
+    /* System Gray 6 */
     border-radius: 20px;
     padding: 30px;
     display: flex;
@@ -52,17 +50,19 @@
     overflow: hidden;
     position: relative;
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .card:hover {
     transform: scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .cardLarge {
     grid-column: span 1;
     grid-row: span 2;
-    background: #000;
-    border: 1px solid #333;
+    background: #F5F5F7;
+    border: none;
 }
 
 @media (min-width: 768px) {
@@ -78,16 +78,17 @@
 
 .cardContent {
     z-index: 2;
-    color: var(--text-main);
+    color: #1d1d1f;
 }
 
 .cardContent h3 {
     font-size: 24px;
     margin: 16px 0 8px;
+    font-weight: 600;
 }
 
 .cardContent p {
-    color: var(--text-secondary);
+    color: #86868b;
     font-size: 15px;
     line-height: 1.4;
 }
@@ -95,13 +96,14 @@
 .iconWrapper {
     width: 48px;
     height: 48px;
-    background: var(--primary);
+    background: #0071e3;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     margin-bottom: 16px;
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
 }
 
 /* Visuals */
@@ -114,7 +116,8 @@
 
 .visualItem {
     height: 40px;
-    background: #333;
+    background: #d2d2d7;
+    /* System Gray 4 */
     border-radius: 8px;
     width: 100%;
     opacity: 0.5;
@@ -133,7 +136,7 @@
 .bar3,
 .bar4 {
     width: 30px;
-    background: var(--primary);
+    background: #0071e3;
     border-radius: 4px 4px 0 0;
 }
 

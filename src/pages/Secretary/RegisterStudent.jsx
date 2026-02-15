@@ -1,8 +1,24 @@
 import { useState } from 'react';
-import { Save, UserPlus, CreditCard, AlertCircle } from 'lucide-react';
+import { Save, UserPlus, CreditCard, AlertCircle, Plus } from 'lucide-react';
+import Input from '../../components/UI/Input';
+import Select from '../../components/UI/Select';
+import Button from '../../components/UI/Button';
 
-const LICENSE_CATEGORIES = ['A2', 'B1', 'C1', 'RC1', 'A2-B1', 'A2-C1', 'A2-RC1'];
-const PAYMENT_METHODS = ['Efectivo', 'Tarjeta', 'Nequi', 'Sistecredito'];
+const LICENSE_CATEGORIES = [
+    { value: 'A2', label: 'A2 - Motocicletas' },
+    { value: 'B1', label: 'B1 - Automóviles' },
+    { value: 'C1', label: 'C1 - Servicio Público' },
+    { value: 'RC1', label: 'Recategorización C1' },
+    { value: 'A2-B1', label: 'Combo A2 + B1' },
+    { value: 'A2-C1', label: 'Combo A2 + C1' }
+];
+
+const PAYMENT_METHODS = [
+    { value: 'Efectivo', label: 'Efectivo' },
+    { value: 'Tarjeta', label: 'Tarjeta Crédito/Débito' },
+    { value: 'Nequi', label: 'Nequi / Daviplata' },
+    { value: 'Sistecredito', label: 'Sistecrédito' }
+];
 
 // Mock Tramitadores for Dropdown
 const MOCK_TRAMITADORES = [
@@ -16,6 +32,8 @@ const RegisterStudent = () => {
         cedula: '',
         name: '',
         email: '',
+        phone: '',
+        address: '',
         contractNumber: '',
         category: 'A2',
         courseValue: '',
@@ -46,92 +64,91 @@ const RegisterStudent = () => {
     };
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-            <div style={{ marginBottom: '32px' }}>
-                <h1 style={{ fontSize: '24px', fontWeight: 600 }}>Registrar Nuevo Alumno</h1>
-                <p style={{ color: '#666', fontSize: '14px' }}>Ingresa los datos del estudiante, contrato y pagos iniciales.</p>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', paddingBottom: '40px', animation: 'fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1)' }}>
+            <style>{`
+                @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+            `}</style>
+
+            <div style={{ marginBottom: '24px', textAlign: 'center' }}>
+                <h1 style={{ fontSize: '28px', fontWeight: 700, letterSpacing: '-0.5px', marginBottom: '6px', color: '#1d1d1f' }}>Registrar Nuevo Alumno</h1>
+                <p style={{ color: '#86868b', fontSize: '15px' }}>Ingresa los datos del estudiante para generar su contrato.</p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'grid', gridTemplateColumns: '2fr 1.1fr', gap: '24px' }}>
 
-                {/* DO LEFT COLUMN: Student Info */}
+                {/* Left Column: Student & Course Info */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-                    {/* Sección 1: Datos Personales y Contrato */}
-                    <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e5e5e5' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <UserPlus size={18} color="#0071e3" /> Información del Estudiante
+                    {/* Section 1: Personal Info */}
+                    <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.02)' }}>
+                        <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', color: '#1d1d1f' }}>
+                            <div style={{ background: '#E3F2FD', padding: '6px', borderRadius: '8px', color: '#0071e3' }}>
+                                <UserPlus size={18} />
+                            </div>
+                            Información del Estudiante
                         </h3>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Cédula</label>
-                                <input
-                                    type="text" required
-                                    value={formData.cedula}
-                                    onChange={e => setFormData({ ...formData, cedula: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Nombre Completo</label>
-                                <input
-                                    type="text" required
-                                    value={formData.name}
-                                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Número de Contrato</label>
-                                <input
-                                    type="text" required
-                                    value={formData.contractNumber}
-                                    onChange={e => setFormData({ ...formData, contractNumber: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                            </div>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Email (Opcional)</label>
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                            </div>
+                            <Input
+                                label="Cédula de Ciudadanía"
+                                placeholder="Ej. 1020304050"
+                                value={formData.cedula}
+                                onChange={e => setFormData({ ...formData, cedula: e.target.value })}
+                                required
+                            />
+                            <Input
+                                label="Nombre Completo"
+                                placeholder="Ej. Juan Pérez"
+                                value={formData.name}
+                                onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                required
+                            />
+                            <Input
+                                label="Teléfono / Celular"
+                                placeholder="Ej. 300 123 4567"
+                                value={formData.phone}
+                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                required
+                            />
+                            <Input
+                                label="Dirección de Residencia"
+                                placeholder="Ej. Cra 5 # 10-20"
+                                value={formData.address}
+                                onChange={e => setFormData({ ...formData, address: e.target.value })}
+                            />
+                            <Input
+                                label="Email (Opcional)"
+                                type="email"
+                                placeholder="juan@ejemplo.com"
+                                value={formData.email}
+                                onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                style={{ gridColumn: 'span 2' }}
+                            />
                         </div>
                     </div>
 
-                    {/* Sección 2: Curso y Tramitador */}
-                    <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e5e5e5' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px' }}>Detalles del Curso</h3>
+                    {/* Section 2: Course Details */}
+                    <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.02)' }}>
+                        <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '20px', color: '#1d1d1f' }}>Detalles del Curso</h3>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Categoría</label>
-                                <select
-                                    value={formData.category}
-                                    onChange={e => setFormData({ ...formData, category: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                >
-                                    {LICENSE_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-                                </select>
-                            </div>
-                            <div>
-                                <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Valor Total del Curso</label>
-                                <input
-                                    type="number" required
-                                    placeholder="0.00"
-                                    value={formData.courseValue}
-                                    onChange={e => setFormData({ ...formData, courseValue: e.target.value })}
-                                    style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                />
-                            </div>
+                            <Select
+                                label="Categoría de Licencia"
+                                value={formData.category}
+                                onChange={e => setFormData({ ...formData, category: e.target.value })}
+                                options={LICENSE_CATEGORIES}
+                            />
+                            <Input
+                                label="Número de Contrato (Físico)"
+                                placeholder="Ej. A-00123"
+                                value={formData.contractNumber}
+                                onChange={e => setFormData({ ...formData, contractNumber: e.target.value })}
+                                required
+                            />
                         </div>
 
-                        <div style={{ paddingTop: '16px', borderTop: '1px solid #eee' }}>
-                            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', marginBottom: '12px' }}>
+                        <div style={{ paddingTop: '16px', borderTop: '1px solid #f5f5f7' }}>
+                            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', marginBottom: '16px', userSelect: 'none' }}>
                                 <input
                                     type="checkbox"
                                     checked={formData.hasTramitador}
@@ -140,47 +157,41 @@ const RegisterStudent = () => {
                                         hasTramitador: e.target.checked,
                                         tramitadorFee: e.target.checked ? formData.tramitadorFee : '0'
                                     })}
+                                    style={{ width: '18px', height: '18px', accentColor: '#0071e3', cursor: 'pointer' }}
                                 />
-                                <span style={{ fontSize: '14px', fontWeight: 500 }}>¿Es por Tramitador?</span>
+                                <span style={{ fontSize: '14px', fontWeight: 500, color: '#1d1d1f' }}>¿Referido por Agencia?</span>
                             </label>
 
                             {formData.hasTramitador && (
-                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', padding: '16px', background: '#fafafa', borderRadius: '8px' }}>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, marginBottom: '4px' }}>Seleccionar Tramitador</label>
-                                        <div style={{ display: 'flex', gap: '8px' }}>
-                                            <select
+                                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', padding: '16px', background: '#F5F5F7', borderRadius: '12px', animation: 'fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)' }}>
+                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
+                                        <div style={{ flex: 1 }}>
+                                            <Select
+                                                label="Seleccionar Agencia / Referido"
                                                 value={formData.tramitadorId}
                                                 onChange={e => setFormData({ ...formData, tramitadorId: e.target.value })}
-                                                style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
-                                            >
-                                                <option value="">Seleccione...</option>
-                                                {MOCK_TRAMITADORES.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-                                            </select>
-                                            <button
-                                                type="button"
-                                                onClick={() => setShowTramitadorModal(true)}
-                                                style={{ background: '#e5e5e5', border: 'none', borderRadius: '6px', width: '36px', cursor: 'pointer' }}
-                                            >
-                                                <Plus size={16} />
-                                            </button>
+                                                options={[
+                                                    { value: '', label: 'Seleccione...' },
+                                                    ...MOCK_TRAMITADORES.map(t => ({ value: t.id, label: t.name }))
+                                                ]}
+                                            />
                                         </div>
+                                        <Button
+                                            type="button"
+                                            variant="secondary"
+                                            onClick={() => setShowTramitadorModal(true)}
+                                            style={{ marginBottom: '16px', padding: '10px' }}
+                                        >
+                                            <Plus size={18} />
+                                        </Button>
                                     </div>
-                                    <div>
-                                        <label style={{ display: 'block', fontSize: '12px', fontWeight: 500, marginBottom: '4px' }}>Comisión / Pago</label>
-                                        <input
-                                            type="number"
-                                            value={formData.tramitadorFee}
-                                            onChange={e => setFormData({ ...formData, tramitadorFee: e.target.value })}
-                                            style={{ width: '100%', padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {!formData.hasTramitador && (
-                                <div style={{ padding: '8px', fontSize: '13px', color: '#666', fontStyle: 'italic' }}>
-                                    Tramitador: <span style={{ fontWeight: 600 }}>No Aplica</span>
+                                    <Input
+                                        label="Comisión"
+                                        type="number"
+                                        value={formData.tramitadorFee}
+                                        onChange={e => setFormData({ ...formData, tramitadorFee: e.target.value })}
+                                        placeholder="0.00"
+                                    />
                                 </div>
                             )}
                         </div>
@@ -188,68 +199,71 @@ const RegisterStudent = () => {
 
                 </div>
 
-                {/* DO RIGHT COLUMN: Payment Info & Action */}
+                {/* Right Column: Financials */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    <div style={{ background: 'white', padding: '24px', borderRadius: '16px', border: '1px solid #e5e5e5' }}>
-                        <h3 style={{ fontSize: '16px', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <CreditCard size={18} color="#2E7D32" /> Pago Inicial (Abono)
+                    <div style={{ background: 'white', padding: '24px', borderRadius: '20px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.02)', position: 'sticky', top: '20px' }}>
+                        <h3 style={{ fontSize: '17px', fontWeight: 600, marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px', color: '#1d1d1f' }}>
+                            <div style={{ background: '#E8F5E9', padding: '6px', borderRadius: '8px', color: '#2E7D32' }}>
+                                <CreditCard size={18} />
+                            </div>
+                            Resumen Financiero
                         </h3>
 
-                        <div style={{ marginBottom: '16px' }}>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Monto Abono</label>
-                            <input
-                                type="number" required
-                                placeholder="0.00"
-                                value={formData.initialPayment}
-                                onChange={e => setFormData({ ...formData, initialPayment: e.target.value })}
-                                style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '16px', fontWeight: 600 }}
-                            />
+                        <Input
+                            label="Valor Total del Curso"
+                            type="number"
+                            placeholder="0.00"
+                            value={formData.courseValue}
+                            onChange={e => setFormData({ ...formData, courseValue: e.target.value })}
+                            required
+                            style={{ fontSize: '16px', fontWeight: 600, color: '#1d1d1f' }}
+                        />
+
+                        <div style={{ margin: '20px 0', borderTop: '1px dashed #d2d2d7' }}></div>
+
+                        <h4 style={{ fontSize: '14px', fontWeight: 600, marginBottom: '12px', color: '#1d1d1f' }}>Pago Inicial (Abono)</h4>
+
+                        <Input
+                            label="Monto a Abonar Hoy"
+                            type="number"
+                            placeholder="0.00"
+                            value={formData.initialPayment}
+                            onChange={e => setFormData({ ...formData, initialPayment: e.target.value })}
+                            required
+                            style={{ fontWeight: 600, color: '#2E7D32' }}
+                        />
+
+                        <Select
+                            label="Método de Pago"
+                            value={formData.paymentMethod}
+                            onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })}
+                            options={PAYMENT_METHODS}
+                        />
+
+                        <div style={{ padding: '16px', background: '#F2F2F7', borderRadius: '14px', marginTop: '20px', marginBottom: '20px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '13px', color: '#86868b' }}>
+                                <span>Valor Curso</span>
+                                <span>${Number(formData.courseValue).toLocaleString()}</span>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '13px', color: '#2E7D32', fontWeight: 500 }}>
+                                <span>Abono Inicial</span>
+                                <span>-${Number(formData.initialPayment).toLocaleString()}</span>
+                            </div>
+                            <div style={{ borderTop: '1px solid #d2d2d7', paddingTop: '10px', display: 'flex', justifyContent: 'space-between', fontSize: '15px', fontWeight: 600 }}>
+                                <span>Saldo Pendiente</span>
+                                <span style={{ color: '#EF6C00' }}>
+                                    ${(Number(formData.courseValue) - Number(formData.initialPayment)).toLocaleString()}
+                                </span>
+                            </div>
                         </div>
 
-                        <div style={{ marginBottom: '20px' }}>
-                            <label style={{ display: 'block', fontSize: '13px', fontWeight: 500, marginBottom: '6px' }}>Tipo de Abono</label>
-                            <select
-                                value={formData.paymentMethod}
-                                onChange={e => setFormData({ ...formData, paymentMethod: e.target.value })}
-                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                            >
-                                {PAYMENT_METHODS.map(m => <option key={m} value={m}>{m}</option>)}
-                            </select>
-                        </div>
+                        <Button type="submit" style={{ width: '100%' }}>
+                            <Save size={18} /> Registrar Alumno
+                        </Button>
 
-                        <div style={{ padding: '12px', background: '#E3F2FD', borderRadius: '8px', fontSize: '13px', color: '#0071e3', display: 'flex', gap: '8px', alignItems: 'start' }}>
-                            <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                            <span>El abono se registrará con la fecha actual automáticamente.</span>
-                        </div>
-                    </div>
-
-                    <button
-                        type="submit"
-                        style={{
-                            background: '#0071e3', color: 'white', border: 'none', padding: '16px',
-                            borderRadius: '12px', fontWeight: 600, fontSize: '16px', cursor: 'pointer',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                            boxShadow: '0 4px 12px rgba(0,113,227,0.3)'
-                        }}
-                    >
-                        <Save size={20} /> Registrar Alumno
-                    </button>
-
-                    {/* Summary Card */}
-                    <div style={{ padding: '16px', borderRadius: '12px', border: '1px dashed #ccc', color: '#666', fontSize: '13px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                            <span>Valor Curso:</span>
-                            <span style={{ fontWeight: 600 }}>${Number(formData.courseValue).toLocaleString()}</span>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                            <span>Abono Inicial:</span>
-                            <span style={{ fontWeight: 600, color: '#2E7D32' }}>-${Number(formData.initialPayment).toLocaleString()}</span>
-                        </div>
-                        <div style={{ borderTop: '1px solid #eee', paddingTop: '8px', display: 'flex', justifyContent: 'space-between' }}>
-                            <span>Saldo Pendiente:</span>
-                            <span style={{ fontWeight: 600, color: '#EF6C00' }}>
-                                ${(Number(formData.courseValue) - Number(formData.initialPayment)).toLocaleString()}
-                            </span>
+                        <div style={{ marginTop: '16px', display: 'flex', gap: '8px', alignItems: 'start', fontSize: '12px', color: '#86868b' }}>
+                            <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+                            <span>El usuario recibirá un correo con sus credenciales de acceso automáticamente.</span>
                         </div>
                     </div>
                 </div>
@@ -260,21 +274,21 @@ const RegisterStudent = () => {
             {showTramitadorModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-                    background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                    background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
+                    animation: 'fadeIn 0.2s ease-out'
                 }}>
-                    <div style={{ background: 'white', width: '350px', padding: '24px', borderRadius: '16px' }}>
-                        <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '16px' }}>Nuevo Tramitador</h3>
-                        <input
+                    <div style={{ background: 'white', width: '400px', padding: '32px', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+                        <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '24px' }}>Nueva Agencia / Referido</h3>
+                        <Input
                             autoFocus
-                            className="modal-input"
-                            placeholder="Nombre del Tramitador"
+                            placeholder="Nombre de la Agencia"
                             value={newTramitadorName}
                             onChange={e => setNewTramitadorName(e.target.value)}
-                            style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', marginBottom: '20px' }}
                         />
-                        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-                            <button onClick={() => setShowTramitadorModal(false)} style={{ background: 'none', border: '1px solid #ddd', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>Cancelar</button>
-                            <button onClick={handleCreateTramitador} style={{ background: '#0071e3', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer' }}>Crear</button>
+                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '24px' }}>
+                            <Button variant="outline" onClick={() => setShowTramitadorModal(false)}>Cancelar</Button>
+                            <Button onClick={handleCreateTramitador}>Crear</Button>
                         </div>
                     </div>
                 </div>

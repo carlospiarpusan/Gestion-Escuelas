@@ -106,20 +106,7 @@ const BentoGrid = () => {
                         </div>
                     </motion.div>
 
-                    {/* Feature 6 - Calendar (Small) */}
-                    <motion.div
-                        className={styles.card}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.5 }}
-                    >
-                        <div className={styles.cardContent}>
-                            <div className={styles.iconWrapper}><Calendar size={32} /></div>
-                            <h3>Agenda Inteligente</h3>
-                            <p>Programación de clases prácticas sin conflictos de horario.</p>
-                        </div>
-                    </motion.div>
+
 
                 </div>
             </div>
