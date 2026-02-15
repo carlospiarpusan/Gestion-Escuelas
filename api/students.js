@@ -114,6 +114,10 @@ export default async function handler(req, res) {
             // 3. Insert initial payment if provided
             const paymentAmount = parseFloat(initialPayment);
             if (paymentAmount > 0) {
+                // Map frontend values to DB check constraint values
+                const methodMap = { 'Efectivo': 'efectivo', 'Tarjeta': 'tarjeta', 'Nequi': 'transferencia', 'Sistecredito': 'transferencia' };
+                const dbMethod = methodMap[paymentMethod] || 'efectivo';
+
                 await sql`
                     INSERT INTO pagos (alumno_id, escuela_id, monto, concepto, metodo_pago, estado, fecha)
                     VALUES (
@@ -121,8 +125,8 @@ export default async function handler(req, res) {
                         ${schoolId || null},
                         ${paymentAmount},
                         'Abono inicial - Matrícula',
-                        ${paymentMethod || 'Efectivo'},
-                        'aprobado',
+                        ${dbMethod},
+                        'pagado',
                         NOW()
                     )
                 `;
