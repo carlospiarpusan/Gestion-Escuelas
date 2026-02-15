@@ -4,6 +4,7 @@ import { Users, UserPlus, Search, Shield, Globe, School, MoreVertical, Edit2, Tr
 
 const UsersPage = () => {
     const [users, setUsers] = useState([]);
+    const [error, setError] = useState(null);
     const [schools, setSchools] = useState([]); // For dropdown
     const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -17,17 +18,20 @@ const UsersPage = () => {
 
     const fetchData = async () => {
         setIsLoading(true);
+        setError(null);
         try {
             const [usersRes, schoolsRes] = await Promise.all([
                 fetch('/api/users'),
                 fetch('/api/schools')
             ]);
 
+            if (!usersRes.ok) throw new Error(`Users API Error: ${usersRes.status}`);
+            if (!schoolsRes.ok) throw new Error(`Schools API Error: ${schoolsRes.status}`);
+
             const usersData = await usersRes.json();
             const schoolsData = await schoolsRes.json();
 
             if (Array.isArray(usersData)) {
-                // Map API data to UI format
                 const mappedUsers = usersData.map(u => ({
                     ...u,
                     name: u.full_name,
@@ -35,10 +39,14 @@ const UsersPage = () => {
                     schoolName: u.schoolName || 'Global'
                 }));
                 setUsers(mappedUsers);
+            } else {
+                throw new Error('Invalid users data format');
             }
+
             if (Array.isArray(schoolsData)) setSchools(schoolsData);
         } catch (err) {
             console.error('Error fetching data:', err);
+            setError(err.message);
         } finally {
             setIsLoading(false);
         }
@@ -105,6 +113,14 @@ const UsersPage = () => {
                     </div>
                 ))}
             </div>
+            {/* Error Message */}
+            {error && (
+                <div style={{ background: '#FFF5F5', color: '#ff3b30', padding: '16px', borderRadius: '12px', marginBottom: '24px' }}>
+                    <strong>Error cargando usuarios:</strong> {error}
+                    <br />
+                    <small>Verifica que la variable DATABASE_URL esté configurada en Vercel.</small>
+                </div>
+            )}
 
             {/* Search Bar */}
             <div style={{ background: 'white', padding: '20px', borderRadius: '24px', marginBottom: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
