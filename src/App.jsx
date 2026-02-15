@@ -10,11 +10,18 @@ import StudentExams from './pages/Student/Exams';
 import StudentPayments from './pages/Student/Payments';
 import InstructorHoursLink from './pages/Secretary/InstructorHours';
 import RegisterStudent from './pages/Secretary/RegisterStudent';
+import Students from './pages/Secretary/Students';
 import Tramitadores from './pages/Secretary/Tramitadores';
+import Finanzas from './pages/Secretary/Finanzas';
 import MyHours from './pages/Instructor/MyHours';
+import VehicleCheck from './pages/Instructor/VehicleCheck';
 import ExamResults from './pages/Analytics/ExamResults';
+import SchoolPerformance from './pages/Analytics/SchoolPerformance';
 import Fleet from './pages/SchoolAdmin/Fleet';
 import VehicleDetails from './pages/SchoolAdmin/VehicleDetails';
+import DashboardHome from './pages/DashboardHome';
+import UsersPage from './pages/SuperAdmin/Users';
+import SettingsPage from './pages/Settings';
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children, allowedRoles = [] }) => {
@@ -31,10 +38,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   return children;
 };
 
-// Placeholder Pages
-const DashboardHome = () => <h1>Bienvenido al Panel de Control</h1>;
-const UsersPage = () => <h1>Gestión de Usuarios</h1>;
-const SettingsPage = () => <h1>Configuración</h1>;
+// Placeholder Pages removed as they are now separate files
 
 function App() {
   return (
@@ -57,14 +61,18 @@ function App() {
             <Route path="questions" element={<ProtectedRoute allowedRoles={['superadmin']}><QuestionsPage /></ProtectedRoute>} />
             <Route path="users" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><UsersPage /></ProtectedRoute>} />
             <Route path="analytics" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><ExamResults /></ProtectedRoute>} />
+            <Route path="school-performance" element={<ProtectedRoute allowedRoles={['superadmin', 'admin']}><SchoolPerformance /></ProtectedRoute>} />
 
             {/* Secretary Routes */}
+            <Route path="students" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><Students /></ProtectedRoute>} />
             <Route path="instructor-logs" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><InstructorHoursLink /></ProtectedRoute>} />
             <Route path="register-student" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><RegisterStudent /></ProtectedRoute>} />
             <Route path="tramitadores" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><Tramitadores /></ProtectedRoute>} />
+            <Route path="finanzas" element={<ProtectedRoute allowedRoles={['secretary', 'admin', 'superadmin']}><Finanzas /></ProtectedRoute>} />
 
             {/* Instructor Routes */}
             <Route path="my-hours" element={<ProtectedRoute allowedRoles={['instructor']}><MyHours /></ProtectedRoute>} />
+            <Route path="vehicle-check" element={<ProtectedRoute allowedRoles={['instructor']}><VehicleCheck /></ProtectedRoute>} />
 
             {/* Student Routes */}
             <Route path="exams" element={<ProtectedRoute allowedRoles={['student']}><StudentExams /></ProtectedRoute>} />

@@ -5,12 +5,12 @@ const AuthContext = createContext(null);
 
 // MOCK USERS FOR DEV - In production this comes from API/DB
 export const MOCK_DB_USERS = [
-    { email: 'super@admin.com', password: '123', role: 'superadmin', name: 'Super Admin', schoolId: null },
-    { email: 'carlospt@live.com', password: 'Car.8902', role: 'superadmin', name: 'Carlos SuperAdmin', schoolId: null },
-    { email: 'admin@school.com', password: '123', role: 'admin', name: 'Admin Escuela', schoolId: 'school-1' },
-    { email: 'sec@school.com', password: '123', role: 'secretary', name: 'Secretaria General', schoolId: 'school-1' },
-    { email: 'inst@school.com', password: '123', role: 'instructor', name: 'Juan Instructor', schoolId: 'school-1' },
-    { email: 'student@school.com', password: '123', role: 'student', name: 'Carlos Estudiante', schoolId: 'school-1' },
+    { email: 'super@admin.com', password: '123', role: 'superadmin', name: 'Super Admin', schoolId: null, schoolName: 'Global' },
+    { email: 'carlospt@live.com', password: 'Car.8902', role: 'superadmin', name: 'Carlos SuperAdmin', schoolId: null, schoolName: 'Global' },
+    { email: 'admin@school.com', password: '123', role: 'admin', name: 'Admin Escuela', schoolId: 'school-1', schoolName: 'Autoescuela Central' },
+    { email: 'sec@school.com', password: '123', role: 'secretary', name: 'Secretaria General', schoolId: 'school-1', schoolName: 'Autoescuela Central' },
+    { email: 'inst@school.com', password: '123', role: 'instructor', name: 'Juan Instructor', schoolId: 'school-1', schoolName: 'Autoescuela Central' },
+    { email: 'student@school.com', password: '123', role: 'student', name: 'Carlos Estudiante', schoolId: 'school-1', schoolName: 'Autoescuela Central' },
 ];
 
 export const AuthProvider = ({ children }) => {
@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
                         role: foundUser.role,
                         name: foundUser.name,
                         schoolId: foundUser.schoolId,
+                        schoolName: foundUser.schoolName,
                         token: 'mock-jwt-token'
                     };
                     setUser(sessionUser);

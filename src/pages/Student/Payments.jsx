@@ -1,8 +1,6 @@
 import { useState } from 'react';
-import { CreditCard, Download, Calendar, DollarSign, Clock, CheckCircle } from 'lucide-react';
+import { Calendar, DollarSign, Clock, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
-import Button from '../../components/UI/Button';
-import PaymentModal from '../../components/Student/PaymentModal';
 
 const INITIAL_PAYMENTS = [
     { id: 1, date: '2025-02-10', amount: 150.00, concept: 'Matrícula Inicial', status: 'Pagado' },
@@ -12,24 +10,10 @@ const INITIAL_PAYMENTS = [
 ];
 
 const StudentPayments = () => {
-    const [payments, setPayments] = useState(INITIAL_PAYMENTS);
-    const [selectedPayment, setSelectedPayment] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [payments] = useState(INITIAL_PAYMENTS);
 
     const totalPaid = payments.filter(p => p.status === 'Pagado').reduce((acc, curr) => acc + curr.amount, 0);
     const nextPayment = payments.find(p => p.status === 'Pendiente');
-
-    const handleOpenPayment = (payment) => {
-        setSelectedPayment(payment);
-        setIsModalOpen(true);
-    };
-
-    const handleConfirmPayment = (paymentId) => {
-        setPayments(prev => prev.map(p =>
-            p.id === paymentId ? { ...p, status: 'Pagado' } : p
-        ));
-        setIsModalOpen(false);
-    };
 
     return (
         <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }}>
@@ -108,7 +92,6 @@ const StudentPayments = () => {
                             <th style={{ padding: '20px 32px', fontWeight: 600 }}>Fecha Límite</th>
                             <th style={{ padding: '20px 32px', fontWeight: 600 }}>Monto</th>
                             <th style={{ padding: '20px 32px', fontWeight: 600 }}>Estado</th>
-                            <th style={{ padding: '20px 32px', fontWeight: 600, textAlign: 'right' }}>Acción</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -134,35 +117,12 @@ const StudentPayments = () => {
                                         {payment.status}
                                     </span>
                                 </td>
-                                <td style={{ padding: '20px 32px', textAlign: 'right' }}>
-                                    {payment.status === 'Pagado' ? (
-                                        <Button variant="ghost" style={{ fontSize: '13px', padding: '8px 16px' }}>
-                                            <Download size={14} /> Recibo
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="primary"
-                                            style={{ fontSize: '13px', padding: '8px 20px' }}
-                                            onClick={() => handleOpenPayment(payment)}
-                                        >
-                                            Pagar
-                                        </Button>
-                                    )}
-                                </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </motion.div>
-
-            <PaymentModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                payment={selectedPayment}
-                onConfirmPayment={handleConfirmPayment}
-            />
         </div>
     );
 };
-
 export default StudentPayments;

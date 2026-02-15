@@ -1,12 +1,21 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Car, AlertTriangle, CheckCircle, Clock, Plus, Filter, Search, ChevronRight } from 'lucide-react';
+import { Car, AlertTriangle, CheckCircle, Clock, Plus, Filter, Search, ChevronRight, MoreVertical, Edit2, Trash2, X } from 'lucide-react';
 import { MOCK_VEHICLES } from '../../data/mockFleet';
+import Button from '../../components/UI/Button';
+import Input from '../../components/UI/Input';
 
 const Fleet = () => {
-    const [vehicles] = useState(MOCK_VEHICLES);
+    const [vehicles, setVehicles] = useState(MOCK_VEHICLES);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [selectedVehicle, setSelectedVehicle] = useState(null);
+    const [formData, setFormData] = useState({
+        brand: '', model: '', year: '', plate: '', km_current: 0, status: 'active'
+    });
 
     const getStatusColor = (dateString, type = 'badge') => {
         const today = new Date();
@@ -30,12 +39,28 @@ const Fleet = () => {
         return 'Vigente';
     };
 
-    const handleNewVehicle = () => {
-        alert("Funcionalidad 'Nuevo Vehículo' próximamente.");
+    const handleOpenNewModal = () => {
+        setFormData({ brand: '', model: '', year: new Date().getFullYear(), plate: '', km_current: 0, status: 'active' });
+        setIsNewModalOpen(true);
     };
 
-    const handleFilters = () => {
-        alert("Filtros avanzados próximamente.");
+    const handleCreate = (e) => {
+        e.preventDefault();
+        const newVehicle = {
+            ...formData,
+            id: Date.now(),
+            image: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=400", // Placeholder
+            soat_expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+            techno_expires: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]
+        };
+        setVehicles([newVehicle, ...vehicles]);
+        setIsNewModalOpen(false);
+    };
+
+    const handleDelete = () => {
+        setVehicles(vehicles.filter(v => v.id !== selectedVehicle.id));
+        setIsDeleteModalOpen(false);
+        setSelectedVehicle(null);
     };
 
     const filteredVehicles = vehicles.filter(v =>
@@ -44,23 +69,15 @@ const Fleet = () => {
     );
 
     return (
-        <div style={{ padding: '40px' }} className="fade-in">
-            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }} className="fade-in">
+            <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '40px' }}>
                 <div>
                     <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#1d1d1f', marginBottom: '8px' }}>Flota Vehicular</h1>
                     <p style={{ color: '#86868b', fontSize: '17px' }}>Gestiona el estado y mantenimiento de tu parque automotor.</p>
                 </div>
-                <button
-                    onClick={handleNewVehicle}
-                    style={{
-                        background: '#0071e3', color: 'white', border: 'none', padding: '12px 24px',
-                        borderRadius: '980px', fontSize: '15px', fontWeight: 600, cursor: 'pointer',
-                        display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(0,113,227,0.2)'
-                    }}
-                >
-                    <Plus size={18} />
-                    Nuevo Vehículo
-                </button>
+                <Button onClick={handleOpenNewModal}>
+                    <Plus size={18} /> Nuevo Vehículo
+                </Button>
             </header>
 
             {/* Stats Overview */}
@@ -104,17 +121,6 @@ const Fleet = () => {
                         }}
                     />
                 </div>
-                <button
-                    onClick={handleFilters}
-                    style={{
-                        padding: '0 24px', borderRadius: '12px', border: 'none', background: 'white',
-                        color: '#1d1d1f', fontSize: '15px', fontWeight: 500, cursor: 'pointer',
-                        display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
-                    }}
-                >
-                    <Filter size={18} />
-                    Filtros
-                </button>
             </div>
 
             {/* Vehicles Grid */}
@@ -122,6 +128,7 @@ const Fleet = () => {
                 {filteredVehicles.map((vehicle) => (
                     <motion.div
                         key={vehicle.id}
+                        layout
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3 }}
@@ -155,11 +162,21 @@ const Fleet = () => {
                                     <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#1d1d1f', marginBottom: '4px' }}>{vehicle.brand} {vehicle.model}</h3>
                                     <p style={{ color: '#86868b', fontSize: '14px' }}>{vehicle.year} • {vehicle.km_current.toLocaleString()} km</p>
                                 </div>
-                                <div style={{
-                                    background: '#F5F5F7', padding: '6px 12px', borderRadius: '8px',
-                                    fontSize: '14px', fontFamily: 'monospace', fontWeight: 600, color: '#1d1d1f'
-                                }}>
-                                    {vehicle.plate}
+                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
+                                    <div style={{
+                                        background: '#F5F5F7', padding: '6px 12px', borderRadius: '8px',
+                                        fontSize: '14px', fontFamily: 'monospace', fontWeight: 600, color: '#1d1d1f'
+                                    }}>
+                                        {vehicle.plate}
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '4px' }}>
+                                        <button
+                                            onClick={() => { setSelectedVehicle(vehicle); setIsDeleteModalOpen(true); }}
+                                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff3b30' }}
+                                        >
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -214,6 +231,80 @@ const Fleet = () => {
                     </motion.div>
                 ))}
             </div>
+
+            {/* New Vehicle Modal */}
+            <AnimatePresence>
+                {isNewModalOpen && (
+                    <div
+                        style={{
+                            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                        }}
+                        onClick={() => setIsNewModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            style={{ background: 'white', width: '500px', padding: '32px', borderRadius: '24px' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '24px' }}>Añadir Nuevo Vehículo</h3>
+                            <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                    <Input label="Marca" value={formData.brand} onChange={e => setFormData({ ...formData, brand: e.target.value })} required />
+                                    <Input label="Modelo" value={formData.model} onChange={e => setFormData({ ...formData, model: e.target.value })} required />
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                                    <Input label="Placa" value={formData.plate} onChange={e => setFormData({ ...formData, plate: e.target.value })} required />
+                                    <Input label="Año" type="number" value={formData.year} onChange={e => setFormData({ ...formData, year: e.target.value })} required />
+                                </div>
+                                <Input label="Kilometraje Inicial" type="number" value={formData.km_current} onChange={e => setFormData({ ...formData, km_current: parseInt(e.target.value) })} />
+
+                                <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
+                                    <Button variant="secondary" type="button" style={{ flex: 1 }} onClick={() => setIsNewModalOpen(false)}>Cancelar</Button>
+                                    <Button type="submit" style={{ flex: 1 }}>Crear Registro</Button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {isDeleteModalOpen && (
+                    <div
+                        style={{
+                            position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                            background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(10px)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+                        }}
+                        onClick={() => setIsDeleteModalOpen(false)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.9, opacity: 0 }}
+                            style={{ background: 'white', width: '400px', padding: '32px', borderRadius: '24px', textAlign: 'center' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: '#FFF5F5', color: '#ff3b30', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+                                <Trash2 size={24} />
+                            </div>
+                            <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '8px' }}>¿Eliminar Vehículo?</h3>
+                            <p style={{ color: '#86868b', fontSize: '15px', marginBottom: '32px' }}>
+                                Se eliminarán los registros de la placa <strong>{selectedVehicle?.plate}</strong>. Esta acción no se puede deshacer.
+                            </p>
+                            <div style={{ display: 'flex', gap: '12px' }}>
+                                <Button variant="secondary" style={{ flex: 1 }} onClick={() => setIsDeleteModalOpen(false)}>Cancelar</Button>
+                                <Button style={{ flex: 1, background: '#ff3b30' }} onClick={handleDelete}>Eliminar</Button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

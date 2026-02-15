@@ -1,5 +1,5 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus, Car } from 'lucide-react';
+import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus, Car, TrendingUp, DollarSign } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 import { useAuth } from '../context/AuthContext';
 
@@ -49,29 +49,34 @@ const DashboardLayout = () => {
                             <SidebarItem to="/dashboard/schools" icon={BookOpen} label="Escuelas" />
                             <SidebarItem to="/dashboard/questions" icon={Shield} label="Banco Preguntas" />
                             <SidebarItem to="/dashboard/users" icon={Users} label="Usuarios Globales" />
-                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
+                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Resultados Exámenes" />
+                            <SidebarItem to="/dashboard/school-performance" icon={TrendingUp} label="Rendimiento Escuelas" />
                             <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 
                     {role === 'admin' && (
                         <>
-                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Analíticas" />
+                            <SidebarItem to="/dashboard/analytics" icon={BarChart3} label="Resultados Exámenes" />
+                            <SidebarItem to="/dashboard/school-performance" icon={TrendingUp} label="Rendimiento Escuelas" />
                             <SidebarItem to="/dashboard/fleet" icon={Car} label="Flota Vehicular" />
                         </>
                     )}
 
                     {role === 'secretary' && (
                         <>
+                            <SidebarItem to="/dashboard/students" icon={Users} label="Gestión Alumnos" />
                             <SidebarItem to="/dashboard/register-student" icon={UserPlus} label="Registrar Alumno" />
                             <SidebarItem to="/dashboard/instructor-logs" icon={Clock} label="Horas Instructor" />
                             <SidebarItem to="/dashboard/tramitadores" icon={Users} label="Tramitadores" />
+                            <SidebarItem to="/dashboard/finanzas" icon={DollarSign} label="Caja / Dinero" />
                         </>
                     )}
 
                     {role === 'instructor' && (
                         <>
                             <SidebarItem to="/dashboard/my-hours" icon={Clock} label="Mis Horas" />
+                            <SidebarItem to="/dashboard/vehicle-check" icon={Car} label="Check-in Vehicular" />
                         </>
                     )}
 
@@ -102,7 +107,9 @@ const DashboardLayout = () => {
 
             {/* Main Content */}
             <main className={styles.mainContent}>
-                <Outlet />
+                <div className={styles.pageContent}>
+                    <Outlet />
+                </div>
             </main>
         </div>
     );

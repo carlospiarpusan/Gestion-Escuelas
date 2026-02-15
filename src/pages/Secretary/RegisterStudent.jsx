@@ -3,14 +3,18 @@ import { Save, UserPlus, CreditCard, AlertCircle, Plus } from 'lucide-react';
 import Input from '../../components/UI/Input';
 import Select from '../../components/UI/Select';
 import Button from '../../components/UI/Button';
+import { MOCK_STUDENTS } from '../../data/mockStudents';
 
 const LICENSE_CATEGORIES = [
     { value: 'A2', label: 'A2 - Motocicletas' },
     { value: 'B1', label: 'B1 - Automóviles' },
     { value: 'C1', label: 'C1 - Servicio Público' },
+    { value: 'C2', label: 'C2 - Camión Rígido' },
     { value: 'RC1', label: 'Recategorización C1' },
     { value: 'A2-B1', label: 'Combo A2 + B1' },
-    { value: 'A2-C1', label: 'Combo A2 + C1' }
+    { value: 'A2-C1', label: 'Combo A2 + C1' },
+    { value: 'A2-RC1', label: 'Combo A2 + RC1' },
+    { value: 'A2-C2', label: 'Combo A2 + C2' }
 ];
 
 const PAYMENT_METHODS = [
@@ -49,9 +53,57 @@ const RegisterStudent = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Registering Student:', formData);
-        alert('Estudiante registrado exitosamente (Simulación)');
-        // Reset form or redirect
+
+        // --- Combo Logic ---
+        const existingStudent = MOCK_STUDENTS.find(s => s.document === formData.cedula);
+        let finalCategory = formData.category;
+
+        if (existingStudent) {
+            const regDate = new Date(existingStudent.registered);
+            const now = new Date();
+            const diffMonths = (now.getFullYear() - regDate.getFullYear()) * 12 + (now.getMonth() - regDate.getMonth());
+
+            if (diffMonths < 3) {
+                const oldCat = existingStudent.category;
+                const newCat = formData.category;
+
+                // Check for combo matching patterns
+                const isComboEligible = (
+                    (oldCat === 'A2' && ['B1', 'C1', 'RC1', 'C2'].includes(newCat)) ||
+                    (newCat === 'A2' && ['B1', 'C1', 'RC1', 'C2'].includes(oldCat))
+                );
+
+                if (isComboEligible) {
+                    const secondaryCat = oldCat === 'A2' ? newCat : oldCat;
+                    finalCategory = `Combo A2-${secondaryCat}`;
+                    alert(`¡Combo detectado! Convirtiendo registro a ${finalCategory} por registro previo hace menos de 3 meses.`);
+                }
+            }
+        }
+
+        const studentData = {
+            ...formData,
+            category: finalCategory,
+            registered: new Date().toISOString().split('T')[0]
+        };
+
+        console.log('Registering Student:', studentData);
+        MOCK_STUDENTS.push({
+            id: Date.now(),
+            name: formData.name,
+            document: formData.cedula,
+            email: formData.email,
+            phone: formData.phone,
+            category: finalCategory,
+            status: 'Active',
+            payment: Number(formData.initialPayment) >= Number(formData.courseValue) ? 'Paid' : 'Pending',
+            registered: studentData.registered,
+            courseValue: Number(formData.courseValue),
+            balance: Number(formData.initialPayment)
+        });
+
+        alert('Estudiante registrado exitosamente. Redirigiendo a la gestión de alumnos...');
+        window.location.href = '/dashboard/students';
     };
 
     const handleCreateTramitador = () => {

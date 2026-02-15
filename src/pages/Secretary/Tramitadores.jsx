@@ -1,18 +1,21 @@
 import { useState } from 'react';
-import { Plus, Search, Edit, Trash2, Save, X, User } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X, User, CheckCircle, AlertCircle, Phone } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Button from '../../components/UI/Button';
+import Input from '../../components/UI/Input';
 
 const Tramitadores = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingId, setEditingId] = useState(null);
+    const [editingTramitador, setEditingTramitador] = useState(null);
 
     // Mock Data
     const [tramitadores, setTramitadores] = useState([
-        { id: 1, name: 'Juan Tramitador', phone: '3001234567', active: true },
-        { id: 2, name: 'Agencia Externa A', phone: '6012345678', active: true },
+        { id: 1, name: 'Juan Pérez (Gestoria Rápida)', phone: '300 123 4567', active: true, students: 12 },
+        { id: 2, name: 'Agencia Vial del Norte', phone: '601 555 0199', active: true, students: 45 },
+        { id: 3, name: 'Carlos Independiente', phone: '315 987 6543', active: false, students: 0 },
     ]);
 
-    // Form State
     const [formData, setFormData] = useState({ name: '', phone: '' });
 
     const filteredTramitadores = tramitadores.filter(t =>
@@ -21,10 +24,10 @@ const Tramitadores = () => {
 
     const handleOpenModal = (tramitador = null) => {
         if (tramitador) {
-            setEditingId(tramitador.id);
+            setEditingTramitador(tramitador);
             setFormData({ name: tramitador.name, phone: tramitador.phone });
         } else {
-            setEditingId(null);
+            setEditingTramitador(null);
             setFormData({ name: '', phone: '' });
         }
         setIsModalOpen(true);
@@ -32,132 +35,182 @@ const Tramitadores = () => {
 
     const handleSave = (e) => {
         e.preventDefault();
-        const newTramitador = {
-            id: editingId || Date.now(),
-            name: formData.name,
-            phone: formData.phone,
-            active: true
-        };
-
-        if (editingId) {
-            setTramitadores(tramitadores.map(t => t.id === editingId ? newTramitador : t));
+        if (editingTramitador) {
+            setTramitadores(tramitadores.map(t =>
+                t.id === editingTramitador.id ? { ...t, ...formData } : t
+            ));
         } else {
-            setTramitadores([newTramitador, ...tramitadores]);
+            setTramitadores([{
+                id: Date.now(),
+                ...formData,
+                active: true,
+                students: 0
+            }, ...tramitadores]);
         }
         setIsModalOpen(false);
     };
 
-    const handleDelete = (id) => {
-        if (window.confirm('¿Desactivar este tramitador?')) {
-            setTramitadores(tramitadores.map(t => t.id === id ? { ...t, active: false } : t));
-        }
+    const toggleStatus = (id) => {
+        setTramitadores(tramitadores.map(t =>
+            t.id === id ? { ...t, active: !t.active } : t
+        ));
     };
 
     return (
-        <div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', paddingBottom: '40px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
                 <div>
-                    <h1 style={{ fontSize: '24px', fontWeight: 600 }}>Gestión de Tramitadores</h1>
-                    <p style={{ color: '#666', fontSize: '14px' }}>Administra los tramitadores y agencias externas.</p>
+                    <h1 style={{ fontSize: '28px', fontWeight: 700, color: '#1d1d1f' }}>Tramitadores</h1>
+                    <p style={{ color: '#86868b', fontSize: '16px' }}>Gestión de aliados y agencias externas.</p>
                 </div>
-                <button
-                    onClick={() => handleOpenModal()}
-                    style={{
-                        background: '#0071e3', color: 'white', border: 'none', padding: '10px 20px',
-                        borderRadius: '8px', fontWeight: 500, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'
-                    }}
-                >
-                    <Plus size={18} /> Nuevo Tramitador
-                </button>
+                <Button onClick={() => handleOpenModal()}>
+                    <Plus size={20} /> Nuevo Tramitador
+                </Button>
             </div>
 
-            <div style={{ background: 'white', padding: '16px', borderRadius: '12px', border: '1px solid #e5e5e5', display: 'flex', gap: '16px', marginBottom: '24px' }}>
-                <div style={{ flex: 1, position: 'relative' }}>
-                    <Search size={18} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: '#888' }} />
-                    <input
-                        type="text"
-                        placeholder="Buscar tramitadores..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        style={{
-                            width: '100%', padding: '8px 8px 8px 36px', borderRadius: '6px',
-                            border: '1px solid #ddd', fontSize: '14px'
-                        }}
-                    />
-                </div>
+            {/* Search Bar */}
+            <div style={{ background: 'white', padding: '16px', borderRadius: '16px', boxShadow: '0 2px 10px rgba(0,0,0,0.02)', marginBottom: '24px' }}>
+                <Input
+                    icon={Search}
+                    placeholder="Buscar por nombre..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{ margin: 0 }}
+                />
             </div>
 
-            <div style={{ background: 'white', borderRadius: '16px', border: '1px solid #e5e5e5', overflow: 'hidden' }}>
+            {/* List */}
+            <div style={{ background: 'white', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                        <tr style={{ textAlign: 'left', fontSize: '13px', color: '#666', background: '#fafafa' }}>
-                            <th style={{ padding: '16px' }}>Nombre</th>
-                            <th style={{ padding: '16px' }}>Teléfono</th>
-                            <th style={{ padding: '16px' }}>Estado</th>
-                            <th style={{ padding: '16px', textAlign: 'right' }}>Acciones</th>
+                        <tr style={{ textAlign: 'left', fontSize: '13px', color: '#86868b', background: '#fafafa', borderBottom: '1px solid #f5f5f7' }}>
+                            <th style={{ padding: '20px 32px', fontWeight: 600 }}>Nombre / Agencia</th>
+                            <th style={{ padding: '20px 32px', fontWeight: 600 }}>Contacto</th>
+                            <th style={{ padding: '20px 32px', fontWeight: 600 }}>Estudiantes Ref.</th>
+                            <th style={{ padding: '20px 32px', fontWeight: 600 }}>Estado</th>
+                            <th style={{ padding: '20px 32px', fontWeight: 600, textAlign: 'right' }}>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredTramitadores.map(t => (
-                            <tr key={t.id} style={{ borderTop: '1px solid #eee' }}>
-                                <td style={{ padding: '16px', fontWeight: 500 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <div style={{ padding: '6px', background: '#E3F2FD', borderRadius: '50%', color: '#0071e3' }}><User size={14} /></div>
-                                        {t.name}
-                                    </div>
-                                </td>
-                                <td style={{ padding: '16px', color: '#666' }}>{t.phone || '-'}</td>
-                                <td style={{ padding: '16px' }}>
-                                    <span style={{
-                                        padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 600,
-                                        background: t.active ? '#E8F5E9' : '#FFEBEE', color: t.active ? '#2E7D32' : '#C62828'
-                                    }}>
-                                        {t.active ? 'Activo' : 'Inactivo'}
-                                    </span>
-                                </td>
-                                <td style={{ padding: '16px', textAlign: 'right' }}>
-                                    <button onClick={() => handleOpenModal(t)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0071e3', marginRight: '12px' }}><Edit size={18} /></button>
-                                    <button onClick={() => handleDelete(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF3B30' }}><Trash2 size={18} /></button>
-                                </td>
-                            </tr>
-                        ))}
+                        <AnimatePresence>
+                            {filteredTramitadores.map(t => (
+                                <motion.tr
+                                    key={t.id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    style={{ borderBottom: '1px solid #f5f5f7' }}
+                                >
+                                    <td style={{ padding: '20px 32px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <div style={{
+                                                width: '40px', height: '40px', borderRadius: '12px',
+                                                background: '#f5f5f7', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                color: '#86868b'
+                                            }}>
+                                                <User size={20} />
+                                            </div>
+                                            <span style={{ fontWeight: 600, color: '#1d1d1f' }}>{t.name}</span>
+                                        </div>
+                                    </td>
+                                    <td style={{ padding: '20px 32px', color: '#6e6e73' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <Phone size={14} /> {t.phone}
+                                        </div>
+                                    </td>
+                                    <td style={{ padding: '20px 32px' }}>
+                                        <span style={{
+                                            background: '#F5F5F7', padding: '4px 10px', borderRadius: '8px',
+                                            fontSize: '13px', fontWeight: 600, color: '#1d1d1f'
+                                        }}>
+                                            {t.students}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '20px 32px' }}>
+                                        <span style={{
+                                            padding: '6px 12px', borderRadius: '980px', fontSize: '13px', fontWeight: 600,
+                                            background: t.active ? '#E8F5E9' : '#FFEBEE',
+                                            color: t.active ? '#2E7D32' : '#C62828',
+                                            display: 'inline-flex', alignItems: 'center', gap: '6px'
+                                        }}>
+                                            {t.active ? <CheckCircle size={14} /> : <AlertCircle size={14} />}
+                                            {t.active ? 'Activo' : 'Inactivo'}
+                                        </span>
+                                    </td>
+                                    <td style={{ padding: '20px 32px', textAlign: 'right' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                                            <Button variant="ghost" onClick={() => handleOpenModal(t)} style={{ padding: '8px' }}>
+                                                <Edit2 size={16} />
+                                            </Button>
+                                            <Button
+                                                variant="ghost"
+                                                onClick={() => toggleStatus(t.id)}
+                                                style={{ padding: '8px', color: t.active ? '#FF3B30' : '#34C759' }}
+                                                title={t.active ? "Desactivar" : "Activar"}
+                                            >
+                                                {t.active ? <Trash2 size={16} /> : <CheckCircle size={16} />}
+                                            </Button>
+                                        </div>
+                                    </td>
+                                </motion.tr>
+                            ))}
+                        </AnimatePresence>
                     </tbody>
                 </table>
             </div>
 
-            {isModalOpen && (
-                <div style={{
-                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-                    background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
-                }}>
-                    <div style={{ background: 'white', width: '400px', padding: '32px', borderRadius: '16px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
-                            <h2 style={{ fontSize: '20px', fontWeight: 600 }}>{editingId ? 'Editar' : 'Nuevo'} Tramitador</h2>
-                            <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer' }}><X size={24} /></button>
-                        </div>
+            {/* Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <div style={{
+                        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                        background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50
+                    }}>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            style={{ background: 'white', padding: '32px', borderRadius: '24px', width: '90%', maxWidth: '450px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
+                        >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+                                <h2 style={{ fontSize: '20px', fontWeight: 700 }}>
+                                    {editingTramitador ? 'Editar Tramitador' : 'Nuevo Tramitador'}
+                                </h2>
+                                <button onClick={() => setIsModalOpen(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#86868b' }}>
+                                    <X size={24} />
+                                </button>
+                            </div>
 
-                        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                            <input
-                                placeholder="Nombre Completo"
-                                value={formData.name}
-                                onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                                required
-                            />
-                            <input
-                                placeholder="Teléfono (Opcional)"
-                                value={formData.phone}
-                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                                style={{ padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
-                            />
+                            <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                <Input
+                                    label="Nombre Completo / Agencia"
+                                    value={formData.name}
+                                    onChange={e => setFormData({ ...formData, name: e.target.value })}
+                                    required
+                                    placeholder="Ej. Gestoria Rápida"
+                                />
+                                <Input
+                                    label="Teléfono de Contacto"
+                                    value={formData.phone}
+                                    onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                                    required
+                                    placeholder="Ej. 300 123 4567"
+                                />
 
-                            <button type="submit" style={{ marginTop: '16px', background: '#0071e3', color: 'white', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: 600, cursor: 'pointer' }}>
-                                Guardar
-                            </button>
-                        </form>
+                                <div style={{ paddingTop: '10px', display: 'flex', gap: '12px' }}>
+                                    <Button variant="secondary" onClick={() => setIsModalOpen(false)} style={{ flex: 1, justifyContent: 'center' }} type="button">
+                                        Cancelar
+                                    </Button>
+                                    <Button type="submit" style={{ flex: 1, justifyContent: 'center' }}>
+                                        Guardar
+                                    </Button>
+                                </div>
+                            </form>
+                        </motion.div>
                     </div>
-                </div>
-            )}
+                )}
+            </AnimatePresence>
         </div>
     );
 };
