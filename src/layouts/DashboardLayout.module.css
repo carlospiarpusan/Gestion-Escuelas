@@ -2,30 +2,27 @@
     display: flex;
     height: 100vh;
     background-color: var(--bg-color);
-    /* #F5F5F7 */
     color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .sidebar {
     width: 260px;
-    background: rgba(255, 255, 255, 0.72);
-    /* Translucent White */
+    background: var(--sidebar-bg);
     backdrop-filter: saturate(180%) blur(20px);
-    /* Apple Glass Effect */
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    color: #1d1d1f;
+    color: var(--text-main);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(0, 0, 0, 0.05);
-    /* Subtle border */
+    border-right: 1px solid var(--border-color);
     position: relative;
     z-index: 100;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .logoContainer {
     padding: 32px 24px 20px;
-    /* No border bottom for cleaner look, or very subtle */
 }
 
 .logo {
@@ -34,12 +31,12 @@
     gap: 12px;
     font-weight: 600;
     font-size: 18px;
-    color: #1d1d1f;
+    color: var(--text-main);
 }
 
 .schoolName {
     font-size: 12px;
-    color: #86868b;
+    color: var(--text-secondary);
     margin-top: 4px;
     margin-left: 36px;
 }
@@ -50,7 +47,6 @@
     display: flex;
     flex-direction: column;
     gap: 2px;
-    /* Tighter spacing for modern feel */
 }
 
 .sidebarItem {
@@ -59,8 +55,7 @@
     gap: 12px;
     padding: 10px 12px;
     border-radius: 8px;
-    color: #424245;
-    /* Dark gray */
+    color: var(--sidebar-text);
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;
@@ -68,40 +63,61 @@
 }
 
 .sidebarItem:hover {
-    background: rgba(0, 0, 0, 0.04);
-    color: #1d1d1f;
+    background: var(--sidebar-hover);
+    color: var(--text-main);
     text-decoration: none;
 }
 
 .active {
-    background: rgba(0, 113, 227, 0.1) !important;
-    /* Light Blue background */
-    color: #0071e3 !important;
-    /* Apple Blue text */
+    background: var(--active-bg) !important;
+    color: var(--primary) !important;
     font-weight: 600;
+}
+
+/* Theme Toggle */
+.themeToggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: var(--sidebar-text);
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s ease;
+}
+
+.themeToggle:hover {
+    background: var(--sidebar-hover);
+    color: var(--text-main);
 }
 
 /* User Profile Section */
 .userProfile {
     padding: 20px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     gap: 12px;
+    transition: border-color 0.3s ease;
 }
 
 .avatar {
     width: 36px;
     height: 36px;
-    background: #e5e5ea;
-    /* Light gray avatar bg */
-    color: #1d1d1f;
+    background: var(--avatar-bg);
+    color: var(--text-main);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 600;
     font-size: 15px;
+    transition: background 0.3s ease;
 }
 
 .userInfo {
@@ -113,7 +129,7 @@
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #1d1d1f;
+    color: var(--text-main);
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
@@ -122,14 +138,14 @@
 .userRole {
     display: block;
     font-size: 12px;
-    color: #86868b;
+    color: var(--text-secondary);
     text-transform: capitalize;
 }
 
 .logoutBtn {
     background: none;
     border: none;
-    color: #86868b;
+    color: var(--text-secondary);
     cursor: pointer;
     padding: 8px;
     border-radius: 6px;
@@ -137,15 +153,15 @@
 }
 
 .logoutBtn:hover {
-    background: rgba(255, 59, 48, 0.1);
-    color: #FF3B30;
-    /* Apple Red */
+    background: var(--danger-hover);
+    color: var(--danger);
 }
 
 .divider {
     height: 1px;
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--border-color);
     margin: 8px 12px;
+    transition: background 0.3s ease;
 }
 
 /* Main Content Area */
@@ -154,22 +170,11 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    background: white;
-    /* Changed to white to contrast with gray background of layout if any, actually layout is gray */
-    background: #fbfbfd;
-    /* Very subtle off-white for content, or use transparent if layout is gray */
-    /* Let's make main content transparent to show layout background which is #F5F5F7 */
     background: transparent;
 }
-
-/* Since layout has #F5F5F7, we can just let content sit on it, 
-   or give it a white "sheet" look. 
-   Usually: Layout #F0F0F2, Content Cards White. 
-*/
 
 .pageContent {
     flex: 1;
     overflow-y: auto;
     padding: 32px 40px;
-    /* Generous padding */
 }

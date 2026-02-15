@@ -1,7 +1,8 @@
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus, Car, TrendingUp, DollarSign } from 'lucide-react';
+import { Home, Users, BookOpen, CreditCard, Shield, GraduationCap, LogOut, Settings, BarChart3, Clock, UserPlus, Car, TrendingUp, DollarSign, Sun, Moon } from 'lucide-react';
 import styles from './DashboardLayout.module.css';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 const SidebarItem = ({ to, icon: Icon, label }) => (
     <NavLink
@@ -17,6 +18,7 @@ const SidebarItem = ({ to, icon: Icon, label }) => (
 const DashboardLayout = () => {
     const { user, logout } = useAuth();
     const navigate = useNavigate();
+    const { theme, toggleTheme } = useTheme();
 
     // Guard clause in case user is null (should be handled by ProtectedRoute, but safe to keep)
     if (!user) return null;
@@ -93,6 +95,10 @@ const DashboardLayout = () => {
                     )}
 
                     <div className={styles.divider}></div>
+                    <button className={styles.themeToggle} onClick={toggleTheme} title={theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}>
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                        <span>{theme === 'light' ? 'Modo Oscuro' : 'Modo Claro'}</span>
+                    </button>
                     <SidebarItem to="/dashboard/settings" icon={Settings} label="Configuración" />
                 </nav>
 
