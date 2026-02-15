@@ -3,7 +3,7 @@ import { Save, UserPlus, CreditCard, AlertCircle, Plus } from 'lucide-react';
 import Input from '../../components/UI/Input';
 import Select from '../../components/UI/Select';
 import Button from '../../components/UI/Button';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const LICENSE_CATEGORIES = [
     { value: 'A2', label: 'A2 - Motocicletas' },
