@@ -14,14 +14,31 @@ export default async function handler(req, res) {
         }
 
         if (req.method === 'POST') {
-            const { category, question_text, option_a, option_b, option_c, option_d, correct_option } = req.body;
+            const data = req.body;
 
-            const result = await sql`
-        INSERT INTO questions (category, question_text, option_a, option_b, option_c, option_d, correct_option)
-        VALUES (${category}, ${question_text}, ${option_a}, ${option_b}, ${option_c}, ${option_d}, ${correct_option})
-        RETURNING *
-      `;
-            return res.status(201).json(result[0]);
+            if (Array.isArray(data)) {
+                // Bulk insert
+                const results = [];
+                for (const q of data) {
+                    const { category, question_text, option_a, option_b, option_c, option_d, correct_option } = q;
+                    const result = await sql`
+                        INSERT INTO questions (category, question_text, option_a, option_b, option_c, option_d, correct_option)
+                        VALUES (${category}, ${question_text}, ${option_a}, ${option_b}, ${option_c}, ${option_d}, ${correct_option})
+                        RETURNING *
+                    `;
+                    results.push(result[0]);
+                }
+                return res.status(201).json({ message: `Successfully imported ${results.length} questions`, data: results });
+            } else {
+                // Single insert
+                const { category, question_text, option_a, option_b, option_c, option_d, correct_option } = data;
+                const result = await sql`
+                    INSERT INTO questions (category, question_text, option_a, option_b, option_c, option_d, correct_option)
+                    VALUES (${category}, ${question_text}, ${option_a}, ${option_b}, ${option_c}, ${option_d}, ${correct_option})
+                    RETURNING *
+                `;
+                return res.status(201).json(result[0]);
+            }
         }
 
         return res.status(405).json({ error: 'Method not allowed' });

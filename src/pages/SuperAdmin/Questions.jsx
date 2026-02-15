@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Plus, Search, Edit2, Trash2, Save, X, BookOpen, AlertCircle, HelpCircle, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Plus, Search, Edit2, Trash2, Save, X, BookOpen, AlertCircle, HelpCircle, CheckCircle, Upload } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
@@ -20,18 +20,46 @@ const QuestionsPage = () => {
         setIsLoading(true);
         try {
             const res = await fetch('/api/questions');
+
+            if (!res.ok) {
+                const text = await res.text();
+                throw new Error(`API Error ${res.status}: ${text.substring(0, 100)}`);
+            }
+
             const data = await res.json();
-            if (Array.isArray(data)) setQuestions(data);
+
+            if (Array.isArray(data)) {
+                // Map the DB names to the frontend component names
+                const mappedQuestions = data.map(q => ({
+                    id: q.id,
+                    category: q.category,
+                    question: q.question_text || '',
+                    options: {
+                        A: q.option_a || '',
+                        B: q.option_b || '',
+                        C: q.option_c || '',
+                        D: q.option_d || ''
+                    },
+                    correct: q.correct_option || 'A',
+                    is_active: q.is_active
+                }));
+                setQuestions(mappedQuestions);
+            } else {
+                console.error('API returned non-array:', data);
+                if (data.error) throw new Error(data.error);
+            }
         } catch (err) {
             console.error('Error fetching questions:', err);
-            // Fallback to mock if API fails in dev
+            // Fallback to mock if API fails
             setQuestions(MOCK_QUESTIONS);
+            // Optional: show alert to user
+            // alert(`Error cargando preguntas: ${err.message}. Se mostrarán datos de prueba.`);
         } finally {
             setIsLoading(false);
         }
     };
 
-    useState(() => {
+    useEffect(() => {
         fetchQuestions();
     }, []);
 
@@ -42,7 +70,7 @@ const QuestionsPage = () => {
 
     const filteredQuestions = questions.filter(q =>
         q.category === filterCategory &&
-        q.question.toLowerCase().includes(searchTerm.toLowerCase())
+        (q.question || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const handleOpenModal = (q = null) => {
@@ -102,6 +130,60 @@ const QuestionsPage = () => {
         }
     };
 
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        setIsLoading(true);
+        const reader = new FileReader();
+
+        reader.onload = async (e) => {
+            try {
+                const content = e.target.result;
+                let dataToImport = [];
+
+                if (file.name.endsWith('.json')) {
+                    dataToImport = JSON.parse(content);
+                } else if (file.name.endsWith('.csv')) {
+                    const lines = content.split('\n');
+                    const headers = lines[0].split(',').map(h => h.trim());
+
+                    dataToImport = lines.slice(1).filter(l => l.trim()).map(line => {
+                        const values = line.split(',').map(v => v.trim());
+                        const obj = {};
+                        headers.forEach((header, i) => {
+                            obj[header] = values[i];
+                        });
+                        return obj;
+                    });
+                }
+
+                const res = await fetch('/api/questions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dataToImport)
+                });
+
+                if (res.ok) {
+                    alert('¡Importación exitosa!');
+                    fetchQuestions();
+                } else {
+                    const err = await res.json();
+                    throw new Error(err.error || 'Error al importar');
+                }
+
+            } catch (err) {
+                console.error('Import Error:', err);
+                alert(`Error al importar: ${err.message}`);
+            } finally {
+                setIsLoading(false);
+                event.target.value = '';
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
     const handleDelete = (id) => {
         if (window.confirm('¿Eliminar esta pregunta?')) {
             setQuestions(questions.filter(q => q.id !== id));
@@ -116,9 +198,21 @@ const QuestionsPage = () => {
                     <h1 style={{ fontSize: '32px', fontWeight: 700, color: '#1d1d1f', marginBottom: '8px' }}>Banco de Preguntas</h1>
                     <p style={{ color: '#86868b', fontSize: '17px' }}>Gestión centralizada de contenidos para exámenes teóricos.</p>
                 </div>
-                <Button onClick={() => handleOpenModal()}>
-                    <Plus size={18} /> Nueva Pregunta
-                </Button>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                    <input
+                        type="file"
+                        id="import-file"
+                        accept=".csv,.json"
+                        style={{ display: 'none' }}
+                        onChange={handleFileUpload}
+                    />
+                    <Button variant="secondary" onClick={() => document.getElementById('import-file').click()}>
+                        <Upload size={18} /> Importar Banco
+                    </Button>
+                    <Button onClick={() => handleOpenModal()}>
+                        <Plus size={18} /> Nueva Pregunta
+                    </Button>
+                </div>
             </div>
 
             {/* Filters Bar */}

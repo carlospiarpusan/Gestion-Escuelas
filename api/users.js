@@ -2,55 +2,79 @@ import { sql } from './_db.js';
 
 export default async function handler(req, res) {
     try {
-        // GET users (Global or School specific)
+        // GET users
         if (req.method === 'GET') {
             const { school_id, role } = req.query;
 
-            // If school_id provided, filter by it. If not, list all (for SuperAdmin)
-            // In real app, check auth token role here.
-
-            let query = sql`
-            SELECT u.id, u.full_name, u.email, u.role, u.active, u.created_at,
-                   s.name as "schoolName", u.school_id
-            FROM users u
-            LEFT JOIN schools s ON u.school_id = s.id
-            WHERE 1=1
-        `;
-
-            if (school_id) {
-                query = sql`${query} AND u.school_id = ${school_id}`;
+            let users;
+            if (school_id && role) {
+                users = await sql`
+                    SELECT u.id, CONCAT(u.nombre, ' ', COALESCE(u.apellido, '')) as full_name,
+                           u.email, u.role, u.activo as active, u.fecha_registro as created_at,
+                           e.nombre as "schoolName", u.escuela_id as school_id
+                    FROM usuarios u
+                    LEFT JOIN escuelas e ON u.escuela_id = e.id
+                    WHERE u.escuela_id = ${school_id}::uuid AND u.role = ${role}
+                    ORDER BY u.fecha_registro DESC
+                `;
+            } else if (school_id) {
+                users = await sql`
+                    SELECT u.id, CONCAT(u.nombre, ' ', COALESCE(u.apellido, '')) as full_name,
+                           u.email, u.role, u.activo as active, u.fecha_registro as created_at,
+                           e.nombre as "schoolName", u.escuela_id as school_id
+                    FROM usuarios u
+                    LEFT JOIN escuelas e ON u.escuela_id = e.id
+                    WHERE u.escuela_id = ${school_id}::uuid
+                    ORDER BY u.fecha_registro DESC
+                `;
+            } else if (role) {
+                users = await sql`
+                    SELECT u.id, CONCAT(u.nombre, ' ', COALESCE(u.apellido, '')) as full_name,
+                           u.email, u.role, u.activo as active, u.fecha_registro as created_at,
+                           e.nombre as "schoolName", u.escuela_id as school_id
+                    FROM usuarios u
+                    LEFT JOIN escuelas e ON u.escuela_id = e.id
+                    WHERE u.role = ${role}
+                    ORDER BY u.fecha_registro DESC
+                `;
+            } else {
+                users = await sql`
+                    SELECT u.id, CONCAT(u.nombre, ' ', COALESCE(u.apellido, '')) as full_name,
+                           u.email, u.role, u.activo as active, u.fecha_registro as created_at,
+                           e.nombre as "schoolName", u.escuela_id as school_id
+                    FROM usuarios u
+                    LEFT JOIN escuelas e ON u.escuela_id = e.id
+                    ORDER BY u.fecha_registro DESC
+                `;
             }
 
-            if (role) {
-                query = sql`${query} AND u.role = ${role}`;
-            }
-
-            const users = await sql`${query} ORDER BY u.created_at DESC`;
             return res.status(200).json(users);
         }
 
-        // CREATE User (Admin, Instructor, Secretary, etc.)
+        // CREATE User
         if (req.method === 'POST') {
             const { school_id, full_name, email, password, role } = req.body;
 
-            if (!school_id || !full_name || !email || !password || !role) {
+            if (!full_name || !email || !password || !role) {
                 return res.status(400).json({ error: 'Missing required fields' });
             }
 
             // Check if email exists
-            const existing = await sql`SELECT id FROM users WHERE email = ${email}`;
+            const existing = await sql`SELECT id FROM usuarios WHERE email = ${email}`;
             if (existing.length > 0) {
                 return res.status(409).json({ error: 'User with this email already exists' });
             }
 
-            // Hash password (TODO: Use bcrypt in production. Using plain for migration compatibility)
-            const password_hash = password;
+            // Split full_name into nombre/apellido
+            const parts = full_name.split(' ');
+            const nombre = parts[0] || full_name;
+            const apellido = parts.slice(1).join(' ') || '';
 
             const result = await sql`
-        INSERT INTO users (school_id, full_name, email, password_hash, role, active)
-        VALUES (${school_id}, ${full_name}, ${email}, ${password_hash}, ${role}, true)
-        RETURNING id, full_name, email, role, school_id
-      `;
+                INSERT INTO usuarios (nombre, apellido, email, password, role, escuela_id, activo)
+                VALUES (${nombre}, ${apellido}, ${email}, ${password}, ${role}, ${school_id || null}, true)
+                RETURNING id, CONCAT(nombre, ' ', COALESCE(apellido, '')) as full_name, email, role, escuela_id as school_id
+            `;
 
             return res.status(201).json(result[0]);
         }

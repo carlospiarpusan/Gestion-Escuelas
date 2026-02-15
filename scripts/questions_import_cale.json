@@ -1,0 +1,1802 @@
+[
+  {
+    "category": "A2",
+    "question_text": "¿A qué presión (PSI) debe estar generalmente la llanta delantera de una moto de 150cc?",
+    "option_a": "15-20 PSI",
+    "option_b": "28-32 PSI",
+    "option_c": "40-50 PSI",
+    "option_d": "10 PSI",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué herramienta se usa para medir el desgaste de la cadena?",
+    "option_a": "Un calibrador de tensión o regla",
+    "option_b": "Un martillo",
+    "option_c": "Un destornillador",
+    "option_d": "Un alicate",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cada cuánto se recomienda generalmente limpiar y lubricar la cadena?",
+    "option_a": "Cada 500-1000 km o después de lluvia",
+    "option_b": "Cada 5000 km",
+    "option_c": "Nunca",
+    "option_d": "Cada año",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué significa el código DOT en una llanta de moto?",
+    "option_a": "Department of Transportation (Fecha de fabricación)",
+    "option_b": "Duro O Terminado",
+    "option_c": "Dirección Obligatoria",
+    "option_d": "Dimensiones Obligatorias",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "En una frenada de emergencia, ¿dónde debe estar la mirada?",
+    "option_a": "En el guardabarros",
+    "option_b": "En el horizonte/vía de escape",
+    "option_c": "En el velocímetro",
+    "option_d": "En el suelo justo delante",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'zig-zag' o slalom?",
+    "option_a": "Una técnica de carrera",
+    "option_b": "Una maniobra para esquivar obstáculos a baja velocidad",
+    "option_c": "Un fallo del motor",
+    "option_d": "Una forma de parquear",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función de la batería de litio en motos modernas?",
+    "option_a": "Es más pesada",
+    "option_b": "Mayor ligereza y capacidad de arranque en frío",
+    "option_c": "Dura menos",
+    "option_d": "Solo sirve para luces",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica un ruido metálico (golpeteo) al pasar un bache?",
+    "option_a": "Cadena suelta o rodamientos de dirección desgastados",
+    "option_b": "Falta de aire",
+    "option_c": "Luces flojas",
+    "option_d": "Motor caliente",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es un motor 'Monocilíndrico'?",
+    "option_a": "Un motor de un solo cilindro",
+    "option_b": "Un motor sin cilindros",
+    "option_c": "Un motor de dos cilindros",
+    "option_d": "Un motor eléctrico",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la ventaja de los rines de radio (aspa) sobre los de aleación en Off-road?",
+    "option_a": "Son más bonitos",
+    "option_b": "Mejor absorción de impactos y facilidad de reparación",
+    "option_c": "Son más pesados",
+    "option_d": "No se pinchan",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué significa 'ECE 22.06' en un casco?",
+    "option_a": "La marca del casco",
+    "option_b": "La homologación europea de seguridad más reciente",
+    "option_c": "El tamaño",
+    "option_d": "El año de compra",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve el 'Pinlock' en un casco?",
+    "option_a": "Para que no lo roben",
+    "option_b": "Evitar que la visera se empañe por el aliento",
+    "option_c": "Para cerrar la correa",
+    "option_d": "Para el ruido",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué debe hacer si encuentra aceite en la barra de suspensión?",
+    "option_a": "Limpiarlo y seguir",
+    "option_b": "Reemplazar los retenedores de la suspensión",
+    "option_c": "Echarle más aceite",
+    "option_d": "Pegarla con cinta",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es el ángulo de inclinación máximo seguro en piso mojado?",
+    "option_a": "90 grados",
+    "option_b": "Mucho menor que en seco para evitar pérdida de agarre",
+    "option_c": "45 grados siempre",
+    "option_d": "0 grados",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica un ralentí inestable en una moto carburada?",
+    "option_a": "Filtro de aire sucio o carburador desajustado",
+    "option_b": "Freno pegado",
+    "option_c": "Llantas lisas",
+    "option_d": "Casco viejo",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Shimmy'?",
+    "option_a": "Un baile",
+    "option_b": "Oscilación del manubrio a alta velocidad",
+    "option_c": "Frenada perfecta",
+    "option_d": "Cambio de marcha",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve el sensor de la pata de cabra (gato lateral)?",
+    "option_a": "Sostener la moto",
+    "option_b": "Apagar el motor si la pata está abajo y se pone una marcha",
+    "option_c": "Contar los kilómetros",
+    "option_d": "Pitar",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función de las pastillas de freno sinterizadas?",
+    "option_a": "Duran menos",
+    "option_b": "Mejor rendimiento a altas temperaturas y mayor mordida",
+    "option_c": "Son de madera",
+    "option_d": "Solo sirven para lluvia",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica una bujía con depósitos blancos?",
+    "option_a": "Mezcla pobre (mucho aire, poca gasolina)",
+    "option_b": "Mezcla rica",
+    "option_c": "Mucha agua",
+    "option_d": "Motor nuevo",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué significa que una moto sea 'Euro 4' o 'Euro 5'?",
+    "option_a": "Que es de Europa",
+    "option_b": "Normativa de control de emisiones contaminantes",
+    "option_c": "Que tiene 4 o 5 cambios",
+    "option_d": "El precio",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cómo se debe cruzar una línea férrea o riel mojado?",
+    "option_a": "En paralelo",
+    "option_b": "Lo más perpendicular posible (90 grados)",
+    "option_c": "Acelerando a fondo",
+    "option_d": "Cerrando los ojos",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es la 'Contramarcha'?",
+    "option_a": "Dar reversa",
+    "option_b": "Empujar el manubrio hacia el lado del giro",
+    "option_c": "Frenar con el de atrás",
+    "option_d": "Bajarse de la moto",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es el peligro de los guanteletes (manguitos) en el manubrio?",
+    "option_a": "Que dan calor",
+    "option_b": "Pueden dificultar el acceso rápido a la manigueta de freno",
+    "option_c": "Se mojan",
+    "option_d": "Son ilegales",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es un 'Intercomunicador'?",
+    "option_a": "Un radio de música",
+    "option_b": "Dispositivo para hablar con el pasajero u otros motociclistas",
+    "option_c": "Un GPS",
+    "option_d": "Una luz",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve el protector de motor (Sliding)?",
+    "option_a": "Para que el piloto se deslice",
+    "option_b": "Minimizar daños al chasis y motor en caídas laterales",
+    "option_c": "Para poner los pies",
+    "option_d": "Para correr más",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Kickstand'?",
+    "option_a": "Un truco",
+    "option_b": "El soporte lateral de la moto",
+    "option_c": "El pedal de arranque",
+    "option_d": "El freno",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica un nivel bajo de líquido de frenos con pastillas nuevas?",
+    "option_a": "Que el líquido se evaporó",
+    "option_b": "Posible fuga en el sistema hidráulico",
+    "option_c": "Que la moto es vieja",
+    "option_d": "Es normal",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función del filtro de aceite?",
+    "option_a": "Retener impurezas metálicas y residuos de combustión",
+    "option_b": "Enfriar el aire",
+    "option_c": "Limpiar la gasolina",
+    "option_d": "No tiene función",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es un motor SOHC?",
+    "option_a": "Single OverHead Camshaft (Un solo árbol de levas)",
+    "option_b": "Simple Oil High Cool",
+    "option_c": "Sin Origen Humano Cercano",
+    "option_d": "Súper Oil High Cam",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica que la dirección de la moto se siente 'dura' o con 'puntos'?",
+    "option_a": "Falta de aire",
+    "option_b": "Cunas o rodamientos de dirección marcados o secos",
+    "option_c": "Motor frío",
+    "option_d": "Casco apretado",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la ventaja de la refrigeración líquida?",
+    "option_a": "Es más barata",
+    "option_b": "Mantiene la temperatura estable independientemente del tráfico",
+    "option_c": "Pesa menos",
+    "option_d": "No usa aceite",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es la 'Precarga' de la suspensión?",
+    "option_a": "Cargar la moto antes",
+    "option_b": "Ajuste del muelle según el peso del conductor/pasajero",
+    "option_c": "Echar aire",
+    "option_d": "Velocidad de rebote",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve la chaqueta con airbag?",
+    "option_a": "Para el frío",
+    "option_b": "Protección inflable del tronco y cuello en milisegundos ante impacto",
+    "option_c": "Para flotar en el agua",
+    "option_d": "Estética",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Efecto Venturi' al pasar un camión?",
+    "option_a": "Que el camión nos sopla aire",
+    "option_b": "Succión lateral hacia el vehículo más grande",
+    "option_c": "Un tipo de luz",
+    "option_d": "Un sensor",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función del CDI o ECU?",
+    "option_a": "Prender las luces",
+    "option_b": "Controlar el tiempo de encendido e inyección",
+    "option_c": "Ahorrar frenos",
+    "option_d": "Medir la cadena",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué significa que una llanta sea 'Tubeless'?",
+    "option_a": "Que tiene neumático interno",
+    "option_b": "Que no requiere neumático (sellomática)",
+    "option_c": "Que es de madera",
+    "option_d": "Que es maciza",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve el 'Cámber'?",
+    "option_a": "Un tipo de cámara",
+    "option_b": "Inclinación de la rueda respecto a la vertical",
+    "option_c": "Para frenar",
+    "option_d": "Un sensor de luz",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Compresómetro'?",
+    "option_a": "Herramienta para medir la presión de aire",
+    "option_b": "Herramienta para medir la presión interna del cilindro",
+    "option_c": "Un inflador",
+    "option_d": "Un velocímetro",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica aceite negro y espeso?",
+    "option_a": "Que es de buena calidad",
+    "option_b": "Aceite degradado que perdió propiedades",
+    "option_c": "Aceite nuevo",
+    "option_d": "Aceite de cocina",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es la 'Regla de los 3 segundos'?",
+    "option_a": "Comer algo del suelo",
+    "option_b": "Distancia de seguridad respecto al vehículo de adelante",
+    "option_c": "Tiempo de cambio de luz",
+    "option_d": "Tiempo de reacción",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función de la pata de arranque (Cran)?",
+    "option_a": "Poner los pies",
+    "option_b": "Encender la moto mecánicamente si falla el arranque eléctrico",
+    "option_c": "Frenar",
+    "option_d": "Apoyar la moto",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Freno de Motor'?",
+    "option_a": "Un botón rojo",
+    "option_b": "Reducción de velocidad por la compresión del motor al soltar el acelerador",
+    "option_c": "El freno de mano",
+    "option_d": "Apagar la moto",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirve el 'Estrangulador' (Choque)?",
+    "option_a": "Para frenar",
+    "option_b": "Enriquecer la mezcla para arranques en frío (motos carburadas)",
+    "option_c": "Apagar el motor",
+    "option_d": "Pitar",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica una dirección que tira hacia un lado?",
+    "option_a": "Llantas nuevas",
+    "option_b": "Chasis o barras de suspensión torcidas",
+    "option_c": "Mucho viento siempre",
+    "option_d": "Casco ladeado",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Líquido de Horquilla'?",
+    "option_a": "Agua para la moto",
+    "option_b": "Aceite especializado para el funcionamiento de la suspensión delantera",
+    "option_c": "Líquido de frenos",
+    "option_d": "Combustible",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Para qué sirven las botas de motociclista?",
+    "option_a": "Para caminar mejor",
+    "option_b": "Protección de tobillos, espinilla y evitar torsiones del pie",
+    "option_c": "Para el frío únicamente",
+    "option_d": "Moda",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es un motor DOHC?",
+    "option_a": "Double OverHead Camshaft (Doble árbol de levas)",
+    "option_b": "Down Oil High Cool",
+    "option_c": "Doble Origen Humano",
+    "option_d": "Motor diesel",
+    "correct_option": "A"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Cuál es la función del diafragma en un carburador?",
+    "option_a": "Filtra el aire",
+    "option_b": "Controlar el paso de gasolina según el vacío del motor",
+    "option_c": "Pitar",
+    "option_d": "Encender la chispa",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué indica un ruido de 'clac-clac' al arrancar en frío?",
+    "option_a": "Cadena floja",
+    "option_b": "Falta de lubricación en válvulas o balancines",
+    "option_c": "Gasolina sucia",
+    "option_d": "Es normal en todas",
+    "correct_option": "B"
+  },
+  {
+    "category": "A2",
+    "question_text": "¿Qué es el 'Manejo en formación de cremallera'?",
+    "option_a": "Cerrar la chaqueta",
+    "option_b": "Motociclistas viajando en grupo de forma intercalada (escalonada)",
+    "option_c": "Una técnica de carrera",
+    "option_d": "Una multa",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa el testigo con forma de termómetro sumergido en líquido?",
+    "option_a": "Falta de aceite",
+    "option_b": "Alta temperatura del sistema de refrigeración",
+    "option_c": "Agua en el parabrisas",
+    "option_d": "Lluvia afuera",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Servofreno'?",
+    "option_a": "Enfriar los frenos",
+    "option_b": "Multiplicar la fuerza ejercida sobre el pedal de freno",
+    "option_c": "Frenar en reversa",
+    "option_d": "Ahorrar pastillas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es el propósito del catalizador?",
+    "option_a": "Aumentar la potencia",
+    "option_b": "Convertir gases contaminantes en menos nocivos mediante reacción química",
+    "option_c": "Filtrar el aceite",
+    "option_d": "Enfriar el escape",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es la 'Alineación' del vehículo?",
+    "option_a": "Lavar las llantas",
+    "option_b": "Ajustar los ángulos de las ruedas para que rueden paralelas y rectas",
+    "option_c": "Limpiar los espejos",
+    "option_d": "Acomodar las sillas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica una vibración del volante a altas velocidades?",
+    "option_a": "Llantas desbalanceadas",
+    "option_b": "Motor frío",
+    "option_c": "Frenos calientes",
+    "option_d": "Viento fuerte",
+    "correct_option": "A"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el sensor de oxígeno?",
+    "option_a": "Para que los pasajeros respiren",
+    "option_b": "Informar a la computadora la calidad de la combustión para ajustar la mezcla",
+    "option_c": "Medir la velocidad",
+    "option_d": "Medir el nivel de aceite",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función del líquido de batería?",
+    "option_a": "Es agua común",
+    "option_b": "Electrolito que permite la reacción química para generar energía",
+    "option_c": "Limpiador",
+    "option_d": "Combustible",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa 'Aquaplaning'?",
+    "option_a": "Lavar el carro",
+    "option_b": "Pérdida de contacto entre llantas y vía debido a una capa de agua",
+    "option_c": "Una técnica de buceo",
+    "option_d": "Frenar en mojado",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirven los sistemas ISOFIX/LATCH?",
+    "option_a": "Cerrar el baúl",
+    "option_b": "Anclaje seguro de sillas infantiles al chasis",
+    "option_c": "Sujetar el motor",
+    "option_d": "No tiene función",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica que un pedal de freno esté 'esponjoso'?",
+    "option_a": "Pastillas nuevas",
+    "option_b": "Aire en el sistema hidráulico de frenos",
+    "option_c": "Poca gasolina",
+    "option_d": "Llantas lisas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Efecto Latigazo'?",
+    "option_a": "Un accidente",
+    "option_b": "Lesión cervical por movimiento brusco de la cabeza en colisión trasera",
+    "option_c": "Un ruido de la caja",
+    "option_d": "Lavar el carro",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función del termostato?",
+    "option_a": "Medir la fiebre",
+    "option_b": "Regular la temperatura abriendo o cerrando el paso al radiador",
+    "option_c": "Medir la presión",
+    "option_d": "Enfriar el aire",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica humo negro por el escape en un motor a gasolina?",
+    "option_a": "Quema de aceite",
+    "option_b": "Mezcla demasiado rica (exceso de combustible)",
+    "option_c": "Falta de agua",
+    "option_d": "Normal en frío",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el freno de mano (estacionamiento)?",
+    "option_a": "Para derrapar",
+    "option_b": "Inmovilizar el vehículo de forma mecánica por tiempo prolongado",
+    "option_c": "Frenar en carretera",
+    "option_d": "No se usa en llanos",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Control de Tracción' (ASR/TCS)?",
+    "option_a": "Frenar el auto",
+    "option_b": "Evitar que las ruedas patinen al acelerar perdiendo tracción",
+    "option_c": "Un tipo de llanta",
+    "option_d": "Un GPS",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es el uso del 'Desempañador'?",
+    "option_a": "Limpiar el barro",
+    "option_b": "Quitar la humedad del vidrio trasero mediante resistencias térmicas",
+    "option_c": "Ahorrar aire",
+    "option_d": "Lavar vidrios",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica un chirrido agudo al frenar?",
+    "option_a": "Discos nuevos",
+    "option_b": "Pastillas desgastadas o cristalizadas",
+    "option_c": "Falta de aire",
+    "option_d": "Llantas viejas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve la bomba de aceite?",
+    "option_a": "Echar gasolina",
+    "option_b": "Hacer circular el aceite por todas las partes móviles del motor",
+    "option_c": "Limpiar el cárter",
+    "option_d": "Enfriar bujías",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Cambio de Luces'?",
+    "option_a": "Poner bombillos nuevos",
+    "option_b": "Alternar entre luces bajas y altas para avisar o mejorar visibilidad",
+    "option_c": "Apagar el motor",
+    "option_d": "Un tipo de multa",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es el peligro de llevar carga sobre el techo sin parrilla adecuada?",
+    "option_a": "Que se ensucie",
+    "option_b": "Desplazamiento de carga y alteración del centro de gravedad",
+    "option_c": "Que llueva",
+    "option_d": "Ninguno",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa 'SAE 10W-30' en un envase de aceite?",
+    "option_a": "El precio",
+    "option_b": "La viscosidad del aceite en diferentes temperaturas",
+    "option_c": "La marca",
+    "option_d": "El volumen",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Filtro de Polen' (Habitáculo)?",
+    "option_a": "Para las flores",
+    "option_b": "Limpiar el aire que entra a la cabina para los pasajeros",
+    "option_c": "Limpiar el motor",
+    "option_d": "Filtrar el combustible",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica que el testigo de batería se encienda con el motor andando?",
+    "option_a": "Batería llena",
+    "option_b": "El alternador no está cargando la batería",
+    "option_c": "Radio encendida",
+    "option_d": "Normal en trayectos largos",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Sincronizado' de la caja de cambios?",
+    "option_a": "Cantar a la par",
+    "option_b": "Sistema que iguala velocidades de piñones para cambios suaves",
+    "option_c": "Un GPS",
+    "option_d": "Frenado perfecto",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función de la junta homocinética?",
+    "option_a": "Juntar el motor",
+    "option_b": "Transmitir la potencia a las ruedas permitiendo giros y movimientos de suspensión",
+    "option_c": "Sostener el exosto",
+    "option_d": "No existe",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica una dirección muy blanda e imprecisa?",
+    "option_a": "Llantas infladas",
+    "option_b": "Posible daño en terminales de dirección o baja presión de llantas",
+    "option_c": "Piso nuevo",
+    "option_d": "Auto nuevo",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el intermitente (direccional)?",
+    "option_a": "Iluminar el camino",
+    "option_b": "Comunicar a otros usuarios la intención de giro o cambio de carril",
+    "option_c": "Para que el carro se vea mejor",
+    "option_d": "No es obligatorio",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Radio de Giro'?",
+    "option_a": "La música del auto",
+    "option_b": "Círculo mínimo que describe el vehículo al girar el volante al tope",
+    "option_c": "La antena",
+    "option_d": "El tamaño del rin",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función del múltiple de admisión?",
+    "option_a": "Sacar el humo",
+    "option_b": "Distribuir la mezcla de aire/gasolina a los cilindros",
+    "option_c": "Un tipo de freno",
+    "option_d": "Decoración",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica humo azul constante?",
+    "option_a": "Motor frío",
+    "option_b": "Consumo de aceite por desgaste de anillos o sellos de válvula",
+    "option_c": "Mezcla rica",
+    "option_d": "Normal en diesel",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve la 'Barra Estabilizadora'?",
+    "option_a": "Para que el carro no corra",
+    "option_b": "Reducir la inclinación de la carrocería en curvas",
+    "option_c": "Sostener el motor",
+    "option_d": "Para amarrar el carro",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa 'ABS'?",
+    "option_a": "Antilock Braking System (Sistema antibloqueo de frenos)",
+    "option_b": "Auto Brake System",
+    "option_c": "Always Brake Safe",
+    "option_d": "Alarma de Bajada Segura",
+    "correct_option": "A"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función del carburador o inyectores?",
+    "option_a": "Frenar",
+    "option_b": "Suministrar la mezcla aire/combustible al motor",
+    "option_c": "Limpiar el tanque",
+    "option_d": "Acelerar las llantas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica que el motor 'pistonee' (cascabeleo)?",
+    "option_a": "Filtro nuevo",
+    "option_b": "Combustión detonante por bajo octanaje o mal tiempo de encendido",
+    "option_c": "Llantas lisas",
+    "option_d": "Falta de aire",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Boster' (Succionador)?",
+    "option_a": "Para limpiar el auto",
+    "option_b": "Asistir el pedal del freno mediante vacío",
+    "option_c": "Un tipo de turbo",
+    "option_d": "Para el aire acondicionado",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es la 'Culata' del motor?",
+    "option_a": "La parte de abajo",
+    "option_b": "La parte superior que cierra los cilindros y aloja las válvulas",
+    "option_c": "El tubo de escape",
+    "option_d": "El asiento",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es el peligro de conducir con el capó mal cerrado?",
+    "option_a": "Que se ensucie",
+    "option_b": "Que se abra con el viento y bloquee totalmente la visibilidad",
+    "option_c": "Ninguno",
+    "option_d": "Que se oxide",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa 'RPM'?",
+    "option_a": "Rápido Por Minuto",
+    "option_b": "Revoluciones Por Minuto del motor",
+    "option_c": "Radio Para Motos",
+    "option_d": "Reversa Por Marcha",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Diferencial'?",
+    "option_a": "Hacer el auto especial",
+    "option_b": "Permitir que las ruedas motrices giren a distinta velocidad en curvas",
+    "option_c": "Unir el motor a la caja",
+    "option_d": "Frenar",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica que las luces frontales sean amarillas y tenues?",
+    "option_a": "Batería baja o alternador fallando",
+    "option_b": "Luces de lujo",
+    "option_c": "Estilo vintage",
+    "option_d": "Es normal en lluvia",
+    "correct_option": "A"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el líquido refrigerante (Anticongelante)?",
+    "option_a": "Lavado interno",
+    "option_b": "Controlar la temperatura y evitar corrosión interna",
+    "option_c": "Como perfume",
+    "option_d": "Hacer que el auto corra más",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es el 'Cárter'?",
+    "option_a": "Un documento",
+    "option_b": "Recipiente donde se aloja el aceite del motor",
+    "option_c": "Una maleta",
+    "option_d": "El volante",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función de la 'Bomba de Agua'?",
+    "option_a": "Lavar el vehículo",
+    "option_b": "Hacer circular el refrigerante por todo el circuito",
+    "option_c": "Limpiar vidrios",
+    "option_d": "Ninguna",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué significa que un vehículo sea 4x4 o AWD?",
+    "option_a": "Que tiene 4 motores",
+    "option_b": "Tracción en las cuatro ruedas",
+    "option_c": "Que es para 4 personas",
+    "option_d": "Que tiene 4 metros de largo",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Filtro de Aire'?",
+    "option_a": "Para que el conductor respire",
+    "option_b": "Evitar que partículas de polvo entren a los cilindros",
+    "option_c": "Mejorar el olor",
+    "option_d": "Aumentar la velocidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica un desgaste excesivo de llantas por el centro?",
+    "option_a": "Presión muy baja",
+    "option_b": "Presión de inflado excesiva",
+    "option_c": "Mala alineación",
+    "option_d": "Frenadas bruscas",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Para qué sirve el 'Espejo Fotocromático'?",
+    "option_a": "Para maquillarse",
+    "option_b": "Oscurecerse automáticamente para evitar deslumbramiento por luces traseras",
+    "option_c": "Sacar fotos",
+    "option_d": "Ver de lejos",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué es la 'Seguridad Pasiva'?",
+    "option_a": "Manejar despacio",
+    "option_b": "Elementos que mitigan daños tras el choque (Airbags, cinturones)",
+    "option_c": "No usar el auto",
+    "option_d": "Lavar el auto",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Cuál es la función de la 'Biela'?",
+    "option_a": "Sostener el volante",
+    "option_b": "Unir el pistón con el cigüeñal para transmitir fuerza",
+    "option_c": "Cambiar marchas",
+    "option_d": "Pitar",
+    "correct_option": "B"
+  },
+  {
+    "category": "B1",
+    "question_text": "¿Qué indica un pedal de embrague muy duro?",
+    "option_a": "Auto nuevo",
+    "option_b": "Desgaste del kit de embrague o falta de lubricación en el cable/prensa",
+    "option_c": "Normal en frío",
+    "option_d": "Muchas marchas",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué sanción aplica por prestar servicio diferente al autorizado en la tarjeta de operación?",
+    "option_a": "Amonestación",
+    "option_b": "Multa e inmovilización",
+    "option_c": "No hay sanción",
+    "option_d": "Una carta de la empresa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es el periodo máximo de renovación de la licencia C1 para menores de 60 años?",
+    "option_a": "10 años",
+    "option_b": "3 años",
+    "option_c": "1 año",
+    "option_d": "5 años",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Tarjeta de Control' en un taxi?",
+    "option_a": "Un carnet de socio",
+    "option_b": "Documento con tarifas y datos del conductor visible al pasajero",
+    "option_c": "Un mapa de la ciudad",
+    "option_d": "La lista de mercados",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el GPS en el transporte público?",
+    "option_a": "Ver películas",
+    "option_b": "Control de rutas, frecuencia y seguridad por parte de la empresa",
+    "option_c": "Solo para el conductor",
+    "option_d": "No sirve",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cómo debe actuar si un pasajero deja un objeto de valor?",
+    "option_a": "Reportarlo de inmediato a la central/empresa y ponerlo en custodia",
+    "option_b": "Quedárselo como propina",
+    "option_c": "Botarlo",
+    "option_d": "Venderlo",
+    "correct_option": "A"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la capacidad máxima de un vehículo mixto?",
+    "option_a": "Solo carga",
+    "option_b": "La definida en la licencia de tránsito para pasajeros y kilos",
+    "option_c": "100 personas",
+    "option_d": "Lo que quepa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'Responsabilidad Civil Contractual'?",
+    "option_a": "Que el contrato es civil",
+    "option_b": "Seguro que cubre a los pasajeros en caso de accidente",
+    "option_c": "Un seguro para el carro únicamente",
+    "option_d": "Una multa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es el trato correcto hacia un usuario según el código de ética?",
+    "option_a": "Indiferente",
+    "option_b": "Respetuoso, digno y eficiente sin discriminación",
+    "option_c": "Solo si paga bien",
+    "option_d": "Malo si el tráfico está pesado",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el botón de pánico en taxis?",
+    "option_a": "Prender el radio",
+    "option_b": "Alertar a la central ante una emergencia de seguridad",
+    "option_c": "Pedir comida",
+    "option_d": "Pitar más duro",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Caja Negra' o Registrador de Eventos?",
+    "option_a": "Para música",
+    "option_b": "Dispositivo que graba parámetros de conducción en buses",
+    "option_c": "Un maletín",
+    "option_d": "Una herramienta",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es el riesgo de llevar pasajeros en el estribo de una buseta?",
+    "option_a": "Que no paguen",
+    "option_b": "Alto riesgo de caída fatal y sanción legal",
+    "option_c": "Se cansan los pies",
+    "option_d": "Ninguno",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué indica una señal de color m orange/naranja en la vía?",
+    "option_a": "Servicios",
+    "option_b": "Obras en la vía o trabajos transitorios",
+    "option_c": "Información turística",
+    "option_d": "Peligro total",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve la planilla de viaje?",
+    "option_a": "Para escribir cuentos",
+    "option_b": "Control de horarios y despachos de vehículos de servicio público",
+    "option_c": "No es obligatoria",
+    "option_d": "Llevar la contabilidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es el 'Plan Estratégico de Seguridad Vial' (PESV)?",
+    "option_a": "Un curso",
+    "option_b": "Guía de gestión de riesgos viales para empresas",
+    "option_c": "Un mapa",
+    "option_d": "El SOAT",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la función del chaleco reflectivo?",
+    "option_a": "Hacer sentir calor",
+    "option_b": "Hacer visible al conductor en caso de detención en la vía",
+    "option_c": "Es moda",
+    "option_d": "No sirve",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué debe hacer si un pasajero no quiere pagar?",
+    "option_a": "Pelear",
+    "option_b": "Solicitar acompañamiento policial sin poner en riesgo la seguridad",
+    "option_c": "Botarlo del carro",
+    "option_d": "Seguir el viaje",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'Transbordo'?",
+    "option_a": "Cambiar de llanta",
+    "option_b": "Traslado de pasajeros de un vehículo a otro legalmente autorizado",
+    "option_c": "Vender el carro",
+    "option_d": "Una multa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la importancia del aseo interno diario?",
+    "option_a": "Que no pese",
+    "option_b": "Higiene, confort y buena imagen del servicio público",
+    "option_c": "Opcional",
+    "option_d": "Solo si el dueño mira",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Capacidad Transportadora'?",
+    "option_a": "La fuerza del bus",
+    "option_b": "Número de vehículos que una empresa tiene permiso de operar",
+    "option_c": "Lo que carga el bus",
+    "option_d": "La velocidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el extintor de 10 libras?",
+    "option_a": "Como peso",
+    "option_b": "Equipamiento reglamentario para controlar incendios",
+    "option_c": "Decoración",
+    "option_d": "Prensa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué indica un ruido de 'metralla' en la caja de cambios?",
+    "option_a": "Caja nueva",
+    "option_b": "Piñones desgastados o falta de lubricación valvulina",
+    "option_c": "Falta de aire",
+    "option_d": "Normal en buses",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cómo debe ser la entrada a paraderos establecidos?",
+    "option_a": "A alta velocidad",
+    "option_b": "Suave, orillado al máximo y sin bloquear la calzada",
+    "option_c": "Pitando",
+    "option_d": "Sin mirar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es el 'RUNT'?",
+    "option_a": "Un tipo de carro",
+    "option_b": "Sistema que centraliza la información de tránsito y transporte",
+    "option_c": "Una multa",
+    "option_d": "Un seguro",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la sanción por conducir bajo efectos del alcohol en servicio público?",
+    "option_a": "Una llamada de atención",
+    "option_b": "Sanciones mucho más severas que en particular, incluyendo pérdida de licencia",
+    "option_c": "No hay diferencia",
+    "option_d": "Multa de 10 mil pesos",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el sistema de monitoreo por cámaras internas?",
+    "option_a": "Espiar",
+    "option_b": "Seguridad de los pasajeros y evidencia ante incidentes",
+    "option_c": "No tiene función",
+    "option_d": "Para verse el pelo",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es el 'Servicio Especial'?",
+    "option_a": "Buses blancos",
+    "option_b": "Transporte de estudiantes, empleados o turistas bajo contrato",
+    "option_c": "Taxis amarillos",
+    "option_d": "Ambulancias",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la función de la salida de emergencia?",
+    "option_a": "Para ventilar",
+    "option_b": "Evacuación rápida en caso de volcamiento o bloqueo de puertas",
+    "option_c": "Para bajar maletas",
+    "option_d": "No tiene",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué indica una señal de 'Paradero de Bus'?",
+    "option_a": "Zona de parqueo",
+    "option_b": "Lugar único autorizado para ascenso y descenso de pasajeros",
+    "option_c": "Taller mecánico",
+    "option_d": "Restaurante",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el carnet de vacunación en algunos casos de transporte?",
+    "option_a": "Es un adorno",
+    "option_b": "Requisito de salud pública en ciertas zonas o tipos de transporte",
+    "option_c": "No existe",
+    "option_d": "Solo para perros",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Tarjeta de Operación'?",
+    "option_a": "Una tarjeta de crédito",
+    "option_b": "Documento que autoriza al vehículo para una modalidad de servicio público",
+    "option_c": "El pase",
+    "option_d": "El carnet de la EPS",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cómo debe actuar ante un herido dentro del bus?",
+    "option_a": "Sacarlo de inmediato",
+    "option_b": "Prestar primeros auxilios básicos según capacidad y buscar ayuda médica",
+    "option_c": "Seguir la ruta",
+    "option_d": "Asustarse",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'Ruta Autorizada'?",
+    "option_a": "Por donde el conductor quiera",
+    "option_b": "Recorrido definido por la autoridad de transporte para prestar el servicio",
+    "option_c": "El camino a casa",
+    "option_d": "Cualquier calle",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la función del martillo de fragmentación?",
+    "option_a": "Para arreglar sillas",
+    "option_b": "Romper ventanas de emergencia en caso de atrapamiento",
+    "option_c": "Defensa personal",
+    "option_d": "No se usa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué indica el testigo de 'Puerta Abierta'?",
+    "option_a": "Aireación",
+    "option_b": "Inseguridad total para el pasajero, debe cerrarse antes de marchar",
+    "option_c": "Testigo quemado",
+    "option_d": "Normal",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el sistema de megafonía?",
+    "option_a": "Cantar",
+    "option_b": "Comunicar novedades o paradas a los pasajeros",
+    "option_c": "No tiene uso",
+    "option_d": "Solo para el radio",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Capacidad de Carga' en mixtos?",
+    "option_a": "Fuerza del motor",
+    "option_b": "Peso máximo de mercancía que puede transportar el vehículo",
+    "option_c": "Número de sillas",
+    "option_d": "La velocidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la importancia de la revisión tecnomecánica anual?",
+    "option_a": "Gastar plata",
+    "option_b": "Garantizar que el servicio público sea seguro y no contamine",
+    "option_c": "Opcional",
+    "option_d": "Solo si hay retén",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué hacer ante un derrame de combustible en la vía?",
+    "option_a": "Seguir",
+    "option_b": "Informar a las autoridades y avisar a otros conductores",
+    "option_c": "Echarle fósforos",
+    "option_d": "Ignorar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'Centro de Diagnóstico Automotriz' (CDA)?",
+    "option_a": "Lugar de venta de autos",
+    "option_b": "Lugar autorizado para realizar la revisión tecnomecánica",
+    "option_c": "Taller de pintura",
+    "option_d": "Escuela de manejo",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es la función de la alarma de exceso de velocidad?",
+    "option_a": "Pitar a la gente",
+    "option_b": "Avisar al conductor y pasajeros que se excedió el límite legal",
+    "option_c": "Solo música",
+    "option_d": "Decoración",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es el 'Mantenimiento Correctivo'?",
+    "option_a": "Limpiar el bus",
+    "option_b": "Reparar daños que ya ocurrieron para que el bus vuelva a operar",
+    "option_c": "Pintar",
+    "option_d": "No existe",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cómo debe actuar si un camión grande le pide vía?",
+    "option_a": "No dársela",
+    "option_b": "Facilitar la maniobra con seguridad, entendiendo sus dimensiones",
+    "option_c": "Pitar",
+    "option_d": "Acelerar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'SOAT' para servicio público?",
+    "option_a": "Seguro opcional",
+    "option_b": "Seguro obligatorio con coberturas para todos los afectados en accidente",
+    "option_c": "Solo para el dueño",
+    "option_d": "Un tipo de llanta",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cuál es el riesgo de la distracción con el celular?",
+    "option_a": "Que se caiga",
+    "option_b": "Pérdida de alerta y alta probabilidad de causar accidentes graves",
+    "option_c": "Ninguno con manos libres",
+    "option_d": "Que se acabe la batería",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es la 'Visión Periférica'?",
+    "option_a": "Ver por el retrovisor",
+    "option_b": "Capacidad de percibir objetos a los lados sin mover la cabeza",
+    "option_c": "Ver de noche",
+    "option_d": "Un tipo de luz",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Para qué sirve el limitador de velocidad?",
+    "option_a": "Correr más",
+    "option_b": "Dispositivo técnico que impide superar la velocidad máxima establecida",
+    "option_c": "No sirve",
+    "option_d": "Para pitar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué indica un color rojo en las placas?",
+    "option_a": "Uso diplomático",
+    "option_b": "Son blancas en servicio público con bordes y letras negras/azules (depende año)",
+    "option_c": "No existen rojas estándar",
+    "option_d": "Camiones de bomberos",
+    "correct_option": "C"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué es el 'Freno de Socorro'?",
+    "option_a": "Un grito",
+    "option_b": "Sistema de respaldo en caso de fallo del freno principal",
+    "option_c": "El embrague",
+    "option_d": "No existe",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Cómo debe ser el ascenso de pasajeros en sillas de ruedas?",
+    "option_a": "No se suben",
+    "option_b": "Mediante rampas or elevadores autorizados con seguridad",
+    "option_c": "Cargados por gente",
+    "option_d": "En el techo",
+    "correct_option": "B"
+  },
+  {
+    "category": "C1",
+    "question_text": "¿Qué significa 'Transporte Intermunicipal'?",
+    "option_a": "Dentro de la ciudad",
+    "option_b": "Transporte entre dos o más municipios",
+    "option_c": "Transporte a pie",
+    "option_d": "Taxis amarillos",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la presión de aire ideal para operar un sistema de frenos de aire?",
+    "option_a": "10-20 PSI",
+    "option_b": "90-120 PSI",
+    "option_c": "200-300 PSI",
+    "option_d": "5 PSI",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el 'Gobernador' del compresor?",
+    "option_a": "Mandar en el camión",
+    "option_b": "Controlar cuándo el compresor carga aire a los tanques",
+    "option_c": "Medir la velocidad",
+    "option_d": "Frenar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Freno de Motor' (Jacobs)?",
+    "option_a": "Un anclaje",
+    "option_b": "Sistema que usa la compresión del motor para reducir la velocidad",
+    "option_c": "Apagar el motor",
+    "option_d": "Freno de mano",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función de las válvulas de drenaje en los tanques de aire?",
+    "option_a": "Lavar el tanque",
+    "option_b": "Extraer agua y aceite para prevenir daños en las válvulas",
+    "option_c": "Sacar la gasolina",
+    "option_d": "Pitar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué significa 'Fading' en los frenos de un camión?",
+    "option_a": "Que están brillantes",
+    "option_b": "Pérdida de frenado por sobrecalentamiento de las campanas/bandas",
+    "option_c": "Frenado perfecto",
+    "option_d": "Frenos nuevos",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirven las 'Pachas' (ruedas duales)?",
+    "option_a": "Para que se vea grande",
+    "option_b": "Distribuir el peso de la carga y ofrecer mayor tracción",
+    "option_c": "Para repuesto",
+    "option_d": "No tienen uso",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es la 'Quinta Rueda'?",
+    "option_a": "La de repuesto",
+    "option_b": "Dispositivo de acoplamiento del tractocamión con el remolque",
+    "option_c": "Un volante extra",
+    "option_d": "Una técnica",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cómo se debe bajar una pendiente larga con carga?",
+    "option_a": "En punto muerto",
+    "option_b": "Engranado en una marcha baja y usando freno motor",
+    "option_c": "Frenando solo con el pedal",
+    "option_d": "A alta velocidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica una señal de 'Altura Máxima 4.40m'?",
+    "option_a": "Distancia a la ciudad",
+    "option_b": "Límite físico para evitar choques contra puentes o cables",
+    "option_c": "Precio del peaje",
+    "option_d": "Número de ruta",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el 'Retardador' (Retarder)?",
+    "option_a": "Para llegar tarde",
+    "option_b": "Freno auxiliar hidráulico o eléctrico en la transmisión",
+    "option_c": "Acelerar",
+    "option_d": "Luz de cruce",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es la 'Carga Extradiimensionada'?",
+    "option_a": "Carga muy pesada",
+    "option_b": "Carga que supera las dimensiones estándar de ancho, largo o alto",
+    "option_c": "Carga ilegal",
+    "option_d": "Carga de comida",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es el peligro del 'Efecto Tijera'?",
+    "option_a": "Cortarse",
+    "option_b": "Que el remolque se doble hacia la cabina perdiendo el control",
+    "option_c": "Un ruido",
+    "option_d": "Un tipo de llanta",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el manómetro de aire?",
+    "option_a": "Medir el aceite",
+    "option_b": "Visualizar la presión disponible en los circuitos de freno",
+    "option_c": "Medir la velocidad",
+    "option_d": "Reloj",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica un silbido fuerte al pisar el freno?",
+    "option_a": "Frenos óptimos",
+    "option_b": "Posible fuga de aire en alguna manguera o válvula",
+    "option_c": "Frenos musicales",
+    "option_d": "Nada",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Punto de Inestabilidad' por carga?",
+    "option_a": "Cuando se acaba el gas",
+    "option_b": "Alteración del centro de gravedad que facilita el volcamiento",
+    "option_c": "Cuando el chofer canta",
+    "option_d": "Un bache",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función del 'Intercooler'?",
+    "option_a": "Enfriar la cabina",
+    "option_b": "Enfriar el aire que sale del turbo antes de entrar al motor",
+    "option_c": "Enfriar el radiador",
+    "option_d": "No existe",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué significa el color rojo en las mangueras de aire (Gladhands)?",
+    "option_a": "Línea de servicio",
+    "option_b": "Línea de emergencia o suministro constante",
+    "option_c": "Agua",
+    "option_d": "Aceite",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el 'Caging' de los resortes de freno?",
+    "option_a": "Atrapar animales",
+    "option_b": "Liberar mecánicamente el freno de emergencia para remolcar el vehículo",
+    "option_c": "Frenar más",
+    "option_d": "Acondicionar aire",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica humo blanco denso en un motor diesel?",
+    "option_a": "Combustión perfecta",
+    "option_b": "Combustión incompleta, agua en cilindros o problemas de inyección",
+    "option_c": "Falta de aire",
+    "option_d": "Normal siempre",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función de las cintas retrorreflectivas?",
+    "option_a": "Decoración",
+    "option_b": "Hacer visible las dimensiones del vehículo pesado en la oscuridad",
+    "option_c": "Tapar golpes",
+    "option_d": "Publicidad",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es la 'Capacidad de Carga Útil'?",
+    "option_a": "Peso del camión vacío",
+    "option_b": "Peso máximo de mercancía que puede llevar legalmente",
+    "option_c": "Peso del conductor",
+    "option_d": "Capacidad del tanque",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cómo debe ser el giro a la derecha en un vehículo largo?",
+    "option_a": "Cerrado",
+    "option_b": "Abierto para evitar que las ruedas traseras suban al andén",
+    "option_c": "Rápido",
+    "option_d": "En diagonal",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica el testigo de baja presión de aceite?",
+    "option_a": "Echar gasolina",
+    "option_b": "Falla crítica de lubricación, riesgo de fundir el motor",
+    "option_c": "Cambio de filtro",
+    "option_d": "Normal en subidas",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el 'Bloqueador de Diferencial'?",
+    "option_a": "Para no girar",
+    "option_b": "Hacer que ambas ruedas motrices giren igual para salir de terrenos difíciles",
+    "option_c": "Frenar",
+    "option_d": "Correr más",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Peso Bruto Vehicular'?",
+    "option_a": "Peso de la carga",
+    "option_b": "Suma del peso del vehículo vacío más la carga máxima permitida",
+    "option_c": "Peso del motor",
+    "option_d": "Peso de 10 pasajeros",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la importancia del purgado de tanques?",
+    "option_a": "Sacar el aire",
+    "option_b": "Evitar que el agua oxide tuberías o congele válvulas en frío",
+    "option_c": "Lavar camión",
+    "option_d": "Ninguna",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica una señal informativa verde con un camión?",
+    "option_a": "Zona de descanso",
+    "option_b": "Zona de pesaje o báscula obligatoria",
+    "option_c": "Venta de camiones",
+    "option_d": "Museo",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el 'Filtro Racor' (Separador)?",
+    "option_a": "Separar el aceite",
+    "option_b": "Separar el agua y sedimentos del combustible diesel",
+    "option_c": "Filtro de aire",
+    "option_d": "No tiene uso",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Ralentí' prolongado?",
+    "option_a": "Andar rápido",
+    "option_b": "Tener el motor prendido sin movimiento por mucho tiempo (gasto innecesario)",
+    "option_c": "Frenar",
+    "option_d": "Un sensor",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función del turbo?",
+    "option_a": "Hacer ruido",
+    "option_b": "Aumentar la entrada de masa de aire al motor para más potencia",
+    "option_c": "Enfriar",
+    "option_d": "Limpiar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica un 'golpeteo' en el eje trasero?",
+    "option_a": "Caja buena",
+    "option_b": "Posible daño en el diferencial o crucetas del cardán",
+    "option_c": "Llantas nuevas",
+    "option_d": "Normal",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirven las calzas o cuñas?",
+    "option_a": "Como pesas",
+    "option_b": "Asegurar las ruedas cuando el vehículo está estacionado en pendientes",
+    "option_c": "Lavar llantas",
+    "option_d": "No se usan",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Manifiesto de Carga'?",
+    "option_a": "Una carta",
+    "option_b": "Documento legal que ampara el transporte de mercancías",
+    "option_c": "El pase",
+    "option_d": "Seguro de vida",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es el riesgo de frenar bruscamente con carga líquida?",
+    "option_a": "Que se evapore",
+    "option_b": "Efecto oleaje que puede empujar el camión o volcarlo",
+    "option_c": "Que se ensucie",
+    "option_d": "Ninguno",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué significa 'Eje Retráctil' (Tándem)?",
+    "option_a": "Eje que se rompe",
+    "option_b": "Eje que puede levantarse cuando el vehículo circula vacío para ahorrar llantas",
+    "option_c": "Eje de repuesto",
+    "option_d": "Eje de madera",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el GPS de carga?",
+    "option_a": "Ver mapas",
+    "option_b": "Seguiremiento satelital de la mercancía y seguridad del vehículo",
+    "option_c": "Solo para radio",
+    "option_d": "No sirve",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica el testigo de precalentamiento (Resistencia)?",
+    "option_a": "Freno activo",
+    "option_b": "Que las bujías de incandescencia están calentando la cámara (Motores diesel)",
+    "option_c": "Luz de salón",
+    "option_d": "Poco aceite",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función de la barra de torsión?",
+    "option_a": "Girar el volante",
+    "option_b": "Ayudar a la suspensión a soportar torsiones del chasis",
+    "option_c": "Frenar",
+    "option_d": "Vender",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Centro de Gravedad'?",
+    "option_a": "Donde está el motor",
+    "option_b": "Punto donde se concentra el peso; vital para la estabilidad",
+    "option_c": "El volante",
+    "option_d": "El techo",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve el medidor de PSI en las llantas?",
+    "option_a": "Limpiar",
+    "option_b": "Asegurar que las llantas soporten el peso y no se estallen por calor",
+    "option_c": "Ver la hora",
+    "option_d": "Decoración",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica que un camión 'escupe' aire por debajo?",
+    "option_a": "Que está roto",
+    "option_b": "La válvula de alivio liberando el exceso de presión del compresor",
+    "option_c": "Que quiere pitar",
+    "option_d": "Falla total",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función del 'AdBlue' / 'DEF'?",
+    "option_a": "Combustible extra",
+    "option_b": "Líquido para reducir emisiones de NOx en sistemas SCR",
+    "option_c": "Limpiar vidrios",
+    "option_d": "Aceite de caja",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué significa 'Cámara de Freno de Resorte'?",
+    "option_a": "Para fotos",
+    "option_b": "Mecanismo que acciona el freno de parqueo si se pierde el aire",
+    "option_c": "Una luz",
+    "option_d": "Un sensor",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es la 'Conducción Técnica'?",
+    "option_a": "Manejar rápido",
+    "option_b": "Uso eficiente del torque y rango verde del tacómetro para ahorrar",
+    "option_c": "Arreglar motores",
+    "option_d": "Una multa",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirven los deflectores de aire?",
+    "option_a": "Para el sol",
+    "option_b": "Mejorar la aerodinámica y reducir el consumo de combustible",
+    "option_c": "Poner avisos",
+    "option_d": "No sirven",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica una dirección que oscila (bamboleo)?",
+    "option_a": "Llantas nuevas",
+    "option_b": "Daños en terminales, amortiguadores o desbalanceo crítico",
+    "option_c": "Normal",
+    "option_d": "Mucho peso",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Cuál es la función del 'Cardán'?",
+    "option_a": "Sostener el chofer",
+    "option_b": "Transmitir el giro de la caja de cambios al diferencial",
+    "option_c": "Pitar",
+    "option_d": "Frenar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué es el 'Plan de Contingencia'?",
+    "option_a": "Un mapa",
+    "option_b": "Procedimiento ante derrames de carga peligrosa o accidentes",
+    "option_c": "Comprar comida",
+    "option_d": "No existe",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Para qué sirve la alarma de reversa?",
+    "option_a": "Despertar gente",
+    "option_b": "Avisar sonoramente a peatones del movimiento hacia atrás del vehículo grande",
+    "option_c": "Cantar",
+    "option_d": "Decorar",
+    "correct_option": "B"
+  },
+  {
+    "category": "C2",
+    "question_text": "¿Qué indica el color azul en las mangueras de aire?",
+    "option_a": "Emergencia",
+    "option_b": "Línea de servicio (activa los frenos al pisar el pedal)",
+    "option_c": "Agua",
+    "option_d": "Aceite",
+    "correct_option": "B"
+  }
+]
