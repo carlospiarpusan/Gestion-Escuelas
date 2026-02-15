@@ -100,23 +100,35 @@ const Students = () => {
         setActiveMenuId(null);
     };
 
-    const handleAddPayment = (e) => {
+    const handleAddPayment = async (e) => {
         e.preventDefault();
         const amount = parseFloat(paymentAmount);
-        if (isNaN(amount)) return;
+        if (isNaN(amount) || amount <= 0) return;
 
-        setStudents(students.map(s => {
-            if (s.id === selectedStudent.id) {
-                const newBalance = (parseFloat(s.balance) || 0) + amount;
-                return {
-                    ...s,
-                    balance: newBalance,
-                    lastPaymentMethod: paymentMethod,
-                    payment: newBalance >= (parseFloat(s.courseValue) || 0) ? 'Paid' : 'Pending'
-                };
+        try {
+            const res = await fetch('/api/payments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    alumnoId: selectedStudent.id,
+                    amount,
+                    paymentMethod,
+                    concepto: 'Abono'
+                })
+            });
+
+            if (!res.ok) {
+                const err = await res.json();
+                throw new Error(err.error || 'Error al registrar abono');
             }
-            return s;
-        }));
+
+            // Refresh students from DB
+            await fetchStudents();
+        } catch (err) {
+            console.error('Payment error:', err);
+            alert('Error al registrar abono: ' + err.message);
+        }
+
         setIsPaymentModalOpen(false);
         setPaymentAmount('');
         setPaymentMethod('Efectivo');
