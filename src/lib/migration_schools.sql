@@ -1,0 +1,3 @@
+-- MIGRATION: Add details to schools table
+ALTER TABLE schools ADD COLUMN IF NOT EXISTS address VARCHAR(255);
+ALTER TABLE schools ADD COLUMN IF NOT EXISTS phone VARCHAR(50);

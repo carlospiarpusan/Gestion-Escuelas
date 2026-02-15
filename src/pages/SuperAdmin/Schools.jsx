@@ -4,16 +4,34 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
 
-const MOCK_SCHOOLS = [
-    { id: 1, name: 'Autoescuela Central', plan: 'Premium', students: 120, active: true, address: 'Calle 10 # 45-20', phone: '601-1234567' },
-    { id: 2, name: 'Ruta Segura', plan: 'Standard', students: 45, active: true, address: 'Cra 15 # 72-10', phone: '601-7654321' },
-    { id: 3, name: 'Conducción Pro', plan: 'Basic', students: 12, active: false, address: 'Av 68 # 80-30', phone: '601-9876543' },
-];
-
 const SchoolsPage = () => {
-    const [schools, setSchools] = useState(MOCK_SCHOOLS);
+    const [schools, setSchools] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const fetchSchools = async () => {
+        setIsLoading(true);
+        try {
+            const res = await fetch('/api/schools');
+            const data = await res.json();
+            // Map DB fields to UI fields if needed
+            const mapped = data.map(s => ({
+                ...s,
+                plan: s.plan_type || s.plan, // Handle DB vs Mock
+                active: s.active,
+                students: parseInt(s.students) || 0
+            }));
+            setSchools(mapped);
+        } catch (err) {
+            console.error('Error fetching schools:', err);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useState(() => {
+        fetchSchools();
+    }, []);
     // UI State
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -42,29 +60,55 @@ const SchoolsPage = () => {
         setActiveMenuId(null);
     };
 
-    const handleCreate = (e) => {
+    const handleCreate = async (e) => {
         e.preventDefault();
-        const newSchool = {
-            ...formData,
-            id: Date.now(),
-            students: 0
-        };
-        setSchools([newSchool, ...schools]);
-        setIsNewModalOpen(false);
+        try {
+            const res = await fetch('/api/schools', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+            if (res.ok) {
+                fetchSchools();
+                setIsNewModalOpen(false);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const handleUpdate = (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        setSchools(schools.map(s => s.id === selectedSchool.id ? { ...s, ...formData } : s));
-        setIsEditModalOpen(false);
-        setSelectedSchool(null);
+        try {
+            const res = await fetch('/api/schools', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...formData, id: selectedSchool.id })
+            });
+            if (res.ok) {
+                fetchSchools();
+                setIsEditModalOpen(false);
+                setSelectedSchool(null);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
-    const handleDelete = () => {
-        setSchools(schools.filter(s => s.id !== selectedSchool.id));
-        setIsDeleteModalOpen(false);
-        setSelectedSchool(null);
-        setActiveMenuId(null);
+    const handleDelete = async () => {
+        try {
+            const res = await fetch(`/api/schools?id=${selectedSchool.id}`, {
+                method: 'DELETE'
+            });
+            if (res.ok) {
+                fetchSchools();
+                setIsDeleteModalOpen(false);
+                setSelectedSchool(null);
+                setActiveMenuId(null);
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
