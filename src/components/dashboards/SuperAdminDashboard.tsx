@@ -108,14 +108,14 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Panel de Super Administrador</h2>
           <p className="text-gray-600 mt-1">Gestión de escuelas de conducción</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="btn btn-primary flex items-center gap-2"
+          className="btn btn-primary flex items-center justify-center gap-2 w-full md:w-auto"
         >
           <Plus className="w-5 h-5" />
           Nueva Escuela
@@ -162,10 +162,10 @@ export default function SuperAdminDashboard() {
         </div>
       </div>
 
-      <div className="flex gap-4 border-b border-gray-200">
+      <div className="flex gap-4 border-b border-gray-200 overflow-x-auto pb-1">
         <button
           onClick={() => setActiveTab('escuelas')}
-          className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'escuelas'
+          className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'escuelas'
             ? 'border-blue-600 text-blue-600'
             : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
@@ -174,7 +174,7 @@ export default function SuperAdminDashboard() {
         </button>
         <button
           onClick={() => setActiveTab('admins')}
-          className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors ${activeTab === 'admins'
+          className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${activeTab === 'admins'
             ? 'border-blue-600 text-blue-600'
             : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
@@ -424,7 +424,7 @@ export default function SuperAdminDashboard() {
                 </>
               ) : (
                 <>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="label">Nombre</label>
                       <input

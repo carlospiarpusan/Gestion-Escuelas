@@ -83,3 +83,17 @@ export interface Clase {
   estado: 'programada' | 'completada' | 'cancelada';
   notas?: string;
 }
+
+export interface Vehiculo {
+  id: string;
+  escuelaId: string;
+  marca: string;
+  modelo: string;
+  placa: string;
+  tipo: 'coche' | 'moto';
+  estado: 'activo' | 'taller' | 'baja';
+  ultimoMantenimiento?: Date;
+  proximoMantenimiento?: Date;
+  imagen?: string;
+  activo: boolean;
+}

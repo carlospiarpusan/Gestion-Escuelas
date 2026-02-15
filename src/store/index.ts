@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, Escuela, RegistroHoras, Pago, ResultadoExamen, Clase } from '../types';
+import type { User, Escuela, RegistroHoras, Pago, ResultadoExamen, Clase, Vehiculo } from '../types';
 import { USE_API } from '../config/api';
-import { escuelasAPI, usersAPI, registrosAPI, pagosAPI, examenesAPI } from '../services/api';
+import { escuelasAPI, usersAPI, registrosAPI, pagosAPI, examenesAPI, vehiculosAPI } from '../services/api';
 
 interface AppState {
   currentUser: User | null;
@@ -12,6 +12,7 @@ interface AppState {
   pagos: Pago[];
   resultadosExamen: ResultadoExamen[];
   clases: Clase[];
+  vehiculos: Vehiculo[];
 
   login: (email: string, password: string) => User | null;
   logout: () => void;
@@ -36,6 +37,10 @@ interface AppState {
 
   addClase: (clase: Omit<Clase, 'id'>) => Promise<void>;
   updateClase: (id: string, clase: Partial<Clase>) => Promise<void>;
+
+  addVehiculo: (vehiculo: Omit<Vehiculo, 'id'>) => Promise<void>;
+  updateVehiculo: (id: string, vehiculo: Partial<Vehiculo>) => Promise<void>;
+  deleteVehiculo: (id: string) => Promise<void>;
 
   fetchInitialData: () => Promise<void>;
 }
@@ -139,6 +144,7 @@ export const useStore = create<AppState>()(
       pagos: [],
       resultadosExamen: [],
       clases: [],
+      vehiculos: [],
 
       login: (email, password) => {
         const user = get().users.find(
@@ -341,14 +347,54 @@ export const useStore = create<AppState>()(
         }));
       },
 
+      addVehiculo: async (vehiculo) => {
+        if (USE_API) {
+          const res = await vehiculosAPI.create(vehiculo);
+          set((state) => ({ vehiculos: [...state.vehiculos, res.data] }));
+        } else {
+          const newVehiculo: Vehiculo = {
+            ...vehiculo,
+            id: generateId(),
+          };
+          set((state) => ({ vehiculos: [...state.vehiculos, newVehiculo] }));
+        }
+      },
+
+      updateVehiculo: async (id, vehiculo) => {
+        if (USE_API) {
+          const res = await vehiculosAPI.update(id, vehiculo);
+          set((state) => ({
+            vehiculos: state.vehiculos.map((v) => (v.id === id ? res.data : v)),
+          }));
+        } else {
+          set((state) => ({
+            vehiculos: state.vehiculos.map((v) => (v.id === id ? { ...v, ...vehiculo } : v)),
+          }));
+        }
+      },
+
+      deleteVehiculo: async (id) => {
+        if (USE_API) {
+          await vehiculosAPI.delete(id);
+          set((state) => ({
+            vehiculos: state.vehiculos.filter((v) => v.id !== id),
+          }));
+        } else {
+          set((state) => ({
+            vehiculos: state.vehiculos.filter((v) => v.id !== id),
+          }));
+        }
+      },
+
       fetchInitialData: async () => {
         if (USE_API) {
-          const [escuelas, users, pagos, registros, examenes] = await Promise.all([
+          const [escuelas, users, pagos, registros, examenes, vehiculos] = await Promise.all([
             escuelasAPI.getAll(),
             usersAPI.getAll(),
             pagosAPI.getAll(),
             registrosAPI.getAll(),
             examenesAPI.getAll(),
+            vehiculosAPI.getAll(),
           ]);
           set({
             escuelas: escuelas.data,
@@ -356,6 +402,7 @@ export const useStore = create<AppState>()(
             pagos: pagos.data,
             registrosHoras: registros.data,
             resultadosExamen: examenes.data,
+            vehiculos: vehiculos.data,
           });
         }
       },

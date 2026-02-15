@@ -55,8 +55,17 @@ export const pagosAPI = {
     update: (id: string, data: any) => api.put(`/pagos/${id}`, data),
 };
 
+
 // Exámenes
 export const examenesAPI = {
     getAll: () => api.get('/examenes'),
     create: (data: any) => api.post('/examenes', data),
+};
+
+// Vehículos
+export const vehiculosAPI = {
+    getAll: () => api.get('/vehiculos'),
+    create: (data: any) => api.post('/vehiculos', data),
+    update: (id: string, data: any) => api.put(`/vehiculos/${id}`, data),
+    delete: (id: string) => api.delete(`/vehiculos/${id}`),
 };

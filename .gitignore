@@ -27,3 +27,5 @@ dist-ssr
 .env
 server/.env
  ts_errors.txt
+
+.vercel

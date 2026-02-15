@@ -7,6 +7,7 @@ import usersRoutes from './routes/users';
 import registrosRoutes from './routes/registros';
 import pagosRoutes from './routes/pagos';
 import examenesRoutes from './routes/examenes';
+import vehiculosRoutes from './routes/vehiculos';
 
 dotenv.config();
 
@@ -22,13 +23,18 @@ app.use('/api/users', usersRoutes);
 app.use('/api/registros', registrosRoutes);
 app.use('/api/pagos', pagosRoutes);
 app.use('/api/examenes', examenesRoutes);
+app.use('/api/vehiculos', vehiculosRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`📊 API disponible en http://localhost:${PORT}/api`);
-  console.log(`🏥 Health check: http://localhost:${PORT}/api/health\n`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`📊 API disponible en http://localhost:${PORT}/api`);
+    console.log(`🏥 Health check: http://localhost:${PORT}/api/health\n`);
+  });
+}
+
+export default app;

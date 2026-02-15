@@ -77,6 +77,23 @@ const setupDatabase = async () => {
     `);
 
     await pool.query(`
+      CREATE TABLE IF NOT EXISTS vehiculos (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        escuela_id UUID NOT NULL REFERENCES escuelas(id) ON DELETE CASCADE,
+        marca VARCHAR(100) NOT NULL,
+        modelo VARCHAR(100) NOT NULL,
+        placa VARCHAR(20) NOT NULL,
+        tipo VARCHAR(20) CHECK (tipo IN ('coche', 'moto')),
+        estado VARCHAR(20) DEFAULT 'activo' CHECK (estado IN ('activo', 'taller', 'baja')),
+        ultimo_mantenimiento DATE,
+        proximo_mantenimiento DATE,
+        imagen TEXT,
+        activo BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS clases (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
         alumno_id UUID NOT NULL REFERENCES usuarios(id) ON DELETE CASCADE,
