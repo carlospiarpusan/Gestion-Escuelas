@@ -3,7 +3,7 @@ import { Save, UserPlus, CreditCard, AlertCircle, Plus } from 'lucide-react';
 import Input from '../../components/UI/Input';
 import Select from '../../components/UI/Select';
 import Button from '../../components/UI/Button';
-import { MOCK_STUDENTS } from '../../data/mockStudents';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LICENSE_CATEGORIES = [
     { value: 'A2', label: 'A2 - Motocicletas' },
@@ -24,13 +24,10 @@ const PAYMENT_METHODS = [
     { value: 'Sistecredito', label: 'Sistecrédito' }
 ];
 
-// Mock Tramitadores for Dropdown
-const MOCK_TRAMITADORES = [
-    { id: 1, name: 'Juan Tramitador' },
-    { id: 2, name: 'Agencia Externa A' },
-];
-
 const RegisterStudent = () => {
+    const { user } = useAuth();
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     // Form State
     const [formData, setFormData] = useState({
         cedula: '',
@@ -48,71 +45,44 @@ const RegisterStudent = () => {
         paymentMethod: 'Efectivo'
     });
 
-    const [showTramitadorModal, setShowTramitadorModal] = useState(false);
-    const [newTramitadorName, setNewTramitadorName] = useState('');
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
 
-        // --- Combo Logic ---
-        const existingStudent = MOCK_STUDENTS.find(s => s.document === formData.cedula);
-        let finalCategory = formData.category;
+        try {
+            const res = await fetch('/api/students', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    cedula: formData.cedula,
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    address: formData.address,
+                    category: formData.category,
+                    courseValue: formData.courseValue,
+                    contractNumber: formData.contractNumber,
+                    initialPayment: formData.initialPayment,
+                    paymentMethod: formData.paymentMethod,
+                    tramitadorId: formData.hasTramitador ? formData.tramitadorId : null,
+                    tramitadorFee: formData.hasTramitador ? formData.tramitadorFee : '0',
+                    schoolId: user?.schoolId || null
+                })
+            });
 
-        if (existingStudent) {
-            const regDate = new Date(existingStudent.registered);
-            const now = new Date();
-            const diffMonths = (now.getFullYear() - regDate.getFullYear()) * 12 + (now.getMonth() - regDate.getMonth());
-
-            if (diffMonths < 3) {
-                const oldCat = existingStudent.category;
-                const newCat = formData.category;
-
-                // Check for combo matching patterns
-                const isComboEligible = (
-                    (oldCat === 'A2' && ['B1', 'C1', 'RC1', 'C2'].includes(newCat)) ||
-                    (newCat === 'A2' && ['B1', 'C1', 'RC1', 'C2'].includes(oldCat))
-                );
-
-                if (isComboEligible) {
-                    const secondaryCat = oldCat === 'A2' ? newCat : oldCat;
-                    finalCategory = `Combo A2-${secondaryCat}`;
-                    alert(`¡Combo detectado! Convirtiendo registro a ${finalCategory} por registro previo hace menos de 3 meses.`);
-                }
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Error al registrar');
             }
+
+            alert('Estudiante registrado exitosamente. Redirigiendo a la gestión de alumnos...');
+            window.location.href = '/dashboard/students';
+        } catch (err) {
+            console.error('Error:', err);
+            alert('Error al registrar: ' + err.message);
+        } finally {
+            setIsSubmitting(false);
         }
-
-        const studentData = {
-            ...formData,
-            category: finalCategory,
-            registered: new Date().toISOString().split('T')[0]
-        };
-
-        console.log('Registering Student:', studentData);
-        MOCK_STUDENTS.push({
-            id: Date.now(),
-            name: formData.name,
-            document: formData.cedula,
-            email: formData.email,
-            phone: formData.phone,
-            category: finalCategory,
-            status: 'Active',
-            payment: Number(formData.initialPayment) >= Number(formData.courseValue) ? 'Paid' : 'Pending',
-            registered: studentData.registered,
-            courseValue: Number(formData.courseValue),
-            balance: Number(formData.initialPayment)
-        });
-
-        alert('Estudiante registrado exitosamente. Redirigiendo a la gestión de alumnos...');
-        window.location.href = '/dashboard/students';
-    };
-
-    const handleCreateTramitador = () => {
-        if (!newTramitadorName) return;
-        // Logic to add to DB mock
-        MOCK_TRAMITADORES.push({ id: Date.now(), name: newTramitadorName });
-        setFormData({ ...formData, tramitadorId: MOCK_TRAMITADORES[MOCK_TRAMITADORES.length - 1].id, hasTramitador: true });
-        setShowTramitadorModal(false);
-        setNewTramitadorName('');
     };
 
     return (
@@ -216,27 +186,12 @@ const RegisterStudent = () => {
 
                             {formData.hasTramitador && (
                                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px', padding: '16px', background: '#F5F5F7', borderRadius: '12px', animation: 'fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1)' }}>
-                                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-end' }}>
-                                        <div style={{ flex: 1 }}>
-                                            <Select
-                                                label="Seleccionar Agencia / Referido"
-                                                value={formData.tramitadorId}
-                                                onChange={e => setFormData({ ...formData, tramitadorId: e.target.value })}
-                                                options={[
-                                                    { value: '', label: 'Seleccione...' },
-                                                    ...MOCK_TRAMITADORES.map(t => ({ value: t.id, label: t.name }))
-                                                ]}
-                                            />
-                                        </div>
-                                        <Button
-                                            type="button"
-                                            variant="secondary"
-                                            onClick={() => setShowTramitadorModal(true)}
-                                            style={{ marginBottom: '16px', padding: '10px' }}
-                                        >
-                                            <Plus size={18} />
-                                        </Button>
-                                    </div>
+                                    <Input
+                                        label="Nombre de la Agencia / Referido"
+                                        placeholder="Ej. Agencia XYZ"
+                                        value={formData.tramitadorId}
+                                        onChange={e => setFormData({ ...formData, tramitadorId: e.target.value })}
+                                    />
                                     <Input
                                         label="Comisión"
                                         type="number"
@@ -309,8 +264,8 @@ const RegisterStudent = () => {
                             </div>
                         </div>
 
-                        <Button type="submit" style={{ width: '100%' }}>
-                            <Save size={18} /> Registrar Alumno
+                        <Button type="submit" style={{ width: '100%' }} disabled={isSubmitting}>
+                            <Save size={18} /> {isSubmitting ? 'Registrando...' : 'Registrar Alumno'}
                         </Button>
 
                         <div style={{ marginTop: '16px', display: 'flex', gap: '8px', alignItems: 'start', fontSize: '12px', color: '#86868b' }}>
@@ -321,30 +276,6 @@ const RegisterStudent = () => {
                 </div>
 
             </form>
-
-            {/* Modal Create Tramitador */}
-            {showTramitadorModal && (
-                <div style={{
-                    position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
-                    background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000,
-                    animation: 'fadeIn 0.2s ease-out'
-                }}>
-                    <div style={{ background: 'white', width: '400px', padding: '32px', borderRadius: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-                        <h3 style={{ fontSize: '20px', fontWeight: 600, marginBottom: '24px' }}>Nueva Agencia / Referido</h3>
-                        <Input
-                            autoFocus
-                            placeholder="Nombre de la Agencia"
-                            value={newTramitadorName}
-                            onChange={e => setNewTramitadorName(e.target.value)}
-                        />
-                        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', marginTop: '24px' }}>
-                            <Button variant="outline" onClick={() => setShowTramitadorModal(false)}>Cancelar</Button>
-                            <Button onClick={handleCreateTramitador}>Crear</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

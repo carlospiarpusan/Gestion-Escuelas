@@ -10,6 +10,7 @@ const Students = () => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterCategory, setFilterCategory] = useState('All');
+    const [filterPending, setFilterPending] = useState(false);
 
     // Month/Year filter
     const currentDate = new Date();
@@ -56,7 +57,7 @@ const Students = () => {
         const matchesSearch = name.includes(searchTerm.toLowerCase()) || doc.includes(searchTerm);
         const cat = (s.category || '');
         const matchesCategory = filterCategory === 'All' ||
-            (filterCategory === 'Combo' ? cat.includes('Combo') : cat === filterCategory);
+            (filterCategory === 'Combo' ? cat.includes('Combo') || cat.includes('-') : cat === filterCategory);
 
         // Month/Year filter
         let matchesDate = true;
@@ -66,7 +67,16 @@ const Students = () => {
             if (filterYear && regDate.getFullYear() !== parseInt(filterYear)) matchesDate = false;
         }
 
-        return matchesSearch && matchesCategory && matchesDate;
+        // Pending balance filter
+        let matchesPending = true;
+        if (filterPending) {
+            const courseValue = parseFloat(s.courseValue) || 0;
+            const balance = parseFloat(s.balance) || 0;
+            const debt = courseValue - balance;
+            matchesPending = debt > 0;
+        }
+
+        return matchesSearch && matchesCategory && matchesDate && matchesPending;
     });
 
     const handleDelete = () => {
@@ -97,12 +107,12 @@ const Students = () => {
 
         setStudents(students.map(s => {
             if (s.id === selectedStudent.id) {
-                const newBalance = (s.balance || 0) + amount;
+                const newBalance = (parseFloat(s.balance) || 0) + amount;
                 return {
                     ...s,
                     balance: newBalance,
                     lastPaymentMethod: paymentMethod,
-                    payment: newBalance >= s.courseValue ? 'Paid' : 'Pending'
+                    payment: newBalance >= (parseFloat(s.courseValue) || 0) ? 'Paid' : 'Pending'
                 };
             }
             return s;
@@ -113,7 +123,7 @@ const Students = () => {
         setSelectedStudent(null);
     };
 
-    // Generate year options (current year to 3 years back)
+    // Generate year options
     const yearOptions = [];
     for (let y = currentDate.getFullYear(); y >= currentDate.getFullYear() - 3; y--) {
         yearOptions.push(y);
@@ -123,6 +133,19 @@ const Students = () => {
         'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
         'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
     ];
+
+    // Summary stats
+    const totalStudents = students.length;
+    const studentsWithDebt = students.filter(s => {
+        const cv = parseFloat(s.courseValue) || 0;
+        const bal = parseFloat(s.balance) || 0;
+        return cv > 0 && (cv - bal) > 0;
+    }).length;
+    const totalDebt = students.reduce((sum, s) => {
+        const cv = parseFloat(s.courseValue) || 0;
+        const bal = parseFloat(s.balance) || 0;
+        return sum + Math.max(0, cv - bal);
+    }, 0);
 
     return (
         <div
@@ -140,12 +163,28 @@ const Students = () => {
                 </Button>
             </div>
 
+            {/* Summary Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '24px' }}>
+                <div style={{ background: 'white', padding: '20px', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+                    <div style={{ fontSize: '12px', color: '#86868b', fontWeight: 600, marginBottom: '4px' }}>TOTAL ALUMNOS</div>
+                    <div style={{ fontSize: '28px', fontWeight: 700, color: '#1d1d1f' }}>{totalStudents}</div>
+                </div>
+                <div style={{ background: 'white', padding: '20px', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+                    <div style={{ fontSize: '12px', color: '#86868b', fontWeight: 600, marginBottom: '4px' }}>CON SALDO PENDIENTE</div>
+                    <div style={{ fontSize: '28px', fontWeight: 700, color: studentsWithDebt > 0 ? '#EF6C00' : '#1d1d1f' }}>{studentsWithDebt}</div>
+                </div>
+                <div style={{ background: 'white', padding: '20px', borderRadius: '18px', boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+                    <div style={{ fontSize: '12px', color: '#86868b', fontWeight: 600, marginBottom: '4px' }}>TOTAL POR COBRAR</div>
+                    <div style={{ fontSize: '28px', fontWeight: 700, color: totalDebt > 0 ? '#ff3b30' : '#2E7D32' }}>${totalDebt.toLocaleString()}</div>
+                </div>
+            </div>
+
             {/* Filters Bar */}
             <div style={{
                 background: 'white', padding: '20px', borderRadius: '24px', marginBottom: '24px',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap'
+                boxShadow: '0 4px 20px rgba(0,0,0,0.03)', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap'
             }}>
-                <div style={{ flex: 1, position: 'relative', minWidth: '200px' }}>
+                <div style={{ flex: 1, position: 'relative', minWidth: '180px' }}>
                     <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#86868b' }} />
                     <input
                         type="text"
@@ -202,23 +241,37 @@ const Students = () => {
                                 padding: '4px 8px', borderRadius: '8px', fontSize: '12px',
                                 fontWeight: 700, cursor: 'pointer', transition: 'all 0.2s'
                             }}
-                            onMouseOver={e => e.currentTarget.style.background = '#ffdada'}
-                            onMouseOut={e => e.currentTarget.style.background = '#FFE5E5'}
                         >
                             ✕
                         </button>
                     )}
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {/* Pending Balance Filter */}
+                <button
+                    onClick={(e) => { e.stopPropagation(); setFilterPending(!filterPending); }}
+                    style={{
+                        padding: '10px 16px', borderRadius: '12px',
+                        border: filterPending ? '2px solid #EF6C00' : '1px solid #e5e5e5',
+                        background: filterPending ? '#FFF3E0' : 'white',
+                        color: filterPending ? '#EF6C00' : '#86868b',
+                        fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s',
+                        display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap'
+                    }}
+                >
+                    <DollarSign size={14} />
+                    Saldo Pendiente
+                </button>
+
+                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                     {['All', 'A2', 'B1', 'C1', 'C2', 'RC1', 'Combo'].map(cat => (
                         <button
                             key={cat}
                             onClick={(e) => { e.stopPropagation(); setFilterCategory(cat); }}
                             style={{
-                                padding: '8px 16px', borderRadius: '10px', border: '1px solid #e5e5e5',
-                                background: filterCategory === cat ? '#1d1d1f' : (cat === 'Combo' && filterCategory.startsWith('Combo')) ? '#1d1d1f' : 'white',
-                                color: (filterCategory === cat || (cat === 'Combo' && filterCategory.startsWith('Combo'))) ? 'white' : '#1d1d1f',
+                                padding: '8px 14px', borderRadius: '10px', border: '1px solid #e5e5e5',
+                                background: filterCategory === cat ? '#1d1d1f' : 'white',
+                                color: filterCategory === cat ? 'white' : '#1d1d1f',
                                 fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s'
                             }}
                         >
@@ -249,6 +302,7 @@ const Students = () => {
                         <tr style={{ textAlign: 'left', background: '#fafafa', fontSize: '12px', color: '#86868b' }}>
                             <th style={{ padding: '16px 24px', fontWeight: 600 }}>ALUMNO</th>
                             <th style={{ padding: '16px 24px', fontWeight: 600 }}>CATEGORÍA</th>
+                            <th style={{ padding: '16px 24px', fontWeight: 600 }}>VALOR CURSO</th>
                             <th style={{ padding: '16px 24px', fontWeight: 600 }}>ABONADO</th>
                             <th style={{ padding: '16px 24px', fontWeight: 600 }}>POR PAGAR</th>
                             <th style={{ padding: '16px 24px', fontWeight: 600 }}>REGISTRO</th>
@@ -261,6 +315,7 @@ const Students = () => {
                                 const courseValue = parseFloat(student.courseValue) || 0;
                                 const balance = parseFloat(student.balance) || 0;
                                 const debt = Math.max(0, courseValue - balance);
+                                const isPaid = courseValue > 0 && debt === 0;
                                 return (
                                     <motion.tr
                                         layout
@@ -282,17 +337,40 @@ const Students = () => {
                                             </div>
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
-                                            <span style={{ fontSize: '14px', color: '#1d1d1f', fontWeight: 500 }}>{student.category || '—'}</span>
+                                            {student.category ? (
+                                                <span style={{
+                                                    fontSize: '13px', fontWeight: 600, color: '#0071e3',
+                                                    background: '#E3F2FD', padding: '4px 10px', borderRadius: '8px'
+                                                }}>
+                                                    {student.category}
+                                                </span>
+                                            ) : (
+                                                <span style={{ fontSize: '13px', color: '#86868b' }}>—</span>
+                                            )}
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
-                                            <span style={{ fontSize: '15px', fontWeight: 600, color: '#2E7D32' }}>
+                                            <span style={{ fontSize: '14px', fontWeight: 600, color: '#1d1d1f' }}>
+                                                {courseValue > 0 ? `$${courseValue.toLocaleString()}` : '—'}
+                                            </span>
+                                        </td>
+                                        <td style={{ padding: '16px 24px' }}>
+                                            <span style={{ fontSize: '14px', fontWeight: 600, color: balance > 0 ? '#2E7D32' : '#86868b' }}>
                                                 ${balance.toLocaleString()}
                                             </span>
                                         </td>
                                         <td style={{ padding: '16px 24px' }}>
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                                                <span style={{ fontSize: '15px', fontWeight: 600, color: debt > 0 ? '#ff3b30' : '#86868b' }}>
-                                                    ${debt.toLocaleString()}
+                                                <span style={{
+                                                    fontSize: '14px', fontWeight: 600,
+                                                    color: isPaid ? '#2E7D32' : debt > 0 ? '#ff3b30' : '#86868b'
+                                                }}>
+                                                    {isPaid ? (
+                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                                            <CheckCircle size={14} /> Pagado
+                                                        </span>
+                                                    ) : (
+                                                        `$${debt.toLocaleString()}`
+                                                    )}
                                                 </span>
                                                 {student.lastPaymentMethod && (
                                                     <div style={{ fontSize: '10px', color: '#86868b', fontWeight: 500 }}>
@@ -502,7 +580,7 @@ const Students = () => {
                 )}
             </AnimatePresence>
 
-            {/* Edit Modal (Includes Course Value) */}
+            {/* Edit Modal */}
             <AnimatePresence>
                 {isEditModalOpen && (
                     <div
